@@ -21,7 +21,7 @@ st.markdown(hide_style, unsafe_allow_html=True)
 
 # 2. Judul Utama Aplikasi Web
 st.title("🗳️ DPT ONLINE PILKADES 2026")
-st.caption("Aplikasi Resmi Publikasi Daftar Pemilih Tetap (Tanpa Data Sensitif NIK/KK)")
+st.caption("Aplikasi Resmi Publikasi Daftar Pemilih Tetap Pilkades Kebondowo 2026")
 
 # Fungsi membaca data lokal CSV secara instan (100% Kebal Eror Jaringan)
 @st.cache_data
@@ -83,7 +83,7 @@ if pilihan_tps != "-- Pilih TPS --":
                 df_tps[nama_key] = df_tps[nama_key].fillna('').astype(str).str.strip()
                 
                 # Kolom Input Pencarian Nama bagi Warga
-                cari_nama = st.text_input(f"Ketik Nama yang dicari di {pilihan_tps}:", "", placeholder="Contoh: GITA ARYU")
+                cari_nama = st.text_input(f"Ketik Nama yang dicari di {pilihan_tps}:", "", placeholder="Contoh: JHON DOE")
                 
                 if cari_nama:
                     # Filter pencarian nama (case-insensitive)
@@ -102,7 +102,7 @@ if pilihan_tps != "-- Pilih TPS --":
                             # 1. Tampilan Nama Pemilih (Besar, Tebal, Font Modern Sans-Serif)
                             st.markdown("###")
                             st.markdown(f"""
-                            <div style="font-family: 'Arial Black', Gadget, sans-serif; font-size: 24px; margin-top: -40px; margin-bottom: 10px;">
+                            <div style="font-family: 'Avenir', Gadget, sans-serif; font-size: 28px; margin-top: -40px; margin-bottom: 10px;">
                                 {v_nama}
                             </div>
                             """, unsafe_allow_html=True)
@@ -114,7 +114,7 @@ if pilihan_tps != "-- Pilih TPS --":
                             # 3. Tampilan ID (Font Tebal Bergaya Kode Monospace)
                             st.markdown("🆔")
                             st.markdown(f"""
-                            <div style="font-family: 'OCR A Extended', monospace; font-size: 18px; margin-top: -40px;">
+                            <div style="font-family: 'OCR A Extended', monospace; font-size: 24px; margin-top: -10px;">
                                 {v_id}
                             </div>
                             """, unsafe_allow_html=True)

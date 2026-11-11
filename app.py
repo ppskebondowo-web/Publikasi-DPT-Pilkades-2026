@@ -1,8 +1,6 @@
 import streamlit as st
 import pandas as pd
-import urllib.request
-import io
-import ssl
+import os
 
 # 1. Konfigurasi Tampilan untuk HP Android agar Modern & Responsif
 st.set_page_config(
@@ -25,40 +23,11 @@ st.markdown(hide_style, unsafe_allow_html=True)
 st.title("🗳️ DPT ONLINE PILKADES 2026")
 st.caption("Aplikasi Resmi Publikasi Daftar Pemilih Tetap (Tanpa Data Sensitif NIK/KK)")
 
-# ID Google Sheet Publik Anda
-SHEET_ID = "1Xvi40Xj5MXFLuu5v4mi-wv3Oyfe7dYuyxNKccXbxXV0"
-
-# Kamus Pemetaan ID Tab (GID) berdasarkan data asli Google Sheet Anda
-GID_MAP = {
-    "Rekap": "1866580022",
-    "TPS 001": "402733912",
-    "TPS 002": "577903264",
-    "TPS 003": "981448162",
-    "TPS 004": "1342674488",
-    "TPS 005": "688461718",
-    "TPS 006": "1657805169",
-    "TPS 007": "315575510",
-    "TPS 008": "1468164319",
-    "TPS 009": "1009029986",
-    "TPS 010": "377507340",
-    "TPS 011": "452778848"
-}
-
-# Fungsi membaca data murni BYPASS SSL agar terbebas dari error koneksi server
-@st.cache_data(ttl=30)
-def load_sheet_secure(sheet_name):
-    gid = GID_MAP.get(sheet_name)
-    url = f"https://google.com{SHEET_ID}/export?format=csv&gid={gid}"
-    
-    # Membuat context untuk mengabaikan verifikasi SSL yang sering membuat koneksi macet
-    context = ssl._create_unverified_context()
-    
-    # Mengunduh data sebagai raw byte teks
-    with urllib.request.urlopen(url, context=context) as response:
-        html_data = response.read()
-        
-    # Membaca file mentah ke dalam bentuk tabel pandas dataframe
-    df = pd.read_csv(io.BytesIO(html_data), header=0, dtype=str)
+# Fungsi membaca data lokal CSV secara instan (100% Kebal Eror Jaringan)
+@st.cache_data
+def load_local_csv(filename):
+    # Membaca file CSV lokal yang berada satu folder dengan app.py
+    df = pd.read_csv(filename, header=0, dtype=str)
     df = df.dropna(how='all', axis=0)
     df.columns = df.columns.str.strip()
     df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
@@ -67,46 +36,64 @@ def load_sheet_secure(sheet_name):
 # 3. FITUR 1: TAMPILKAN REKAPITULASI
 st.subheader("📊 Rekapitulasi Pemilih")
 try:
-    df_rekap = load_sheet_secure("Rekap")
-    st.dataframe(df_rekap, use_container_width=True, hide_index=True)
+    if os.path.exists("Rekap.csv"):
+        df_rekap = load_local_csv("Rekap.csv")
+        st.dataframe(df_rekap, use_container_width=True, hide_index=True)
+    else:
+        st.error("File 'Rekap.csv' tidak ditemukan di server aplikasi. Pastikan Anda sudah mengunggahnya ke GitHub.")
 except Exception as e:
-    st.error("Gagal terhubung dengan server Google. Silakan klik tombol 'Muat Ulang Hubungan Data' di bawah.")
-
-# Tombol refresh darurat untuk menghapus memori sistem yang nyangkut
-if st.button("🔄 Muat Ulang Hubungan Data"):
-    st.cache_data.clear()
-    st.rerun()
+    st.error("Gagal memproses data Rekapitulasi lokal.")
 
 # 4. FITUR 2: PENCARIAN & DETAIL DATA PER TPS
 st.markdown("---")
 st.subheader("🔍 Cek Daftar Pemilih Per TPS")
 
-tps_list = [f"TPS {str(i).zfill(3)}" for i in range(1, 12)]
-pilihan_tps = st.selectbox("Pilih nomor TPS terlebih dahulu:", ["-- Pilih TPS --"] + tps_list)
+# Membuat daftar nama file CSV lokal sesuai pilihan TPS
+tps_options = {
+    "TPS 001": "TPS_001.csv",
+    "TPS 002": "TPS_002.csv",
+    "TPS 003": "TPS_003.csv",
+    "TPS 004": "TPS_004.csv",
+    "TPS 005": "TPS_005.csv",
+    "TPS 006": "TPS_006.csv",
+    "TPS 007": "TPS_007.csv",
+    "TPS 008": "TPS_008.csv",
+    "TPS 009": "TPS_009.csv",
+    "TPS 010": "TPS_010.csv",
+    "TPS 011": "TPS_011.csv"
+}
+
+pilihan_tps = st.selectbox("Pilih nomor TPS terlebih dahulu:", ["-- Pilih TPS --"] + list(tps_options.keys()))
 
 if pilihan_tps != "-- Pilih TPS --":
-    try:
-        df_tps = load_sheet_secure(pilihan_tps)
-        kolom_nama = [col for col in df_tps.columns if col.lower() == 'nama']
-        
-        if not kolom_nama:
-            st.error(f"Eror Struktur: Kolom dengan nama 'Nama' tidak ditemukan di {pilihan_tps}.")
-        else:
-            nama_key = kolom_nama[0]
-            df_tps[nama_key] = df_tps[nama_key].fillna('').astype(str).str.strip()
+    csv_file = tps_options[pilihan_tps]
+    
+    if not os.path.exists(csv_file):
+        st.error(f"File '{csv_file}' belum diunggah ke GitHub Anda.")
+    else:
+        try:
+            df_tps = load_local_csv(csv_file)
+            kolom_nama = [col for col in df_tps.columns if col.lower() == 'nama']
             
-            cari_nama = st.text_input(f"Ketik Nama yang dicari di {pilihan_tps}:", "", placeholder="Contoh: ALAM KHODIRUN")
-            
-            if cari_nama:
-                df_filtered = df_tps[df_tps[nama_key].str.contains(cari_nama, case=False, na=False)]
-                if not df_filtered.empty:
-                    st.success(f"Ditemukan {len(df_filtered)} data yang cocok:")
-                    st.dataframe(df_filtered, use_container_width=True, hide_index=True)
-                else:
-                    st.warning(f"Nama '{cari_nama}' tidak ditemukan di {pilihan_tps}. Periksa ejaan kembali.")
+            if not kolom_nama:
+                st.error(f"Eror Struktur: Kolom dengan nama 'Nama' tidak ditemukan di {pilihan_tps}.")
             else:
-                st.info(f"Menampilkan seluruh daftar pemilih di {pilihan_tps} (Total: {len(df_tps)} orang)")
-                st.dataframe(df_tps, use_container_width=True, hide_index=True)
-            
-    except Exception as e:
-        st.error(f"Gagal memuat data {pilihan_tps}. Silakan coba klik tombol 'Muat Ulang Hubungan Data' di atas.")
+                nama_key = kolom_nama[0]
+                df_tps[nama_key] = df_tps[nama_key].fillna('').astype(str).str.strip()
+                
+                # Kolom Input Pencarian Nama bagi Warga
+                cari_nama = st.text_input(f"Ketik Nama yang dicari di {pilihan_tps}:", "", placeholder="Contoh: ALAM KHODIRUN")
+                
+                if cari_nama:
+                    df_filtered = df_tps[df_tps[nama_key].str.contains(cari_nama, case=False, na=False)]
+                    if not df_filtered.empty:
+                        st.success(f"Ditemukan {len(df_filtered)} data yang cocok:")
+                        st.dataframe(df_filtered, use_container_width=True, hide_index=True)
+                    else:
+                        st.warning(f"Nama '{cari_nama}' tidak ditemukan di {pilihan_tps}. Periksa ejaan kembali.")
+                else:
+                    st.info(f"Menampilkan seluruh daftar pemilih di {pilihan_tps} (Total: {len(df_tps)} orang)")
+                    st.dataframe(df_tps, use_container_width=True, hide_index=True)
+                
+        except Exception as e:
+            st.error(f"Gagal memuat data lokal untuk {pilihan_tps}.")

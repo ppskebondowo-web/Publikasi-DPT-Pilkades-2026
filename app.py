@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from streamlit_gsheets import GSheetsConnection
 
 # 1. Konfigurasi Tampilan HP Android agar Modern & Responsif
 st.set_page_config(
@@ -14,7 +15,6 @@ hide_style = """
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
-    .stDataFrame {button: hidden;}
     </style>
 """
 st.markdown(hide_style, unsafe_allow_html=True)
@@ -23,28 +23,29 @@ st.markdown(hide_style, unsafe_allow_html=True)
 st.title("🗳️ DPT ONLINE PILKADES 2026")
 st.caption("Aplikasi Resmi Publikasi Daftar Pemilih Tetap (Tanpa Data Sensitif NIK/KK)")
 
-# Link Google Sheet Publik Anda yang sudah disesuaikan
-SHEET_ID = "1Xvi40Xj5MXFLuu5v4mi-wv3Oyfe7dYuyxNKccXbxXV0"
+# URL Google Sheet Publik Anda
+GOOGLE_SHEET_URL = "https://google.com"
+
+# Membuat koneksi aman dan stabil ke Google Sheets
+conn = st.connection("gsheets", type=GSheetsConnection)
 
 # Fungsi membaca data ter-cache agar loading web super cepat di HP warga
-@st.cache_data(ttl=300)  # Data disimpan di memori selama 5 menit
+@st.cache_data(ttl=300) # Data disimpan di memori selama 5 menit
 def load_sheet_data(sheet_name):
-    # Menggunakan format ekspor CSV resmi Google Docs
-    url = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet={sheet_name}"
-    df = pd.read_csv(url)
-    # Bersihkan kolom kosong jika ada bawaan dari Google Sheet
+    # Membaca sheet berdasarkan nama tab secara presisi
+    df = conn.read(spreadsheet=GOOGLE_SHEET_URL, worksheet=sheet_name)
+    # Bersihkan baris atau kolom kosong bawaan Google Sheet jika ada
     df = df.dropna(how='all', axis=0)
     df = df.dropna(how='all', axis=1)
     return df
 
-# 3. FITUR 1: TAMPILKAN REKAPITULASI (Sesuai kolom sheet Anda: TPS, L, P, L+P)
+# 3. FITUR 1: TAMPILKAN REKAPITULASI
 st.subheader("📊 Rekapitulasi Pemilih")
 try:
     df_rekap = load_sheet_data("Rekap")
-    # Menampilkan tabel rekap yang bisa digeser (scroll) lancar di layar HP
     st.dataframe(df_rekap, use_container_width=True, hide_index=True)
 except Exception as e:
-    st.error("Gagal memuat data sheet 'Rekap'. Pastikan akses Google Sheet diatur ke 'Anyone with the link' (Siapa saja dapat melihat).")
+    st.error("Gagal memuat data sheet 'Rekap'. Pastikan akses Google Sheet tetap diatur publik.")
 
 # 4. FITUR 2: PENCARIAN & DETAIL DATA PER TPS
 st.markdown("---")
@@ -56,16 +57,16 @@ pilihan_tps = st.selectbox("Pilih nomor TPS terlebih dahulu:", ["-- Pilih TPS --
 
 if pilihan_tps != "-- Pilih TPS --":
     try:
-        # Load data TPS secara realtime/cache
+        # Mengambil data TPS menggunakan GSheetsConnection
         df_tps = load_sheet_data(pilihan_tps)
         
         # Kolom Pencarian Nama bagi Warga
         cari_nama = st.text_input(f"Ketik Nama yang dicari di {pilihan_tps}:", "", placeholder="Contoh: Budi")
         
         if cari_nama:
-            # Cari nama tanpa memedulikan huruf besar/kecil (case-insensitive)
-            # Memastikan kolom nama dibaca sebagai teks string
+            # Mengubah kolom Nama menjadi teks string untuk menghindari error type
             df_tps['Nama'] = df_tps['Nama'].astype(str)
+            # Cari nama tanpa memedulikan huruf besar/kecil (case-insensitive)
             df_filtered = df_tps[df_tps['Nama'].str.contains(cari_nama, case=False, na=False)]
             
             if not df_filtered.empty:
@@ -79,4 +80,4 @@ if pilihan_tps != "-- Pilih TPS --":
             st.dataframe(df_tps, use_container_width=True, hide_index=True)
             
     except Exception as e:
-        st.error(f"Gagal memuat data untuk {pilihan_tps}. Pastikan nama tab sheet di Google Sheets bertuliskan '{pilihan_tps}' persis.")
+        st.error(f"Gagal memuat data untuk {pilihan_tps}. Sistem mendeteksi pemutusan koneksi sementara dari Google. Silakan coba pilih ulang opsi TPS.")

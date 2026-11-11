@@ -23,10 +23,11 @@ st.markdown(hide_style, unsafe_allow_html=True)
 st.title("🗳️ DPT ONLINE PILKADES 2026")
 st.caption("Aplikasi Resmi Publikasi Daftar Pemilih Tetap (Tanpa Data Sensitif NIK/KK)")
 
-# Fungsi membaca data lokal CSV secara instan (100% Kebal Eror Jaringan)
+# Fungsi membaca data lokal CSV secara instan dengan proteksi encoding teks
 @st.cache_data
 def load_local_csv(filename):
-    df = pd.read_csv(filename, header=0, dtype=str)
+    # Menambahkan opsi encoding dan engine python agar kebal terhadap kesalahan karakter teks
+    df = pd.read_csv(filename, header=0, dtype=str, encoding='utf-8', on_bad_lines='skip', engine='python')
     df = df.dropna(how='all', axis=0)
     df.columns = df.columns.str.strip()
     df = df.loc[:, ~df.columns.str.contains('^Unnamed')]

@@ -32,7 +32,7 @@ def load_local_csv(filename):
     df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
     return df
 
-# 3. FITUR 1: TAMPILKAN REKAPITULASI (Tetap berbentuk tabel agar ringkas)
+# 3. FITUR 1: TAMPILKAN REKAPITULASI
 st.subheader("📊 Rekapitulasi Pemilih")
 try:
     if os.path.exists("Rekap.csv"):
@@ -65,7 +65,7 @@ if pilihan_tps != "-- Pilih TPS --":
         try:
             df_tps = load_local_csv(csv_file)
             
-            # Deteksi otomatis kolom Nama (toleransi huruf besar/kecil)
+            # Deteksi otomatis kolom Nama
             kolom_nama = [col for col in df_tps.columns if col.lower() == 'nama']
             
             if not kolom_nama:
@@ -75,7 +75,7 @@ if pilihan_tps != "-- Pilih TPS --":
                 df_tps[nama_key] = df_tps[nama_key].fillna('').astype(str).str.strip()
                 
                 # Kolom Input Pencarian Nama bagi Warga
-                cari_nama = st.text_input(f"Ketik Nama yang dicari di {pilihan_tps}:", "", placeholder="Contoh: ALAM KHODIRUN")
+                cari_nama = st.text_input(f"Ketik Nama yang dicari di {pilihan_tps}:", "", placeholder="Contoh: GITA ARYU")
                 
                 if cari_nama:
                     # Filter pencarian nama (case-insensitive)
@@ -84,29 +84,25 @@ if pilihan_tps != "-- Pilih TPS --":
                     if not df_filtered.empty:
                         st.success(f"Ditemukan {len(df_filtered)} data yang cocok:")
                         
-                        # FORMAT OUTPUT BARU: Ditampilkan berbaris ke bawah menggunakan perulangan (loop)
+                        # FORMAT OUTPUT BARU: Menggunakan perulangan bergaya teks sesuai keinginan Anda
                         for index, row in df_filtered.iterrows():
-                            # Mengambil nilai dari kolom, sesuaikan dengan nama kolom asli sheet Anda
-                            v_nama = row.get('Nama', '-')
+                            v_nama = row.get('Nama', '-').upper() # Dipaksa Huruf Besar
                             v_jk = row.get('JnsKlmn', '-')
                             v_alamat = row.get('Alamat', '-')
                             v_id = row.get('ID', '-')
                             
-                            # Menampilkan kotak informasi bergaya kartu yang estetik untuk HP
-                            with st.container():
-                                st.markdown(f"""
-                                📋 **Nama:** {v_nama}  
-                                👤 **Jenis Kelamin:** {v_jk}  
-                                📍 **Alamat:** {v_alamat}  
-                                🆔 **ID:** {v_id}
-                                """)
-                                st.markdown("---") # Garis pembatas antar nama jika hasil pencarian lebih dari satu
+                            # Menggunakan markdown khusus dengan injeksi HTML aman untuk membesarkan font Nama
+                            st.markdown(f"### 📋 {v_nama}")
+                            st.markdown(f"👤 *{v_jk}*") # Huruf miring (italic)
+                            st.markdown(f"📍 {v_alamat}")
+                            st.markdown(f"🆔 {v_id}")
+                            
+                            st.markdown("---") # Garis pembatas antar data
                                 
                     else:
                         st.warning(f"Nama '{cari_nama}' tidak ditemukan di {pilihan_tps}. Periksa ejaan kembali.")
                 else:
-                    # Jika kolom pencarian kosong, tampilkan daftar awal berbentuk tabel sebagai pratinjau saja
-                    st.info(f"Menampilkan pratinjau daftar pemilih di {pilihan_tps} (Total: {len(df_tps)} orang). Silakan ketik nama di atas untuk melihat format kartu detail.")
+                    st.info(f"Menampilkan pratinjau daftar pemilih di {pilihan_tps} (Total: {len(df_tps)} orang). Silakan ketik nama di atas untuk melihat detail format khusus.")
                     st.dataframe(df_tps, use_container_width=True, hide_index=True)
                 
         except Exception as e:

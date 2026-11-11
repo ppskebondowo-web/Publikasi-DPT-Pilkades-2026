@@ -27,20 +27,17 @@ st.caption("Aplikasi Resmi Publikasi Daftar Pemilih Tetap (Tanpa Data Sensitif N
 @st.cache_data
 def load_local_csv(filename):
     try:
-        # engine='python' dan on_bad_lines='skip' berfungsi melompati baris yang terpotong/rusak agar tidak crash
         df = pd.read_csv(filename, header=0, dtype=str, encoding='utf-8', on_bad_lines='skip', engine='python')
         df = df.dropna(how='all', axis=0)
         df.columns = df.columns.str.strip()
         df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
         return df
     except Exception as e:
-        # Jika gagal membaca normal, gunakan pembacaan darurat per baris teks baku
         lines = []
         with open(filename, 'r', encoding='utf-8', errors='ignore') as f:
             header = f.readline().strip().split(',')
             for line in f:
                 parts = line.strip().split(',')
-                # Hanya masukkan baris data yang memiliki kolom lengkap (4 kolom)
                 if len(parts) == len(header):
                     lines.append(parts)
         return pd.DataFrame(lines, columns=header)
@@ -56,11 +53,10 @@ try:
 except Exception as e:
     st.error("Gagal memproses data Rekapitulasi lokal.")
 
-# 4. FITUR 2: PENCARIAN DATA PER TPS (Tanpa Pratinjau Tabel)
+# 4. FITUR 2: PENCARIAN DATA PER TPS
 st.markdown("---")
 st.subheader("🔍 Cek Daftar Pemilih Per TPS")
 
-# Pemetaan Nama Pilihan ke Nama File CSV Asli Anda (Menggunakan Spasi)
 tps_options = {
     "TPS 001": "TPS 001.csv", "TPS 002": "TPS 002.csv", "TPS 003": "TPS 003.csv",
     "TPS 004": "TPS 004.csv", "TPS 005": "TPS 005.csv", "TPS 006": "TPS 006.csv",
@@ -78,8 +74,6 @@ if pilihan_tps != "-- Pilih TPS --":
     else:
         try:
             df_tps = load_local_csv(csv_file)
-            
-            # Deteksi otomatis kolom Nama
             kolom_nama = [col for col in df_tps.columns if col.lower() == 'nama']
             
             if not kolom_nama:
@@ -88,41 +82,24 @@ if pilihan_tps != "-- Pilih TPS --":
                 nama_key = kolom_nama[0]
                 df_tps[nama_key] = df_tps[nama_key].fillna('').astype(str).str.strip()
                 
-                # Kolom Input Pencarian Nama bagi Warga
-                cari_nama = st.text_input(f"Ketik Nama yang dicari di {pilihan_tps}:", "", placeholder="Contoh: JHON DOE")
+                cari_nama = st.text_input(f"Ketik Nama yang dicari di {pilihan_tps}:", "", placeholder="Contoh: MOHAMMAD MUSTAQIM")
                 
                 if cari_nama:
-                    # Filter pencarian nama (case-insensitive)
                     df_filtered = df_tps[df_tps[nama_key].str.contains(cari_nama, case=False, na=False)]
                     
                     if not df_filtered.empty:
                         st.success(f"Ditemukan {len(df_filtered)} data yang cocok:")
                         
-                        # FORMAT OUTPUT: Desain Kartu Rapat dengan Font Pilihan OCR A Extended
-                     for index, row in df_filtered.iterrows():
+                        for index, row in df_filtered.iterrows():
                             v_nama = row.get('Nama', '-').upper()
                             v_jk = row.get('JnsKlmn', '-')
                             v_alamat = row.get('Alamat', '-')
                             v_id = row.get('ID', '-')
                             
-                            # Menggabungkan semua baris ke dalam 1 blok HTML agar tidak terkena spasi otomatis Streamlit
-                            st.markdown(f"""
-                            <div style="padding-top: 4px; padding-bottom: 4px;">
-                                <div style="font-family: 'Arial Black', Gadget, sans-serif; font-size: 22px; font-weight: bold; line-height: 1.2; margin-bottom: 6px;">
-                                    <span style="font-family: sans-serif;">📋</span> {v_nama}
-                                </div>
-                                <div style="font-size: 15px; line-height: 1.4; margin-bottom: 2px;">
-                                    👤 <span style="font-style: italic;">{v_jk}</span>
-                                </div>
-                                <div style="font-size: 15px; line-height: 1.4; margin-bottom: 4px;">
-                                    📍 {v_alamat}
-                                </div>
-                                <div style="font-family: 'OCR A Extended', 'OCR-A', Courier, monospace; font-size: 17px; font-weight: bold; line-height: 1.3;">
-                                    <span style="font-family: sans-serif;">🆔</span> {v_id}
-                                </div>
-                            </div>
-                            <hr style="margin-top: 8px; margin-bottom: 8px; border: 0; border-top: 1px solid rgba(128, 128, 128, 0.3);">
-                            """, unsafe_allow_html=True)
+                            # HTML 1 baris penuh untuk mengunci jarak rapat antara garis, nama, dan elemen bawahnya
+                            html_card = f'<div style="padding: 2px 0;"><div style="font-family: \'Arial Black\', Gadget, sans-serif; font-size: 20px; font-weight: bold; line-height: 1.2; margin-bottom: 4px;"><span style="font-family: sans-serif;">📋</span> {v_nama}</div><div style="font-size: 15px; line-height: 1.3; margin-bottom: 2px;">👤 <span style="font-style: italic;">{v_jk}</span></div><div style="font-size: 15px; line-height: 1.3; margin-bottom: 3px;">📍 {v_alamat}</div><div style="font-family: \'OCR A Extended\', \'OCR-A\', Courier, monospace; font-size: 16px; font-weight: bold; line-height: 1.2;"><span style="font-family: sans-serif;">🆔</span> {v_id}</div></div><hr style="margin: 8px 0; border: 0; border-top: 1px solid rgba(128, 128, 128, 0.3);">'
+                            
+                            st.markdown(html_card, unsafe_allow_html=True)
                                 
                     else:
                         st.warning(f"Nama '{cari_nama}' tidak ditemukan di {pilihan_tps}. Periksa ejaan kembali.")

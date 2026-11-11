@@ -92,7 +92,7 @@ if pilihan_tps != "-- Pilih TPS --":
                             v_id = row.get('ID', '-')
                             
                             # Menggunakan markdown khusus dengan injeksi HTML aman untuk membesarkan font Nama
-                            st.markdown(f"### 📋 {v_nama}")
+                            st.markdown(f"### {v_nama}")
                             st.markdown(f"👤 *{v_jk}*") # Huruf miring (italic)
                             st.markdown(f"📍 {v_alamat}")
                             st.markdown(f"🆔 {v_id}")

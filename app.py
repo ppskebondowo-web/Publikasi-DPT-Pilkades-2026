@@ -1,5 +1,8 @@
 import streamlit as st
 import pandas as pd
+import urllib.request
+import io
+import ssl
 
 # 1. Konfigurasi Tampilan untuk HP Android agar Modern & Responsif
 st.set_page_config(
@@ -41,15 +44,21 @@ GID_MAP = {
     "TPS 011": "452778848"
 }
 
-# Fungsi membaca data ter-cache dengan metode Ekspor Direct CSV (Sangat Cepat & Stabil)
-@st.cache_data(ttl=60)
-def load_sheet_by_gid(sheet_name):
+# Fungsi membaca data murni BYPASS SSL agar terbebas dari error koneksi server
+@st.cache_data(ttl=30)
+def load_sheet_secure(sheet_name):
     gid = GID_MAP.get(sheet_name)
-    # Jalur ekspor CSV langsung via GID yang kebal blokir IP server
     url = f"https://google.com{SHEET_ID}/export?format=csv&gid={gid}"
     
-    # Membaca data dan memaksa teks string agar nomor ID tidak rusak
-    df = pd.read_csv(url, header=0, dtype=str)
+    # Membuat context untuk mengabaikan verifikasi SSL yang sering membuat koneksi macet
+    context = ssl._create_unverified_context()
+    
+    # Mengunduh data sebagai raw byte teks
+    with urllib.request.urlopen(url, context=context) as response:
+        html_data = response.read()
+        
+    # Membaca file mentah ke dalam bentuk tabel pandas dataframe
+    df = pd.read_csv(io.BytesIO(html_data), header=0, dtype=str)
     df = df.dropna(how='all', axis=0)
     df.columns = df.columns.str.strip()
     df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
@@ -58,13 +67,13 @@ def load_sheet_by_gid(sheet_name):
 # 3. FITUR 1: TAMPILKAN REKAPITULASI
 st.subheader("📊 Rekapitulasi Pemilih")
 try:
-    df_rekap = load_sheet_by_gid("Rekap")
+    df_rekap = load_sheet_secure("Rekap")
     st.dataframe(df_rekap, use_container_width=True, hide_index=True)
 except Exception as e:
-    st.error("Gagal terhubung dengan server Google. Silakan ketuk tombol 'Muat Ulang Paksa' di bawah.")
+    st.error("Gagal terhubung dengan server Google. Silakan klik tombol 'Muat Ulang Hubungan Data' di bawah.")
 
-# Tombol muat ulang paksa jika cache browser macet
-if st.button("🔄 Muat Ulang Paksa Aplikasi"):
+# Tombol refresh darurat untuk menghapus memori sistem yang nyangkut
+if st.button("🔄 Muat Ulang Hubungan Data"):
     st.cache_data.clear()
     st.rerun()
 
@@ -77,7 +86,7 @@ pilihan_tps = st.selectbox("Pilih nomor TPS terlebih dahulu:", ["-- Pilih TPS --
 
 if pilihan_tps != "-- Pilih TPS --":
     try:
-        df_tps = load_sheet_by_gid(pilihan_tps)
+        df_tps = load_sheet_secure(pilihan_tps)
         kolom_nama = [col for col in df_tps.columns if col.lower() == 'nama']
         
         if not kolom_nama:
@@ -100,4 +109,4 @@ if pilihan_tps != "-- Pilih TPS --":
                 st.dataframe(df_tps, use_container_width=True, hide_index=True)
             
     except Exception as e:
-        st.error(f"Gagal memuat data {pilihan_tps}. Silakan coba klik tombol 'Muat Ulang Paksa' di atas.")
+        st.error(f"Gagal memuat data {pilihan_tps}. Silakan coba klik tombol 'Muat Ulang Hubungan Data' di atas.")

@@ -50,7 +50,7 @@ st.subheader("🔍 Cek Daftar Pemilih Per TPS")
 
 # Membuat daftar nama file CSV lokal sesuai pilihan TPS
 tps_options = {
-    "TPS 001": "TPS_001.csv",
+    "TPS 001": "TPS 001.csv",
     "TPS 002": "TPS_002.csv",
     "TPS 003": "TPS_003.csv",
     "TPS 004": "TPS_004.csv",

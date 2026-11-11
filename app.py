@@ -89,7 +89,7 @@ if pilihan_tps != "-- Pilih TPS --":
                 df_tps[nama_key] = df_tps[nama_key].fillna('').astype(str).str.strip()
                 
                 # Kolom Input Pencarian Nama bagi Warga
-                cari_nama = st.text_input(f"Ketik Nama yang dicari di {pilihan_tps}:", "", placeholder="Contoh: MARIA FILIPETA")
+                cari_nama = st.text_input(f"Ketik Nama yang dicari di {pilihan_tps}:", "", placeholder="Contoh: JHON DOE")
                 
                 if cari_nama:
                     # Filter pencarian nama (case-insensitive)
@@ -107,7 +107,7 @@ if pilihan_tps != "-- Pilih TPS --":
                             
                             # 1. Tampilan Nama (Besar & Merapat)
                             st.markdown("###")
-                            st.markdown(f"""<div style="font-family: 'Avenir', Gadget, sans-serif; font-size: 24px; margin-top: -20px; margin-bottom: 2px; line-height: 1.1;">{v_nama}</div>""", unsafe_allow_html=True)
+                            st.markdown(f"""<div style="font-family: 'Avenir', Gadget, sans-serif; font-size: 24px; margin-top: -20px; margin-bottom: 7px; line-height: 1.1;">{v_nama}</div>""", unsafe_allow_html=True)
                             
                             # 2. Tampilan Jenis Kelamin & Alamat
                             st.markdown(f"""<div style="margin-bottom: 12px; line-height: 1.2;">👤 <span style="font-style: italic;">{v_jk}</span></div>""", unsafe_allow_html=True)

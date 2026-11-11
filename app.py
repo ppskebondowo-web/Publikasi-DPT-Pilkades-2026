@@ -25,10 +25,11 @@ st.caption("Aplikasi Resmi Publikasi Daftar Pemilih Tetap (Tanpa Data Sensitif N
 # ID Google Sheet Publik Anda
 SHEET_ID = "1Xvi40Xj5MXFLuu5v4mi-wv3Oyfe7dYuyxNKccXbxXV0"
 
-# Fungsi membaca data ter-cache dengan pembersihan data tingkat lanjut
+# Fungsi membaca data murni jalur ekspor publikasi web (Sangat Stabil & Anti-Blokir)
 @st.cache_data(ttl=60)
 def load_sheet_data(sheet_name):
-    url = f"https://google.com{SHEET_ID}/gviz/tq?tqx=out:csv&sheet={sheet_name}"
+    # Metode jalur ekspor pub?output=csv berbasis tab sheet
+    url = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/pub?output=csv&sheet={sheet_name}"
     
     # Membaca seluruh data sebagai text/string demi keamanan data tipe nomor
     df = pd.read_csv(url, header=0, dtype=str)
@@ -39,7 +40,7 @@ def load_sheet_data(sheet_name):
     # 2. Bersihkan nama kolom dari spasi tersembunyi
     df.columns = df.columns.str.strip()
     
-    # 3. BUANG KOLOM KOSONG (UNNAMED) SECARA OTOMATIS
+    # 3. Buang kolom kosong (Unnamed) secara otomatis jika ada
     df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
     
     return df
@@ -50,10 +51,10 @@ try:
     df_rekap = load_sheet_data("Rekap")
     st.dataframe(df_rekap, use_container_width=True, hide_index=True)
 except Exception as e:
-    st.error("Sistem sedang memuat ulang koneksi ke Google Sheets. Silakan tekan tombol 'Segarkan Data' di bawah.")
+    st.error("Gagal terhubung dengan server data Google. Silakan klik tombol 'Muat Ulang Paksa' di bawah.")
 
-# Tombol manual untuk membersihkan memori eror jika Google sempat memblokir koneksi
-if st.button("🔄 Segarkan Data (Refresh Data)"):
+# Tombol muat ulang paksa dengan membersihkan seluruh memori cache yang macet
+if st.button("🔄 Muat Ulang Paksa Aplikasi"):
     st.cache_data.clear()
     st.rerun()
 
@@ -74,7 +75,7 @@ if pilihan_tps != "-- Pilih TPS --":
         kolom_nama = [col for col in df_tps.columns if col.lower() == 'nama']
         
         if not kolom_nama:
-            st.error(f"Eror Struktur: Kolom dengan nama 'Nama' tidak ditemukan di tab {pilihan_tps}. Periksa tulisan header di Google Sheets Anda.")
+            st.error(f"Eror Struktur: Kolom dengan nama 'Nama' tidak ditemukan di tab {pilihan_tps}.")
         else:
             nama_key = kolom_nama[0] # Mengambil nama kolom yang tepat (misal 'Nama')
             df_tps[nama_key] = df_tps[nama_key].fillna('').astype(str).str.strip()
@@ -97,4 +98,4 @@ if pilihan_tps != "-- Pilih TPS --":
                 st.dataframe(df_tps, use_container_width=True, hide_index=True)
             
     except Exception as e:
-        st.error(f"Gagal memuat data {pilihan_tps}. Silakan ketuk tombol 'Segarkan Data' di atas terlebih dahulu.")
+        st.error(f"Gagal memuat data {pilihan_tps}. Sistem mendeteksi pemutusan koneksi sementara dari Google.")

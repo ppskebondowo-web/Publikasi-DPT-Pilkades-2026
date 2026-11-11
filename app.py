@@ -23,24 +23,23 @@ st.markdown(hide_style, unsafe_allow_html=True)
 st.title("🗳️ DPT ONLINE PILKADES 2026")
 st.caption("Aplikasi Resmi Publikasi Daftar Pemilih Tetap (Tanpa Data Sensitif NIK/KK)")
 
-# Fungsi membaca data lokal CSV secara instan (100% Kebal Eror Jaringan)
+# Fungsi membaca data lokal CSV secara instan
 @st.cache_data
 def load_local_csv(filename):
-    # Membaca file CSV lokal yang berada satu folder dengan app.py
     df = pd.read_csv(filename, header=0, dtype=str)
     df = df.dropna(how='all', axis=0)
     df.columns = df.columns.str.strip()
     df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
     return df
 
-# 3. FITUR 1: TAMPILKAN REKAPITULASI
+# 3. FITUR 1: TAMPILKAN REKAPITULASI (Tetap berbentuk tabel agar ringkas)
 st.subheader("📊 Rekapitulasi Pemilih")
 try:
     if os.path.exists("Rekap.csv"):
         df_rekap = load_local_csv("Rekap.csv")
         st.dataframe(df_rekap, use_container_width=True, hide_index=True)
     else:
-        st.error("File 'Rekap.csv' tidak ditemukan di server aplikasi. Pastikan Anda sudah mengunggahnya ke GitHub.")
+        st.error("File 'Rekap.csv' tidak ditemukan di server aplikasi.")
 except Exception as e:
     st.error("Gagal memproses data Rekapitulasi lokal.")
 
@@ -48,19 +47,11 @@ except Exception as e:
 st.markdown("---")
 st.subheader("🔍 Cek Daftar Pemilih Per TPS")
 
-# Membuat daftar nama file CSV lokal sesuai pilihan TPS
 tps_options = {
-    "TPS 001": "TPS 001.csv",
-    "TPS 002": "TPS_002.csv",
-    "TPS 003": "TPS_003.csv",
-    "TPS 004": "TPS_004.csv",
-    "TPS 005": "TPS_005.csv",
-    "TPS 006": "TPS_006.csv",
-    "TPS 007": "TPS_007.csv",
-    "TPS 008": "TPS_008.csv",
-    "TPS 009": "TPS_009.csv",
-    "TPS 010": "TPS_010.csv",
-    "TPS 011": "TPS_011.csv"
+    "TPS 001": "TPS 001.csv", "TPS 002": "TPS 002.csv", "TPS 003": "TPS 003.csv",
+    "TPS 004": "TPS 004.csv", "TPS 005": "TPS 005.csv", "TPS 006": "TPS 006.csv",
+    "TPS 007": "TPS 007.csv", "TPS 008": "TPS 008.csv", "TPS 009": "TPS 009.csv",
+    "TPS 010": "TPS 010.csv", "TPS 011": "TPS 011.csv"
 }
 
 pilihan_tps = st.selectbox("Pilih nomor TPS terlebih dahulu:", ["-- Pilih TPS --"] + list(tps_options.keys()))
@@ -73,6 +64,8 @@ if pilihan_tps != "-- Pilih TPS --":
     else:
         try:
             df_tps = load_local_csv(csv_file)
+            
+            # Deteksi otomatis kolom Nama (toleransi huruf besar/kecil)
             kolom_nama = [col for col in df_tps.columns if col.lower() == 'nama']
             
             if not kolom_nama:
@@ -85,14 +78,35 @@ if pilihan_tps != "-- Pilih TPS --":
                 cari_nama = st.text_input(f"Ketik Nama yang dicari di {pilihan_tps}:", "", placeholder="Contoh: ALAM KHODIRUN")
                 
                 if cari_nama:
+                    # Filter pencarian nama (case-insensitive)
                     df_filtered = df_tps[df_tps[nama_key].str.contains(cari_nama, case=False, na=False)]
+                    
                     if not df_filtered.empty:
                         st.success(f"Ditemukan {len(df_filtered)} data yang cocok:")
-                        st.dataframe(df_filtered, use_container_width=True, hide_index=True)
+                        
+                        # FORMAT OUTPUT BARU: Ditampilkan berbaris ke bawah menggunakan perulangan (loop)
+                        for index, row in df_filtered.iterrows():
+                            # Mengambil nilai dari kolom, sesuaikan dengan nama kolom asli sheet Anda
+                            v_nama = row.get('Nama', '-')
+                            v_jk = row.get('JnsKlmn', '-')
+                            v_alamat = row.get('Alamat', '-')
+                            v_id = row.get('ID', '-')
+                            
+                            # Menampilkan kotak informasi bergaya kartu yang estetik untuk HP
+                            with st.container():
+                                st.markdown(f"""
+                                📋 **Nama:** {v_nama}  
+                                👤 **Jenis Kelamin:** {v_jk}  
+                                📍 **Alamat:** {v_alamat}  
+                                🆔 **ID:** {v_id}
+                                """)
+                                st.markdown("---") # Garis pembatas antar nama jika hasil pencarian lebih dari satu
+                                
                     else:
                         st.warning(f"Nama '{cari_nama}' tidak ditemukan di {pilihan_tps}. Periksa ejaan kembali.")
                 else:
-                    st.info(f"Menampilkan seluruh daftar pemilih di {pilihan_tps} (Total: {len(df_tps)} orang)")
+                    # Jika kolom pencarian kosong, tampilkan daftar awal berbentuk tabel sebagai pratinjau saja
+                    st.info(f"Menampilkan pratinjau daftar pemilih di {pilihan_tps} (Total: {len(df_tps)} orang). Silakan ketik nama di atas untuk melihat format kartu detail.")
                     st.dataframe(df_tps, use_container_width=True, hide_index=True)
                 
         except Exception as e:

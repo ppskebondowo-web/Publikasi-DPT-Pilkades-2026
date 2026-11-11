@@ -5,7 +5,7 @@ import os
 # 1. Konfigurasi Tampilan untuk HP Android agar Modern & Responsif
 st.set_page_config(
     page_title="DPT Pilkades 2026", 
-    page_icon="🗳️", 
+    page_icon="", 
     layout="centered"
 )
 
@@ -20,8 +20,8 @@ hide_style = """
 st.markdown(hide_style, unsafe_allow_html=True)
 
 # 2. Judul Utama Aplikasi Web
-st.title("🗳️ DPT ONLINE PILKADES 2026")
-st.caption("Aplikasi Resmi Publikasi Daftar Pemilih Tetap (Tanpa Data Sensitif NIK/KK)")
+st.title("DAFTAR PEMILIH TETAP PILKADES 2026")
+st.caption("Aplikasi Resmi Publikasi DPT Pilkades 2026 Desa Kebondowo")
 
 # Fungsi membaca data lokal CSV secara instan dengan proteksi kerusakan baris teks
 @st.cache_data
@@ -97,7 +97,7 @@ if pilihan_tps != "-- Pilih TPS --":
                             v_id = row.get('ID', '-')
                             
                             # HTML 1 baris penuh untuk mengunci jarak rapat antara garis, nama, dan elemen bawahnya
-                            html_card = f'<div style="padding: 2px 0;"><div style="font-family: \'Roboto\', Gadget, sans-serif; font-size: 28px; font-weight: light; line-height: 1.2; margin-bottom: 4px;"><span style="font-family: sans-serif;">{v_nama}</div><div style="font-size: 16px; line-height: 1.3; margin-bottom: 5px;">👤 <span style="font-style: italic;">{v_jk}</span></div><div style="font-size: 16px; line-height: 1.3; margin-bottom: 5px;">📍 {v_alamat}</div><div style="font-family: \'OCR A Extended\', \'OCR-A\', Courier, monospace; font-size: 18px; font-weight: regular; line-height: 1.3;"><span style="font-family: sans-serif;">🆔</span>{v_id}</div></div><hr style="margin: 8px 0; border: 0; border-top: 1px solid rgba(128, 128, 128, 0.3);">'
+                            html_card = f'<div style="padding: 2px 0;"><div style="font-family: \'Roboto\', Gadget, sans-serif; font-size: 28px; font-weight: light; line-height: 1.2; margin-bottom: 6px;"><span style="font-family: sans-serif;">{v_nama}</div><div style="font-size: 16px; line-height: 1.3; margin-bottom: 7px;">👤 <span style="font-style: italic;">{v_jk}</span></div><div style="font-size: 16px; line-height: 1.3; margin-bottom: 7px;">📍 {v_alamat}</div><div style="font-family: \'OCR A Extended\', \'OCR-A\', Courier, monospace; font-size: 18px; font-weight: regular; line-height: 1.3;"><span style="font-family: sans-serif;">🆔</span>{v_id}</div></div><hr style="margin: 8px 0; border: 0; border-top: 1px solid rgba(128, 128, 128, 0.3);">'
                             
                             st.markdown(html_card, unsafe_allow_html=True)
                                 

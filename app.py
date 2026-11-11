@@ -114,7 +114,7 @@ if pilihan_tps != "-- Pilih TPS --":
                             # 3. Tampilan ID (Font Tebal Bergaya Kode Monospace)
                             st.markdown("🆔")
                             st.markdown(f"""
-                            <div style="font-family: 'Courier New', Courier, monospace; font-size: 18px; font-weight: bold; margin-top: -40px;">
+                            <div style="font-family: 'OCR A Extended', monospace; font-size: 18px; margin-top: -40px;">
                                 {v_id}
                             </div>
                             """, unsafe_allow_html=True)

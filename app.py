@@ -19,11 +19,11 @@ hide_style = """
 """
 st.markdown(hide_style, unsafe_allow_html=True)
 
-# 2. Judul Utama Aplikasi
+# 2. Judul Utama Aplikasi Web
 st.title("🗳️ DPT ONLINE PILKADES 2026")
 st.caption("Aplikasi Resmi Publikasi Daftar Pemilih Tetap (Tanpa Data Sensitif NIK/KK)")
 
-# Fungsi membaca data lokal CSV secara instan
+# Fungsi membaca data lokal CSV secara instan (100% Kebal Eror Jaringan)
 @st.cache_data
 def load_local_csv(filename):
     df = pd.read_csv(filename, header=0, dtype=str)
@@ -39,19 +39,27 @@ try:
         df_rekap = load_local_csv("Rekap.csv")
         st.dataframe(df_rekap, use_container_width=True, hide_index=True)
     else:
-        st.error("File 'Rekap.csv' tidak ditemukan di server aplikasi.")
+        st.error("File 'Rekap.csv' tidak ditemukan di server aplikasi. Pastikan Anda sudah mengunggahnya ke GitHub.")
 except Exception as e:
     st.error("Gagal memproses data Rekapitulasi lokal.")
 
-# 4. FITUR 2: PENCARIAN & DETAIL DATA PER TPS
+# 4. FITUR 2: PENCARIAN DATA PER TPS (Tanpa Pratinjau Tabel & Menggunakan Kustom Font)
 st.markdown("---")
 st.subheader("🔍 Cek Daftar Pemilih Per TPS")
 
+# Pemetaan Nama Pilihan ke Nama File CSV Asli Anda (Menggunakan Spasi, bukan Underscore)
 tps_options = {
-    "TPS 001": "TPS 001.csv", "TPS 002": "TPS 002.csv", "TPS 003": "TPS 003.csv",
-    "TPS 004": "TPS 004.csv", "TPS 005": "TPS 005.csv", "TPS 006": "TPS 006.csv",
-    "TPS 007": "TPS 007.csv", "TPS 008": "TPS 008.csv", "TPS 009": "TPS 009.csv",
-    "TPS 010": "TPS 010.csv", "TPS 011": "TPS 011.csv"
+    "TPS 001": "TPS 001.csv",
+    "TPS 002": "TPS 002.csv",
+    "TPS 003": "TPS 003.csv",
+    "TPS 004": "TPS 004.csv",
+    "TPS 005": "TPS 005.csv",
+    "TPS 006": "TPS 006.csv",
+    "TPS 007": "TPS 007.csv",
+    "TPS 008": "TPS 008.csv",
+    "TPS 009": "TPS 009.csv",
+    "TPS 010": "TPS 010.csv",
+    "TPS 011": "TPS 011.csv"
 }
 
 pilihan_tps = st.selectbox("Pilih nomor TPS terlebih dahulu:", ["-- Pilih TPS --"] + list(tps_options.keys()))
@@ -60,12 +68,12 @@ if pilihan_tps != "-- Pilih TPS --":
     csv_file = tps_options[pilihan_tps]
     
     if not os.path.exists(csv_file):
-        st.error(f"File '{csv_file}' belum diunggah ke GitHub Anda.")
+        st.error(f"File '{csv_file}' belum diunggah ke GitHub Anda. Pastikan nama file menggunakan spasi, bukan garis bawah.")
     else:
         try:
             df_tps = load_local_csv(csv_file)
             
-            # Deteksi otomatis kolom Nama
+            # Deteksi otomatis kolom Nama (toleransi huruf besar/kecil)
             kolom_nama = [col for col in df_tps.columns if col.lower() == 'nama']
             
             if not kolom_nama:
@@ -84,28 +92,40 @@ if pilihan_tps != "-- Pilih TPS --":
                     if not df_filtered.empty:
                         st.success(f"Ditemukan {len(df_filtered)} data yang cocok:")
                         
-                        # FORMAT OUTPUT BARU: Menggunakan perulangan bergaya teks sesuai keinginan Anda
+                        # FORMAT OUTPUT: Desain Kartu Kustom Font & Pemisahan Emoji Anti-Error
                         for index, row in df_filtered.iterrows():
-                            v_nama = row.get('Nama', '-').upper() # Dipaksa Huruf Besar
+                            v_nama = row.get('Nama', '-').upper()
                             v_jk = row.get('JnsKlmn', '-')
                             v_alamat = row.get('Alamat', '-')
                             v_id = row.get('ID', '-')
                             
-                            # Menggunakan markdown khusus dengan injeksi HTML aman untuk membesarkan font Nama
-                            st.markdown(f"#### {v_nama}")
-                            st.markdown(f"👤 *{v_jk}*") # Huruf miring (italic)
-                            st.markdown(f"📍 {v_alamat}")
-                            st.markdown(f"🆔 {v_id}")
-                            <div style="font-family: 'Lucida Console', Monaco, monospace; font-size: 16px;">
-                                🆔 {v_id}
+                            # 1. Tampilan Nama Pemilih (Besar, Tebal, Font Modern Sans-Serif)
+                            st.markdown("### 📋")
+                            st.markdown(f"""
+                            <div style="font-family: 'Arial Black', Gadget, sans-serif; font-size: 24px; margin-top: -40px; margin-bottom: 10px;">
+                                {v_nama}
+                            </div>
+                            """, unsafe_allow_html=True)
                             
-                            st.markdown("---") # Garis pembatas antar data
+                            # 2. Tampilan Jenis Kelamin (Italic) & Alamat
+                            st.markdown(f"👤 *{v_jk}*")
+                            st.markdown(f"📍 {v_alamat}")
+                            
+                            # 3. Tampilan ID (Font Tebal Bergaya Kode Monospace)
+                            st.markdown("🆔")
+                            st.markdown(f"""
+                            <div style="font-family: 'Courier New', Courier, monospace; font-size: 18px; font-weight: bold; margin-top: -40px;">
+                                {v_id}
+                            </div>
+                            """, unsafe_allow_html=True)
+                            
+                            st.markdown("---") # Garis pembatas tipis antar nama
                                 
                     else:
                         st.warning(f"Nama '{cari_nama}' tidak ditemukan di {pilihan_tps}. Periksa ejaan kembali.")
                 else:
-                    st.info(f"Menampilkan pratinjau daftar pemilih di {pilihan_tps} (Total: {len(df_tps)} orang). Silakan ketik nama di atas untuk melihat detail format khusus.")
-                    st.dataframe(df_tps, use_container_width=True, hide_index=True)
+                    # Tampilan bersih jika belum mengetik nama
+                    st.info(f"Silakan ketik nama pemilih pada kolom di atas untuk mencari data di {pilihan_tps}.")
                 
         except Exception as e:
-            st.error(f"Gagal memuat data lokal untuk {pilihan_tps}.")
+            st.error(f"Gagal memuat data lokal untuk {pilihan_tps}. Periksa format struktur file CSV tersebut.")

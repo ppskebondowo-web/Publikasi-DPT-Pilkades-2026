@@ -28,7 +28,7 @@ SHEET_ID = "1Xvi40Xj5MXFLuu5v4mi-wv3Oyfe7dYuyxNKccXbxXV0"
 # Fungsi membaca data ter-cache dengan pembersihan data tingkat lanjut
 @st.cache_data(ttl=60)
 def load_sheet_data(sheet_name):
-    url = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet={sheet_name}"
+    url = f"https://google.com{SHEET_ID}/gviz/tq?tqx=out:csv&sheet={sheet_name}"
     
     # Membaca seluruh data sebagai text/string demi keamanan data tipe nomor
     df = pd.read_csv(url, header=0, dtype=str)
@@ -38,6 +38,9 @@ def load_sheet_data(sheet_name):
     
     # 2. Bersihkan nama kolom dari spasi tersembunyi
     df.columns = df.columns.str.strip()
+    
+    # 3. BUANG KOLOM KOSONG (UNNAMED) SECARA OTOMATIS
+    df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
     
     return df
 

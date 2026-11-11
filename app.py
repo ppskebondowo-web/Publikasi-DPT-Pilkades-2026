@@ -96,6 +96,8 @@ if pilihan_tps != "-- Pilih TPS --":
                             st.markdown(f"👤 *{v_jk}*") # Huruf miring (italic)
                             st.markdown(f"📍 {v_alamat}")
                             st.markdown(f"🆔 {v_id}")
+                            <div style="font-family: 'Lucida Console', Monaco, monospace; font-size: 16px;">
+                                🆔 {v_id}
                             
                             st.markdown("---") # Garis pembatas antar data
                                 

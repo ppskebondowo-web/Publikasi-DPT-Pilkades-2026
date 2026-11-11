@@ -20,8 +20,8 @@ hide_style = """
 st.markdown(hide_style, unsafe_allow_html=True)
 
 # 2. Judul Utama Aplikasi Web
-st.title("DAFTAR PEMILIH TETAP PILKADES 2026")
-st.caption("Aplikasi Resmi Publikasi DPT Pilkades 2026 Desa Kebondowo")
+st.title("DAFTAR PEMILIH TETAP")
+st.caption("Aplikasi Resmi Publikasi DPT Pemilihan Kepala Desa Kebondowo Tahun 2026 © Panitia Pilkades Kebondowo")
 
 # Fungsi membaca data lokal CSV secara instan dengan proteksi kerusakan baris teks
 @st.cache_data
@@ -55,7 +55,7 @@ except Exception as e:
 
 # 4. FITUR 2: PENCARIAN DATA PER TPS
 st.markdown("---")
-st.subheader("🔍 Cek Daftar Pemilih Per TPS")
+st.subheader("🔍 Cek Data Pemilih Per TPS")
 
 tps_options = {
     "TPS 001": "TPS 001.csv", "TPS 002": "TPS 002.csv", "TPS 003": "TPS 003.csv",

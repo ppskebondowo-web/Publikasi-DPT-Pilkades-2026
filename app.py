@@ -23,15 +23,27 @@ st.markdown(hide_style, unsafe_allow_html=True)
 st.title("🗳️ DPT ONLINE PILKADES 2026")
 st.caption("Aplikasi Resmi Publikasi Daftar Pemilih Tetap (Tanpa Data Sensitif NIK/KK)")
 
-# Fungsi membaca data lokal CSV secara instan dengan proteksi encoding teks
+# Fungsi membaca data lokal CSV secara instan dengan proteksi kerusakan baris teks
 @st.cache_data
 def load_local_csv(filename):
-    # Menambahkan opsi encoding dan engine python agar kebal terhadap kesalahan karakter teks
-    df = pd.read_csv(filename, header=0, dtype=str, encoding='utf-8', on_bad_lines='skip', engine='python')
-    df = df.dropna(how='all', axis=0)
-    df.columns = df.columns.str.strip()
-    df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
-    return df
+    try:
+        # engine='python' dan on_bad_lines='skip' berfungsi melompati baris yang terpotong/rusak agar tidak crash
+        df = pd.read_csv(filename, header=0, dtype=str, encoding='utf-8', on_bad_lines='skip', engine='python')
+        df = df.dropna(how='all', axis=0)
+        df.columns = df.columns.str.strip()
+        df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
+        return df
+    except Exception as e:
+        # Jika gagal membaca normal, gunakan pembacaan darurat per baris teks baku
+        lines = []
+        with open(filename, 'r', encoding='utf-8', errors='ignore') as f:
+            header = f.readline().strip().split(',')
+            for line in f:
+                parts = line.strip().split(',')
+                # Hanya masukkan baris data yang memiliki kolom lengkap (4 kolom)
+                if len(parts) == len(header):
+                    lines.append(parts)
+        return pd.DataFrame(lines, columns=header)
 
 # 3. FITUR 1: TAMPILKAN REKAPITULASI
 st.subheader("📊 Rekapitulasi Pemilih")
@@ -44,11 +56,11 @@ try:
 except Exception as e:
     st.error("Gagal memproses data Rekapitulasi lokal.")
 
-# 4. FITUR 2: PENCARIAN DATA PER TPS (Tanpa Pratinjau Tabel & Menggunakan Kustom Font)
+# 4. FITUR 2: PENCARIAN DATA PER TPS (Tanpa Pratinjau Tabel)
 st.markdown("---")
 st.subheader("🔍 Cek Daftar Pemilih Per TPS")
 
-# Pemetaan Nama Pilihan ke Nama File CSV Asli Anda
+# Pemetaan Nama Pilihan ke Nama File CSV Asli Anda (Menggunakan Spasi)
 tps_options = {
     "TPS 001": "TPS 001.csv", "TPS 002": "TPS 002.csv", "TPS 003": "TPS 003.csv",
     "TPS 004": "TPS 004.csv", "TPS 005": "TPS 005.csv", "TPS 006": "TPS 006.csv",
@@ -73,11 +85,11 @@ if pilihan_tps != "-- Pilih TPS --":
             if not kolom_nama:
                 st.error(f"Eror Struktur: Kolom dengan nama 'Nama' tidak ditemukan di {pilihan_tps}.")
             else:
-                nama_key = kolom_nama
+                nama_key = kolom_nama[0]
                 df_tps[nama_key] = df_tps[nama_key].fillna('').astype(str).str.strip()
                 
                 # Kolom Input Pencarian Nama bagi Warga
-                cari_nama = st.text_input(f"Ketik Nama yang dicari di {pilihan_tps}:", "", placeholder="Contoh: GITA ARYU")
+                cari_nama = st.text_input(f"Ketik Nama yang dicari di {pilihan_tps}:", "", placeholder="Contoh: MARIA FILIPETA")
                 
                 if cari_nama:
                     # Filter pencarian nama (case-insensitive)
@@ -86,22 +98,22 @@ if pilihan_tps != "-- Pilih TPS --":
                     if not df_filtered.empty:
                         st.success(f"Ditemukan {len(df_filtered)} data yang cocok:")
                         
-                        # FORMAT OUTPUT: Desain Kartu Rapat Bebas IndentationError
+                        # FORMAT OUTPUT: Desain Kartu Rapat dengan Font Pilihan OCR A Extended
                         for index, row in df_filtered.iterrows():
                             v_nama = row.get('Nama', '-').upper()
                             v_jk = row.get('JnsKlmn', '-')
                             v_alamat = row.get('Alamat', '-')
                             v_id = row.get('ID', '-')
                             
-                            # 1. Nama Pemilih (Besar & Merapat)
+                            # 1. Tampilan Nama (Besar & Merapat)
                             st.markdown("### 📋")
                             st.markdown(f"""<div style="font-family: 'Arial Black', Gadget, sans-serif; font-size: 24px; margin-top: -45px; margin-bottom: 2px; line-height: 1.1;">{v_nama}</div>""", unsafe_allow_html=True)
                             
-                            # 2. Jenis Kelamin & Alamat (HTML Satu Baris Rapat)
+                            # 2. Tampilan Jenis Kelamin & Alamat
                             st.markdown(f"""<div style="margin-bottom: 2px; line-height: 1.2;">👤 <span style="font-style: italic;">{v_jk}</span></div>""", unsafe_allow_html=True)
                             st.markdown(f"""<div style="margin-bottom: 2px; line-height: 1.2;">📍 {v_alamat}</div>""", unsafe_allow_html=True)
                             
-                            # 3. ID Pemilih (OCR A Extended Rapat)
+                            # 3. Tampilan ID (Jenis Font Kustom OCR A Extended)
                             st.markdown(f"""<div style="font-family: 'OCR A Extended', 'OCR-A', Courier, monospace; font-size: 18px; font-weight: bold; margin-top: 2px; margin-bottom: 8px;"><span style="font-family: sans-serif;">🆔</span> {v_id}</div>""", unsafe_allow_html=True)
                             
                             st.markdown("---")
@@ -112,4 +124,4 @@ if pilihan_tps != "-- Pilih TPS --":
                     st.info(f"Silakan ketik nama pemilih pada kolom di atas untuk mencari data di {pilihan_tps}.")
                 
         except Exception as e:
-            st.error(f"Gagal memuat data lokal untuk {pilihan_tps}.")
+            st.error(f"Gagal memuat data lokal untuk {pilihan_tps}. Pastikan struktur dalam file CSV sudah benar.")

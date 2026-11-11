@@ -1,8 +1,7 @@
 import streamlit as st
 import pandas as pd
-from streamlit_gsheets import GSheetsConnection
 
-# 1. Konfigurasi Tampilan HP Android agar Modern & Responsif
+# 1. Konfigurasi Tampilan untuk HP Android agar Modern & Responsif
 st.set_page_config(
     page_title="DPT Pilkades 2026", 
     page_icon="🗳️", 
@@ -23,20 +22,18 @@ st.markdown(hide_style, unsafe_allow_html=True)
 st.title("🗳️ DPT ONLINE PILKADES 2026")
 st.caption("Aplikasi Resmi Publikasi Daftar Pemilih Tetap (Tanpa Data Sensitif NIK/KK)")
 
-# URL Tautan Google Sheet Publik Anda
-GOOGLE_SHEET_URL = "https://google.com"
-
-# Menginisialisasi koneksi resmi Streamlit ke Google Sheets
-conn = st.connection("gsheets", type=GSheetsConnection)
+# ID Google Sheet Publik Anda yang diambil dari link asli
+SHEET_ID = "1Xvi40Xj5MXFLuu5v4mi-wv3Oyfe7dYuyxNKccXbxXV0"
 
 # Fungsi membaca data ter-cache agar loading web super cepat di HP warga
-@st.cache_data(ttl=300) # Simpan cache di memori selama 5 menit
+@st.cache_data(ttl=60) # Simpan cache pendek agar tidak memicu error pemutusan dari Google
 def load_sheet_data(sheet_name):
-    # MENYANTUMKAN TAUTAN SPREADSHEET SECARA EKSPLISIT AGAR TIDAK ERROR
-    df = conn.read(spreadsheet=GOOGLE_SHEET_URL, worksheet=sheet_name)
+    # Menggunakan metode ekspor CSV resmi dari Google Docs API
+    url = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet={sheet_name}"
+    # Memaksa pandas membaca baris pertama sebagai header agar stabil
+    df = pd.read_csv(url, header=0)
     # Bersihkan baris atau kolom kosong otomatis bawaan Google Sheet jika ada
     df = df.dropna(how='all', axis=0)
-    df = df.dropna(how='all', axis=1)
     return df
 
 # 3. FITUR 1: TAMPILKAN REKAPITULASI
@@ -45,7 +42,12 @@ try:
     df_rekap = load_sheet_data("Rekap")
     st.dataframe(df_rekap, use_container_width=True, hide_index=True)
 except Exception as e:
-    st.error("Gagal memuat data sheet 'Rekap'. Silakan muat ulang halaman atau periksa koneksi internet Anda.")
+    st.error("Sistem sedang memuat ulang koneksi ke Google Sheets. Silakan tekan tombol 'Segarkan Data' di bawah.")
+
+# Tombol manual untuk membersihkan memori eror jika Google sempat memblokir koneksi
+if st.button("🔄 Segarkan Data (Refresh Data)"):
+    st.cache_data.clear()
+    st.rerun()
 
 # 4. FITUR 2: PENCARIAN & DETAIL DATA PER TPS
 st.markdown("---")
@@ -80,4 +82,4 @@ if pilihan_tps != "-- Pilih TPS --":
             st.dataframe(df_tps, use_container_width=True, hide_index=True)
             
     except Exception as e:
-        st.error(f"Gagal memuat data untuk {pilihan_tps}. Silakan coba klik/pilih kembali nama TPS Anda pada menu di atas.")
+        st.error(f"Gagal memuat data {pilihan_tps}. Silakan ketuk tombol 'Segarkan Data' di atas terlebih dahulu.")

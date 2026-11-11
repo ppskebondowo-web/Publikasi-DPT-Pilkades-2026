@@ -99,24 +99,30 @@ if pilihan_tps != "-- Pilih TPS --":
                         st.success(f"Ditemukan {len(df_filtered)} data yang cocok:")
                         
                         # FORMAT OUTPUT: Desain Kartu Rapat dengan Font Pilihan OCR A Extended
-                        for index, row in df_filtered.iterrows():
+                     for index, row in df_filtered.iterrows():
                             v_nama = row.get('Nama', '-').upper()
                             v_jk = row.get('JnsKlmn', '-')
                             v_alamat = row.get('Alamat', '-')
                             v_id = row.get('ID', '-')
                             
-                            # 1. Tampilan Nama (Besar & Merapat)
-                            st.markdown("###")
-                            st.markdown(f"""<div style="font-family: 'Avenir', Gadget, sans-serif; font-size: 24px; margin-top: -60px;">{v_nama}</div>""", unsafe_allow_html=True)
-                            
-                            # 2. Tampilan Jenis Kelamin & Alamat
-                            st.markdown(f"""<div style="margin-bottom: 12px; line-height: 1.2;">👤 <span style="font-style: italic;">{v_jk}</span></div>""", unsafe_allow_html=True)
-                            st.markdown(f"""<div style="margin-bottom: 5px; line-height: 1.2;">📍 {v_alamat}</div>""", unsafe_allow_html=True)
-                            
-                            # 3. Tampilan ID (Jenis Font Kustom OCR A Extended)
-                            st.markdown(f"""<div style="font-family: 'OCR A Extended', 'OCR-A', Courier, monospace; font-size: 18px; margin-top: 2px; margin-bottom: 8px;"><span style="font-family: sans-serif;">🆔</span>{v_id}</div>""", unsafe_allow_html=True)
-                            
-                            st.markdown("---")
+                            # Menggabungkan semua baris ke dalam 1 blok HTML agar tidak terkena spasi otomatis Streamlit
+                            st.markdown(f"""
+                            <div style="padding-top: 4px; padding-bottom: 4px;">
+                                <div style="font-family: 'Arial Black', Gadget, sans-serif; font-size: 22px; font-weight: bold; line-height: 1.2; margin-bottom: 6px;">
+                                    <span style="font-family: sans-serif;">📋</span> {v_nama}
+                                </div>
+                                <div style="font-size: 15px; line-height: 1.4; margin-bottom: 2px;">
+                                    👤 <span style="font-style: italic;">{v_jk}</span>
+                                </div>
+                                <div style="font-size: 15px; line-height: 1.4; margin-bottom: 4px;">
+                                    📍 {v_alamat}
+                                </div>
+                                <div style="font-family: 'OCR A Extended', 'OCR-A', Courier, monospace; font-size: 17px; font-weight: bold; line-height: 1.3;">
+                                    <span style="font-family: sans-serif;">🆔</span> {v_id}
+                                </div>
+                            </div>
+                            <hr style="margin-top: 8px; margin-bottom: 8px; border: 0; border-top: 1px solid rgba(128, 128, 128, 0.3);">
+                            """, unsafe_allow_html=True)
                                 
                     else:
                         st.warning(f"Nama '{cari_nama}' tidak ditemukan di {pilihan_tps}. Periksa ejaan kembali.")

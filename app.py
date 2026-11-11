@@ -21,7 +21,7 @@ st.markdown(hide_style, unsafe_allow_html=True)
 
 # 2. Judul Utama Aplikasi Web
 st.title("🗳️ DPT ONLINE PILKADES 2026")
-st.caption("Aplikasi Resmi Publikasi Daftar Pemilih Tetap Pilkades Kebondowo 2026")
+st.caption("Aplikasi Resmi Publikasi Daftar Pemilih Tetap (Tanpa Data Sensitif NIK/KK)")
 
 # Fungsi membaca data lokal CSV secara instan (100% Kebal Eror Jaringan)
 @st.cache_data
@@ -47,19 +47,12 @@ except Exception as e:
 st.markdown("---")
 st.subheader("🔍 Cek Daftar Pemilih Per TPS")
 
-# Pemetaan Nama Pilihan ke Nama File CSV Asli Anda (Menggunakan Spasi, bukan Underscore)
+# Pemetaan Nama Pilihan ke Nama File CSV Asli Anda
 tps_options = {
-    "TPS 001": "TPS 001.csv",
-    "TPS 002": "TPS 002.csv",
-    "TPS 003": "TPS 003.csv",
-    "TPS 004": "TPS 004.csv",
-    "TPS 005": "TPS 005.csv",
-    "TPS 006": "TPS 006.csv",
-    "TPS 007": "TPS 007.csv",
-    "TPS 008": "TPS 008.csv",
-    "TPS 009": "TPS 009.csv",
-    "TPS 010": "TPS 010.csv",
-    "TPS 011": "TPS 011.csv"
+    "TPS 001": "TPS 001.csv", "TPS 002": "TPS 002.csv", "TPS 003": "TPS 003.csv",
+    "TPS 004": "TPS 004.csv", "TPS 005": "TPS 005.csv", "TPS 006": "TPS 006.csv",
+    "TPS 007": "TPS 007.csv", "TPS 008": "TPS 008.csv", "TPS 009": "TPS 009.csv",
+    "TPS 010": "TPS 010.csv", "TPS 011": "TPS 011.csv"
 }
 
 pilihan_tps = st.selectbox("Pilih nomor TPS terlebih dahulu:", ["-- Pilih TPS --"] + list(tps_options.keys()))
@@ -68,22 +61,22 @@ if pilihan_tps != "-- Pilih TPS --":
     csv_file = tps_options[pilihan_tps]
     
     if not os.path.exists(csv_file):
-        st.error(f"File '{csv_file}' belum diunggah ke GitHub Anda. Pastikan nama file menggunakan spasi, bukan garis bawah.")
+        st.error(f"File '{csv_file}' belum diunggah ke GitHub Anda.")
     else:
         try:
             df_tps = load_local_csv(csv_file)
             
-            # Deteksi otomatis kolom Nama (toleransi huruf besar/kecil)
+            # Deteksi otomatis kolom Nama
             kolom_nama = [col for col in df_tps.columns if col.lower() == 'nama']
             
             if not kolom_nama:
                 st.error(f"Eror Struktur: Kolom dengan nama 'Nama' tidak ditemukan di {pilihan_tps}.")
             else:
-                nama_key = kolom_nama[0]
+                nama_key = kolom_nama
                 df_tps[nama_key] = df_tps[nama_key].fillna('').astype(str).str.strip()
                 
                 # Kolom Input Pencarian Nama bagi Warga
-                cari_nama = st.text_input(f"Ketik Nama yang dicari di {pilihan_tps}:", "", placeholder="Contoh: JHON DOE")
+                cari_nama = st.text_input(f"Ketik Nama yang dicari di {pilihan_tps}:", "", placeholder="Contoh: GITA ARYU")
                 
                 if cari_nama:
                     # Filter pencarian nama (case-insensitive)
@@ -92,44 +85,30 @@ if pilihan_tps != "-- Pilih TPS --":
                     if not df_filtered.empty:
                         st.success(f"Ditemukan {len(df_filtered)} data yang cocok:")
                         
-                        # FORMAT OUTPUT: Desain Kartu Kustom Font & Pemisahan Emoji Anti-Error
+                        # FORMAT OUTPUT: Desain Kartu Rapat Bebas IndentationError
                         for index, row in df_filtered.iterrows():
                             v_nama = row.get('Nama', '-').upper()
                             v_jk = row.get('JnsKlmn', '-')
                             v_alamat = row.get('Alamat', '-')
                             v_id = row.get('ID', '-')
                             
-                            # 1. Tampilan Nama Pemilih (Besar, Tebal, Font Modern Sans-Serif)
-                            st.markdown("###")
-                            st.markdown(f"""
-                            <div style="font-family: 'Avenir', Gadget, sans-serif; font-size: 28px; margin-top: -40px; margin-bottom: 10px;">
-                                {v_nama}
-                            </div>
-                            """, unsafe_allow_html=True)
+                            # 1. Nama Pemilih (Besar & Merapat)
+                            st.markdown("### 📋")
+                            st.markdown(f"""<div style="font-family: 'Arial Black', Gadget, sans-serif; font-size: 24px; margin-top: -45px; margin-bottom: 2px; line-height: 1.1;">{v_nama}</div>""", unsafe_allow_html=True)
                             
-                            # 2. Tampilan Jenis Kelamin (Italic) & Alamat
-                           <div style="margin-bottom: 2px; line-height: 1.2;">
-                                👤 <span style="font-style: italic;">{v_jk}</span>
-                            </div>
-                            <div style="margin-bottom: 2px; line-height: 1.2;">
-                                📍 {v_alamat}
-                            </div>
-                            """, unsafe_allow_html=True)
+                            # 2. Jenis Kelamin & Alamat (HTML Satu Baris Rapat)
+                            st.markdown(f"""<div style="margin-bottom: 2px; line-height: 1.2;">👤 <span style="font-style: italic;">{v_jk}</span></div>""", unsafe_allow_html=True)
+                            st.markdown(f"""<div style="margin-bottom: 2px; line-height: 1.2;">📍 {v_alamat}</div>""", unsafe_allow_html=True)
                             
-                            # 3. Tampilan ID (Font Tebal Bergaya Kode Monospace)
-                             st.markdown(f"""
-                            <div style="font-family: 'OCR A Extended', 'OCR-A', Courier, monospace; font-size: 18px; font-weight: bold; margin-top: 2px; margin-bottom: 8px;">
-                                <span style="font-family: sans-serif;">🆔</span> {v_id}
-                            </div>
-                            """, unsafe_allow_html=True)
+                            # 3. ID Pemilih (OCR A Extended Rapat)
+                            st.markdown(f"""<div style="font-family: 'OCR A Extended', 'OCR-A', Courier, monospace; font-size: 18px; font-weight: bold; margin-top: 2px; margin-bottom: 8px;"><span style="font-family: sans-serif;">🆔</span> {v_id}</div>""", unsafe_allow_html=True)
                             
-                            st.markdown("---") # Garis pembatas tipis antar nama
+                            st.markdown("---")
                                 
                     else:
                         st.warning(f"Nama '{cari_nama}' tidak ditemukan di {pilihan_tps}. Periksa ejaan kembali.")
                 else:
-                    # Tampilan bersih jika belum mengetik nama
                     st.info(f"Silakan ketik nama pemilih pada kolom di atas untuk mencari data di {pilihan_tps}.")
                 
         except Exception as e:
-            st.error(f"Gagal memuat data lokal untuk {pilihan_tps}. Periksa format struktur file CSV tersebut.")
+            st.error(f"Gagal memuat data lokal untuk {pilihan_tps}.")

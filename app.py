@@ -100,7 +100,7 @@ if pilihan_tps != "-- Pilih TPS --":
                             v_id = row.get('ID', '-')
                             
                             # 1. Tampilan Nama Pemilih (Besar, Tebal, Font Modern Sans-Serif)
-                            st.markdown("### 📋")
+                            st.markdown("###")
                             st.markdown(f"""
                             <div style="font-family: 'Arial Black', Gadget, sans-serif; font-size: 24px; margin-top: -40px; margin-bottom: 10px;">
                                 {v_nama}

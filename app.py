@@ -107,10 +107,10 @@ if pilihan_tps != "-- Pilih TPS --":
                             
                             # 1. Tampilan Nama (Besar & Merapat)
                             st.markdown("###")
-                            st.markdown(f"""<div style="font-family: 'Avenir', Gadget, sans-serif; font-size: 24px; margin-top: -20px; margin-bottom: 0px; line-height: 1.1;">{v_nama}</div>""", unsafe_allow_html=True)
+                            st.markdown(f"""<div style="font-family: 'Avenir', Gadget, sans-serif; font-size: 24px; margin-top: -20px; margin-bottom: 2px; line-height: 1.1;">{v_nama}</div>""", unsafe_allow_html=True)
                             
                             # 2. Tampilan Jenis Kelamin & Alamat
-                            st.markdown(f"""<div style="margin-bottom: 10px; line-height: 1.2;">👤 <span style="font-style: italic;">{v_jk}</span></div>""", unsafe_allow_html=True)
+                            st.markdown(f"""<div style="margin-bottom: 12px; line-height: 1.2;">👤 <span style="font-style: italic;">{v_jk}</span></div>""", unsafe_allow_html=True)
                             st.markdown(f"""<div style="margin-bottom: 5px; line-height: 1.2;">📍 {v_alamat}</div>""", unsafe_allow_html=True)
                             
                             # 3. Tampilan ID (Jenis Font Kustom OCR A Extended)

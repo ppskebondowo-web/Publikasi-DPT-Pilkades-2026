@@ -108,12 +108,17 @@ if pilihan_tps != "-- Pilih TPS --":
                             """, unsafe_allow_html=True)
                             
                             # 2. Tampilan Jenis Kelamin (Italic) & Alamat
-                            st.markdown(f"👤 *{v_jk}*")
-                            st.markdown(f"📍 {v_alamat}")
+                           <div style="margin-bottom: 2px; line-height: 1.2;">
+                                👤 <span style="font-style: italic;">{v_jk}</span>
+                            </div>
+                            <div style="margin-bottom: 2px; line-height: 1.2;">
+                                📍 {v_alamat}
+                            </div>
+                            """, unsafe_allow_html=True)
                             
                             # 3. Tampilan ID (Font Tebal Bergaya Kode Monospace)
-                            st.markdown(f"""
-                            <div style="font-family: 'OCR A Extended', 'OCR-A', Courier, monospace; font-size: 18px; font-weight: bold; margin-top: 10px; margin-bottom: 10px;">
+                             st.markdown(f"""
+                            <div style="font-family: 'OCR A Extended', 'OCR-A', Courier, monospace; font-size: 18px; font-weight: bold; margin-top: 2px; margin-bottom: 8px;">
                                 <span style="font-family: sans-serif;">🆔</span> {v_id}
                             </div>
                             """, unsafe_allow_html=True)

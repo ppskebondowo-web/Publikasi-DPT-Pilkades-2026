@@ -18,42 +18,52 @@ hide_style = """
 """
 st.markdown(hide_style, unsafe_allow_html=True)
 
-# 2. Judul Aplikasi Web
+# 2. Judul Utama Aplikasi
 st.title("🗳️ DPT ONLINE PILKADES 2026")
 st.caption("Aplikasi Resmi Publikasi Daftar Pemilih Tetap (Tanpa Data Sensitif NIK/KK)")
 
 # ID Google Sheet Publik Anda
 SHEET_ID = "1Xvi40Xj5MXFLuu5v4mi-wv3Oyfe7dYuyxNKccXbxXV0"
 
-# Fungsi membaca data murni jalur ekspor publikasi web (Sangat Stabil & Anti-Blokir)
+# Kamus Pemetaan ID Tab (GID) berdasarkan data asli Google Sheet Anda
+GID_MAP = {
+    "Rekap": "1866580022",
+    "TPS 001": "402733912",
+    "TPS 002": "577903264",
+    "TPS 003": "981448162",
+    "TPS 004": "1342674488",
+    "TPS 005": "688461718",
+    "TPS 006": "1657805169",
+    "TPS 007": "315575510",
+    "TPS 008": "1468164319",
+    "TPS 009": "1009029986",
+    "TPS 010": "377507340",
+    "TPS 011": "452778848"
+}
+
+# Fungsi membaca data ter-cache dengan metode Ekspor Direct CSV (Sangat Cepat & Stabil)
 @st.cache_data(ttl=60)
-def load_sheet_data(sheet_name):
-    # Metode jalur ekspor pub?output=csv berbasis tab sheet
-    url = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/pub?output=csv&sheet={sheet_name}"
+def load_sheet_by_gid(sheet_name):
+    gid = GID_MAP.get(sheet_name)
+    # Jalur ekspor CSV langsung via GID yang kebal blokir IP server
+    url = f"https://google.com{SHEET_ID}/export?format=csv&gid={gid}"
     
-    # Membaca seluruh data sebagai text/string demi keamanan data tipe nomor
+    # Membaca data dan memaksa teks string agar nomor ID tidak rusak
     df = pd.read_csv(url, header=0, dtype=str)
-    
-    # 1. Bersihkan baris yang kosong total di Google Sheet
     df = df.dropna(how='all', axis=0)
-    
-    # 2. Bersihkan nama kolom dari spasi tersembunyi
     df.columns = df.columns.str.strip()
-    
-    # 3. Buang kolom kosong (Unnamed) secara otomatis jika ada
     df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
-    
     return df
 
 # 3. FITUR 1: TAMPILKAN REKAPITULASI
 st.subheader("📊 Rekapitulasi Pemilih")
 try:
-    df_rekap = load_sheet_data("Rekap")
+    df_rekap = load_sheet_by_gid("Rekap")
     st.dataframe(df_rekap, use_container_width=True, hide_index=True)
 except Exception as e:
-    st.error("Gagal terhubung dengan server data Google. Silakan klik tombol 'Muat Ulang Paksa' di bawah.")
+    st.error("Gagal terhubung dengan server Google. Silakan ketuk tombol 'Muat Ulang Paksa' di bawah.")
 
-# Tombol muat ulang paksa dengan membersihkan seluruh memori cache yang macet
+# Tombol muat ulang paksa jika cache browser macet
 if st.button("🔄 Muat Ulang Paksa Aplikasi"):
     st.cache_data.clear()
     st.rerun()
@@ -62,40 +72,32 @@ if st.button("🔄 Muat Ulang Paksa Aplikasi"):
 st.markdown("---")
 st.subheader("🔍 Cek Daftar Pemilih Per TPS")
 
-# Membuat daftar pilihan TPS 001 sampai TPS 011 sesuai nama tab sheet Anda
 tps_list = [f"TPS {str(i).zfill(3)}" for i in range(1, 12)]
 pilihan_tps = st.selectbox("Pilih nomor TPS terlebih dahulu:", ["-- Pilih TPS --"] + tps_list)
 
 if pilihan_tps != "-- Pilih TPS --":
     try:
-        # Mengambil data TPS dengan fungsi pembersihan baru
-        df_tps = load_sheet_data(pilihan_tps)
-        
-        # Validasi Dinamis untuk mendeteksi kolom nama secara fleksibel
+        df_tps = load_sheet_by_gid(pilihan_tps)
         kolom_nama = [col for col in df_tps.columns if col.lower() == 'nama']
         
         if not kolom_nama:
-            st.error(f"Eror Struktur: Kolom dengan nama 'Nama' tidak ditemukan di tab {pilihan_tps}.")
+            st.error(f"Eror Struktur: Kolom dengan nama 'Nama' tidak ditemukan di {pilihan_tps}.")
         else:
-            nama_key = kolom_nama[0] # Mengambil nama kolom yang tepat (misal 'Nama')
+            nama_key = kolom_nama[0]
             df_tps[nama_key] = df_tps[nama_key].fillna('').astype(str).str.strip()
             
-            # Kolom Input Pencarian Nama bagi Warga
             cari_nama = st.text_input(f"Ketik Nama yang dicari di {pilihan_tps}:", "", placeholder="Contoh: ALAM KHODIRUN")
             
             if cari_nama:
-                # Filter pencarian nama tanpa memedulikan huruf besar/kecil (case-insensitive)
                 df_filtered = df_tps[df_tps[nama_key].str.contains(cari_nama, case=False, na=False)]
-                
                 if not df_filtered.empty:
                     st.success(f"Ditemukan {len(df_filtered)} data yang cocok:")
                     st.dataframe(df_filtered, use_container_width=True, hide_index=True)
                 else:
-                    st.warning(f"Nama '{cari_nama}' tidak ditemukan di {pilihan_tps}. Pastikan ejaan benar atau coba cari di TPS lain.")
+                    st.warning(f"Nama '{cari_nama}' tidak ditemukan di {pilihan_tps}. Periksa ejaan kembali.")
             else:
-                # Jika kolom input kosong, tampilkan info total warga dan daftar seluruhnya di TPS tersebut
                 st.info(f"Menampilkan seluruh daftar pemilih di {pilihan_tps} (Total: {len(df_tps)} orang)")
                 st.dataframe(df_tps, use_container_width=True, hide_index=True)
             
     except Exception as e:
-        st.error(f"Gagal memuat data {pilihan_tps}. Sistem mendeteksi pemutusan koneksi sementara dari Google.")
+        st.error(f"Gagal memuat data {pilihan_tps}. Silakan coba klik tombol 'Muat Ulang Paksa' di atas.")

@@ -9,11 +9,16 @@ st.set_page_config(
     layout="centered"
 )
 
-# Style CSS Kustom untuk menyembunyikan menu bawaan, memuat Open Sans, & membesarkan Dropdown + Input Nama
+# Memuat Google Fonts secara resmi menggunakan tag <link> agar anti-blokir
+st.markdown("""
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Poppins:wght@600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+""", unsafe_allow_html=True)
+
+# Style CSS Kustom
 hide_style = """
     <style>
-    @import url('https://googleapis.com');
-    
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}

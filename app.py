@@ -15,8 +15,8 @@ st.markdown("""
     <style>
     #MainMenu, footer, header {visibility: hidden;}
     html, body, [class*="css"], p, div, span, td, th { font-family: 'Open Sans', sans-serif; }
-    div[data-testid="stSelectbox"] label p { font-family: 'Montserrat_Lokal', sans-serif !important; font-size: 14px !important; }
-    div[data-testid="stTextInput"] label p { font-family: 'Montserrat_Lokal', sans-serif !important; font-size: 14px !important; }
+    div[data-testid="stSelectbox"] label p { font-family: 'Montserrat_Lokal', sans-serif !important; font-size: 12px !important; }
+    div[data-testid="stTextInput"] label p { font-family: 'Montserrat_Lokal', sans-serif !important; font-size: 12px !important; }
     div[data-testid="stSelectbox"] div[data-baseweb="select"],
     div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:first-child,
     div[data-testid="stSelectbox"] div[data-baseweb="select"] div,
@@ -44,7 +44,7 @@ if os.path.exists("montserrat.ttf"):
         mont_b64 = base64.b64encode(f.read()).decode()
     st.markdown(f"<style>@font-face {{ font-family: 'Montserrat_Lokal'; src: url(data:font/ttf;base64,{mont_b64}) format('truetype'); }}</style>", unsafe_allow_html=True)
 
-if os.path.exists("siera.ttf"):
+if os.path.exists("saira.ttf"):
     with open("siera.ttf", "rb") as f:
         siera_b64 = base64.b64encode(f.read()).decode()
     st.markdown(f"<style>@font-face {{ font-family: 'Siera_Lokal'; src: url(data:font/ttf;base64,{siera_b64}) format('truetype'); }}</style>", unsafe_allow_html=True)

@@ -9,7 +9,7 @@ st.set_page_config(
     layout="centered"
 )
 
-# Memuat Google Fonts (Termasuk Montserrat Light 300 & Roboto Light 300)
+# Memuat Google Fonts secara resmi menggunakan tag <link> agar anti-blokir
 st.markdown("""
     <link rel="preconnect" href="https://googleapis.com">
     <link rel="preconnect" href="https://gstatic.com" crossorigin>
@@ -18,17 +18,6 @@ st.markdown("""
 
 # Style CSS Kustom
 hide_style = """
-        /* Menghilangkan total tulisan 'Press Enter to submit form' di semua versi Streamlit */
-    [data-testid="InputInstructions"],
-    [data-testid="InputInstructions"] *,
-    div[data-testid="stForm"] small,
-    div[data-testid="stTextInput"] small {
-        display: none !important;
-        visibility: hidden !important;
-        height: 0 !important;
-        opacity: 0 !important;
-    }
-
     <style>
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
@@ -47,7 +36,7 @@ hide_style = """
         font-size: 18px !important;
     }
     
-    /* Kotak Dropdown TPS -> Ukuran 18px */
+    /* Kotak Dropdown TPS -> Memaksa semua teks di dalamnya menjadi 18px */
     div[data-testid="stSelectbox"] div[data-baseweb="select"],
     div[data-testid="stSelectbox"] div[data-baseweb="select"] *,
     div[data-baseweb="select"] [value] {
@@ -75,6 +64,17 @@ hide_style = """
         font-family: 'Open Sans', sans-serif !important;
         font-weight: 400 !important;
         font-size: 18px !important;
+    }
+
+    /* Menghilangkan total tulisan 'Press Enter to submit form' di semua versi Streamlit */
+    [data-testid="InputInstructions"],
+    [data-testid="InputInstructions"] *,
+    div[data-testid="stForm"] small,
+    div[data-testid="stTextInput"] small {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        opacity: 0 !important;
     }
     </style>
 """
@@ -184,7 +184,7 @@ if pilihan_tps != "-- Pilih TPS --":
                 nama_key = kolom_nama[0]
                 df_tps[nama_key] = df_tps[nama_key].fillna('').astype(str).str.strip()
                 
-                # Form Pencarian dengan Tombol (Menghilangkan teks Press Enter)
+                # Form Pencarian dengan Tombol
                 with st.form(key=f"form_cari_{pilihan_tps}", border=False):
                     cari_nama = st.text_input(
                         f"Ketik Nama yang dicari di {pilihan_tps}:", 
@@ -206,7 +206,7 @@ if pilihan_tps != "-- Pilih TPS --":
                                 v_alamat = row.get('Alamat', '-')
                                 v_id = row.get('ID', '-')
                                 
-                                html_card = f'<div style="padding: 2px 0;"><div style="font-family: \'Roboto\', sans-serif; font-size: 28px; font-weight: 300; line-height: 1.2; margin-bottom: 6px;">{v_nama}</div><div style="font-size: 16px; line-height: 1.3; margin-bottom: 7px;">👤 <span style="font-style: italic;">{v_jk}</span></div><div style="font-size: 16px; line-height: 1.3; margin-bottom: 7px;">📍 {v_alamat}</div><div style="font-family: \'OCR A Extended\', \'OCR-A\', Courier, monospace; font-size: 18px; font-weight: 400; line-height: 1.3;"><span style="font-family: sans-serif;">🆔</span>{v_id}</div></div><hr style="margin: 8px 0; border: 0; border-top: 1px solid rgba(128, 128, 128, 0.3);">'
+                                html_card = f'<div style="padding: 2px 0;"><div style="font-family: \'Roboto\', sans-serif; font-size: 28px; font-weight: 300; line-height: 1.2; margin-bottom: 6px;">{v_nama}</div><div style="font-size: 16px; line-height: 1.3; margin-bottom: 7px;">👤 <span style="font-style: italic;">{v_jk}</span></div><div style="font-size: 16px; line-height: 1.3; margin-bottom: 7px;">📍 {v_alamat}</div><div style="font-family: \'OCR A Extended\', \'OCR-A\', Courier, monospace; font-size: 18px; font-weight: 400; line-height: 1.3;"><span style="font-family: sans-serif;">🆔</span> {v_id}</div></div><hr style="margin: 8px 0; border: 0; border-top: 1px solid rgba(128, 128, 128, 0.3);">'
                                 
                                 st.markdown(html_card, unsafe_allow_html=True)
                         else:

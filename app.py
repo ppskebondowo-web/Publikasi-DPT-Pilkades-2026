@@ -21,9 +21,9 @@ hide_style = """
 """
 st.markdown(hide_style, unsafe_allow_html=True)
 
-# 2. Judul Utama Aplikasi Web (Menggunakan Font Open Sans)
+# 2. Judul Utama Aplikasi Web
 st.markdown("""
-<h1 style="font-family: 'Roboto Condensed', sans-serif; font-size: 36px; font-weight: 600; margin-bottom: 15px; line-height: 1.2;">
+<h1 style="font-family: 'Roboto', sans-serif; font-size: 36px; font-weight: 600; margin-bottom: 2px; line-height: 1.2;">
     DAFTAR PEMILIH TETAP
 </h1>
 <div style="font-family: 'Open Sans', sans-serif; font-size: 14px; color: gray; line-height: 1.4; margin-bottom: 15px;">

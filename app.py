@@ -20,7 +20,16 @@ hide_style = """
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
-    
+    # Ubah baris hide_style menjadi f-string (hide_style = f""" ... """) agar bisa membaca variabel ocra_base64
+font_face_css = f"""
+    @font-face {{
+        font-family: 'OCRA_Lokal';
+        src: url(data:font/ttf;base64,{ocra_base64}) format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }}
+""" if ocra_base64 else ""
+
     html, body, [class*="css"], p, div, span, td, th {
         font-family: 'Open Sans', sans-serif;
     }
@@ -85,6 +94,13 @@ def get_base64_image(image_path):
             return base64.b64encode(img_file.read()).decode()
     return None
 
+def get_base64_font(font_path):
+    if os.path.exists(font_path):
+        with open(font_path, "rb") as f:
+            return base64.b64encode(f.read()).decode()
+    return None
+
+ocra_base64 = get_base64_font("OCRAExtended.ttf")
 logo_base64 = get_base64_image("logo.png")
 img_html = f'<img src="data:image/png;base64,{logo_base64}" style="width: 85px; height: auto; margin-bottom: 10px; object-fit: contain;">' if logo_base64 else ''
 
@@ -219,7 +235,7 @@ if pilihan_tps != "-- Pilih TPS --":
                                 jk_usia_text = v_jk
                                                         
                             # Desain Kartu Rata Tengah (Center) Persis Sesuai Gambar Contoh
-                            html_card = f'<div style="text-align: center; padding: 8px 0;"><div style="font-family: \'Roboto\', sans-serif; font-size: 28px; font-weight: 400; line-height: 1.2; margin-bottom: 4px;">{v_nama}</div><div style="font-size: 16px; font-style: italic; line-height: 1.3; margin-bottom: 3px;">{jk_usia_text}</div><div style="font-size: 16px; line-height: 1.3; margin-bottom: 5px;">{v_alamat}</div><div style="font-family: \'OCR A Extended\', \'OCR-A\', \'Share Tech Mono\', monospace; font-size: 19px; font-weight: 400; letter-spacing: 1px; line-height: 1.3;"><span style="font-family: sans-serif; letter-spacing: 0;">🆔</span> {v_id}</div></div><hr style="margin: 10px 0; border: 0; border-top: 1px solid rgba(128, 128, 128, 0.3);">'
+                            html_card = f'<div style="text-align: center; padding: 8px 0;"><div style="font-family: \'Roboto\', sans-serif; font-size: 28px; font-weight: 400; line-height: 1.2; margin-bottom: 4px;">{v_nama}</div><div style="font-size: 16px; font-style: italic; line-height: 1.3; margin-bottom: 3px;">{jk_usia_text}</div><div style="font-size: 16px; line-height: 1.3; margin-bottom: 5px;">{v_alamat}</div><div style=";font-family: 'OCRA_Lokal', 'OCR A Extended', monospace; font-size: 19px; font-weight: 400; letter-spacing: 1px; line-height: 1.3;"><span style="font-family: sans-serif; letter-spacing: 0;">🆔</span> {v_id}</div></div><hr style="margin: 10px 0; border: 0; border-top: 1px solid rgba(128, 128, 128, 0.3);">'
                             st.markdown(html_card, unsafe_allow_html=True)
                    
                     else:

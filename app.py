@@ -42,16 +42,32 @@ def load_local_csv(filename):
                     lines.append(parts)
         return pd.DataFrame(lines, columns=header)
 
-# 3. FITUR 1: TAMPILKAN REKAPITULASI
+# 3. FITUR 1: TAMPILKAN REKAPITULASI (Dengan Format Titik Ribuan)
 st.subheader("📊 Rekapitulasi Pemilih")
 try:
     if os.path.exists("Rekap.csv"):
         df_rekap = load_local_csv("Rekap.csv")
+        
+        # Fungsi otomatis untuk menambahkan titik pemisah ribuan pada angka
+        def format_ribuan(val):
+            try:
+                # Bersihkan karakter non-angka jika ada, lalu format dengan titik
+                num = int(float(str(val).replace('.', '').replace(',', '').strip()))
+                return f"{num:,}".replace(",", ".")
+            except:
+                return val
+
+        # Terapkan pemisah titik ke kolom L, P, dan L+P
+        for col in ['L', 'P', 'L+P']:
+            if col in df_rekap.columns:
+                df_rekap[col] = df_rekap[col].apply(format_ribuan)
+                
         st.dataframe(df_rekap, width='stretch', hide_index=True)
     else:
         st.error("File 'Rekap.csv' tidak ditemukan di server aplikasi. Pastikan Anda sudah mengunggahnya ke GitHub.")
 except Exception as e:
     st.error("Gagal memproses data Rekapitulasi lokal.")
+
 
 # 4. FITUR 2: PENCARIAN DATA PER TPS
 st.markdown("---")

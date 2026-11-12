@@ -17,7 +17,17 @@ st.markdown("""
     html, body, [class*="css"], p, div, span, td, th { font-family: 'Open Sans', sans-serif; }
     div[data-testid="stSelectbox"] label p { font-family: 'Montserrat', sans-serif !important; font-weight: 300 !important; font-size: 15px !important; }
     div[data-testid="stTextInput"] label p { font-family: 'Montserrat', sans-serif !important; font-weight: 300 !important; font-size: 18px !important; }
-    div[data-testid="stSelectbox"] div[data-baseweb="select"] * { font-size: 18px !important; line-height: 1.5 !important; }
+    div[data-testid="stSelectbox"] div[data-baseweb="select"],
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:first-child,
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] div,
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] span,
+    div[data-testid="stSelectbox"] input {
+        font-family: 'Open Sans', sans-serif !important;
+        font-weight: 400 !important;
+        font-size: 18px !important;
+        line-height: 1.5 !important;
+        min-height: 28px !important;
+    }
     div[data-baseweb="popover"] li, [role="option"] { font-size: 18px !important; padding: 8px !important; }
     div[data-testid="stTextInput"] input { font-size: 18px !important; }
     [data-testid="InputInstructions"], div[data-testid="stForm"] small { display: none !important; }

@@ -5,7 +5,7 @@ import os
 # 1. Konfigurasi Tampilan untuk HP Android agar Modern & Responsif
 st.set_page_config(
     page_title="DPT Pilkades Kebondowo 2026", 
-    page_icon="🗳️", 
+    page_icon="", 
     layout="centered"
 )
 
@@ -82,8 +82,8 @@ st.markdown(hide_style, unsafe_allow_html=True)
 
 # 2. Judul Utama Aplikasi Web
 st.markdown("""
-<h1 style="font-family: 'Open Sans', sans-serif; font-size: 28px; font-weight: 800; margin-bottom: 5px; line-height: 1.2;">
-    🗳️ DAFTAR PEMILIH TETAP
+<h1 style="font-family: 'Open Sans', sans-serif; font-size: 28px; font-weight: 600; margin-bottom: 5px; line-height: 1.2;">
+    DAFTAR PEMILIH TETAP
 </h1>
 <div style="font-family: 'Open Sans', sans-serif; font-size: 14px; color: gray; line-height: 1.4; margin-bottom: 15px;">
     Aplikasi Resmi Publikasi Daftar Pemilih Tetap<br>

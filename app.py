@@ -440,9 +440,7 @@ if pilihan_tps != "-- Pilih TPS --":
                             # Desain Kartu Rata Tengah (Center) Persis Sesuai Gambar Contoh
                             html_card = f'<div style="text-align: center; padding: 8px 0;"><div style="font-family: \'Roboto\', sans-serif; font-size: 28px; font-weight: 400; line-height: 1.2; margin-bottom: 4px;">{v_nama}</div><div style="font-size: 16px; font-style: italic; line-height: 1.3; margin-bottom: 3px;">{jk_usia_text}</div><div style="font-size: 16px; line-height: 1.3; margin-bottom: 5px;">{v_alamat}</div><div style="font-family: \'OCR A Extended\', \'OCR-A\', \'Share Tech Mono\', monospace; font-size: 19px; font-weight: 400; letter-spacing: 1px; line-height: 1.3;"><span style="font-family: sans-serif; letter-spacing: 0;">🆔</span> {v_id}</div></div><hr style="margin: 10px 0; border: 0; border-top: 1px solid rgba(128, 128, 128, 0.3);">'
                             st.markdown(html_card, unsafe_allow_html=True)
-                    else:
-                        st.warning(f"Nama '{cari_nama}' tidak ditemukan di {pilihan_tps}.")
-
+                   
                     else:
                         st.warning(f"Nama '{cari_nama}' tidak ditemukan di {pilihan_tps}.")
                 else:

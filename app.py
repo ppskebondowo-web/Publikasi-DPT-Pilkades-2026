@@ -37,7 +37,7 @@ st.markdown("""
 # 2. Judul Utama Aplikasi Web
 st.title("DAFTAR PEMILIH TETAP")
 st.markdown("""
-<div style="font-size: 16px; color: gray; line-height: 1.4; margin-top: -10px; margin-bottom: 15px;">
+<div style="font-family: 'Roboto', sans-serif; font-size: 16px; color: gray; line-height: 1.4; margin-top: -10px; margin-bottom: 15px;">
     Aplikasi Resmi Publikasi Daftar Pemilih Tetap<br>
     Pemilihan Kepala Desa Kebondowo Tahun 2026<br>
     © Panitia Pilkades Kebondowo

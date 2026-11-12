@@ -9,15 +9,30 @@ st.set_page_config(
     layout="centered"
 )
 
-# Style CSS Kustom untuk menyembunyikan menu bawaan agar web bersih di HP warga
+# Style CSS Kustom untuk menyembunyikan menu bawaan & memuat Google Font Open Sans
 hide_style = """
     <style>
+    @import url('https://googleapis.com');
+    
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
     </style>
 """
 st.markdown(hide_style, unsafe_allow_html=True)
+
+# 2. Judul Utama Aplikasi Web (Menggunakan Font Open Sans)
+st.markdown("""
+<h1 style="font-family: 'Open Sans', sans-serif; font-size: 28px; font-weight: 800; margin-bottom: 5px; line-height: 1.2;">
+    🗳️ DAFTAR PEMILIH TETAP
+</h1>
+<div style="font-family: 'Open Sans', sans-serif; font-size: 14px; color: gray; line-height: 1.4; margin-bottom: 15px;">
+    Aplikasi Resmi Publikasi Daftar Pemilih Tetap<br>
+    Pemilihan Kepala Desa Kebondowo Tahun 2026<br>
+    © Panitia Pilkades Kebondowo
+</div>
+""", unsafe_allow_html=True)
+
 
 # 2. Judul Utama Aplikasi Web
 st.title("DAFTAR PEMILIH TETAP")

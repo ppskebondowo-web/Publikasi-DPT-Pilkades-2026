@@ -5,15 +5,15 @@ import os
 # 1. Konfigurasi Tampilan untuk HP Android agar Modern & Responsif
 st.set_page_config(
     page_title="DPT Pilkades Kebondowo 2026", 
-    page_icon="", 
+    page_icon="🗳️", 
     layout="centered"
 )
 
 # Memuat Google Fonts secara resmi menggunakan tag <link> agar anti-blokir
 st.markdown("""
-    <link rel="preconnect" href="https://googleapis.com">
-    <link rel="preconnect" href="https://gstatic.com" crossorigin>
-    <link href="https://googleapis.com/css2?family=Merriweather:wght@700&family=Montserrat:wght@300;400;600;700;800&family=Open+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Poppins:wght@600;700;800&family=Roboto:wght@300;400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Montserrat:wght@300;400;600;700;800&family=Open+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Poppins:wght@600;700;800&family=Roboto:wght@300;400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 """, unsafe_allow_html=True)
 
 # Style CSS Kustom
@@ -80,9 +80,9 @@ hide_style = """
 """
 st.markdown(hide_style, unsafe_allow_html=True)
 
-# 2. Judul Utama Aplikasi Web
+# 2. Judul Utama Aplikasi Web (Perbaikan line-height agar tidak bertumpuk di layar HP)
 st.markdown("""
-<h1 style="font-family: 'Open Sans', sans-serif; font-size: 32px; font-weight: 600; margin-bottom: 0px; line-height: 0;">
+<h1 style="font-family: 'Open Sans', sans-serif; font-size: 32px; font-weight: 600; margin-bottom: 8px; line-height: 1.2;">
     DAFTAR PEMILIH TETAP
 </h1>
 <div style="font-family: 'Open Sans', sans-serif; font-size: 14px; color: gray; line-height: 1.4; margin-bottom: 15px;">
@@ -206,7 +206,7 @@ if pilihan_tps != "-- Pilih TPS --":
                                 v_alamat = row.get('Alamat', '-')
                                 v_id = row.get('ID', '-')
                                 
-                                html_card = f'<div style="padding: 2px 0;"><div style="font-family: \'Roboto\', sans-serif; font-size: 28px; font-weight: 300; line-height: 1.2; margin-bottom: 6px;">{v_nama}</div><div style="font-size: 16px; line-height: 1.3; margin-bottom: 7px;">👤 <span style="font-style: italic;">{v_jk}</span></div><div style="font-size: 16px; line-height: 1.3; margin-bottom: 7px;">📍 {v_alamat}</div><div style="font-family: \'OCR A Extended\', \'OCR-A\', Courier, monospace; font-size: 18px; font-weight: 400; line-height: 1.3;"><span style="font-family: sans-serif;">🆔</span>{v_id}</div></div><hr style="margin: 8px 0; border: 0; border-top: 1px solid rgba(128, 128, 128, 0.3);">'
+                                html_card = f'<div style="padding: 2px 0;"><div style="font-family: \'Roboto\', sans-serif; font-size: 28px; font-weight: 300; line-height: 1.2; margin-bottom: 6px;">{v_nama}</div><div style="font-size: 16px; line-height: 1.3; margin-bottom: 7px;">👤 <span style="font-style: italic;">{v_jk}</span></div><div style="font-size: 16px; line-height: 1.3; margin-bottom: 7px;">📍 {v_alamat}</div><div style="font-family: \'OCR A Extended\', \'OCR-A\', Courier, monospace; font-size: 18px; font-weight: 400; line-height: 1.3;"><span style="font-family: sans-serif;">🆔</span> {v_id}</div></div><hr style="margin: 8px 0; border: 0; border-top: 1px solid rgba(128, 128, 128, 0.3);">'
                                 
                                 st.markdown(html_card, unsafe_allow_html=True)
                         else:
@@ -217,4 +217,3 @@ if pilihan_tps != "-- Pilih TPS --":
                     st.info("Ketik nama pemilih pada kolom di atas lalu tekan tombol 🔍 Cari Pemilih.")
                 
         except Exception:
-            st.error(f"Gagal memuat data lokal untuk {pilihan_tps}. Pastikan struktur file CSV sudah benar.")

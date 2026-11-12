@@ -44,6 +44,11 @@ if os.path.exists("montserrat.ttf"):
         mont_b64 = base64.b64encode(f.read()).decode()
     st.markdown(f"<style>@font-face {{ font-family: 'Montserrat_Lokal'; src: url(data:font/ttf;base64,{mont_b64}) format('truetype'); }}</style>", unsafe_allow_html=True)
 
+if os.path.exists("siera.ttf"):
+    with open("siera.ttf", "rb") as f:
+        siera_b64 = base64.b64encode(f.read()).decode()
+    st.markdown(f"<style>@font-face {{ font-family: 'Siera_Lokal'; src: url(data:font/ttf;base64,{siera_b64}) format('truetype'); }}</style>", unsafe_allow_html=True)
+
 logo_b64 = base64.b64encode(open("logo.png", "rb").read()).decode() if os.path.exists("logo.png") else None
 img_html = f'<img src="data:image/png;base64,{logo_b64}" style="width: 85px; margin-bottom: 10px;">' if logo_b64 else ''
 
@@ -108,7 +113,7 @@ if pilihan_tps != "-- Pilih TPS --":
                             v_id = row.get('ID', '-')
                             v_usia = next((str(row[k]).strip() for k in row.index if k.strip().lower() in ['usia', 'umur']), '')
                             jk_usia = f"{v_jk}, {v_usia} tahun" if v_usia and v_usia.lower() not in ['-', 'nan', ''] else v_jk
-                            st.markdown(f'<div style="text-align: center; padding: 8px 0;"><div style="font-family: \'Roboto\', sans-serif; font-size: 28px; line-height: 1.2; margin-bottom: 4px;">{v_nama}</div><div style="font-size: 16px; font-style: italic; margin-bottom: 3px;">{jk_usia}</div><div style="font-size: 16px; margin-bottom: 5px;">{v_alamat}</div><div style="font-family: \'OCRA_Lokal\', \'OCR A Extended\', monospace; font-size: 19px; letter-spacing: 1px;"><span style="font-family: sans-serif; letter-spacing: 0;">🆔</span>{v_id}</div></div><hr style="margin: 10px 0; border: 0; border-top: 1px solid rgba(128, 128, 128, 0.3);">', unsafe_allow_html=True)
+                            st.markdown(f'<div style="text-align: center; padding: 8px 0;"><div style="font-family: \'Siera_Lokal\', \'Roboto\', sans-serif; font-size: 28px; line-height: 1.2; margin-bottom: 4px;">{v_nama}</div><div style="font-size: 16px; font-style: italic; margin-bottom: 3px;">{jk_usia}</div><div style="font-size: 16px; margin-bottom: 5px;">{v_alamat}</div><div style="font-family: \'OCRA_Lokal\', \'OCR A Extended\', monospace; font-size: 19px; letter-spacing: 1px;"><span style="font-family: sans-serif; letter-spacing: 0;">🆔</span>{v_id}</div></div><hr style="margin: 10px 0; border: 0; border-top: 1px solid rgba(128, 128, 128, 0.3);">', unsafe_allow_html=True)
                     else:
                         st.warning(f"Nama '{cari_nama}' tidak ditemukan di {pilihan_tps}.")
                 else:

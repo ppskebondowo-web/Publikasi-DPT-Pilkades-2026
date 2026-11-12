@@ -27,15 +27,15 @@ hide_style = """
     div[data-testid="stSelectbox"] label p {
         font-size: 16px !important;
         font-weight: 100 !important;
-        font-family: 'Montserrat' !important;
+        font-family: 'Montserrat', sans-serif !important;
     }
     
     /* Membesarkan tulisan pilihan terpilih di dalam kotak dropdown TPS */
     div[data-baseweb="select"] div,
     div[data-baseweb="select"] span {
         font-size: 24px !important;
-        font-weight: 50 !important;
-        font-family: 'Open Sans', sans-serif !important;
+        font-weight: 100 !important;
+        font-family: 'Montserrat', sans-serif !important;
     }
     
     /* Membesarkan tulisan seluruh daftar TPS saat menu dropdown terbuka (Popover & Listbox) */
@@ -45,7 +45,7 @@ hide_style = """
     [role="option"] {
         font-size: 18px !important;
         font-weight: 200 !important;
-        font-family: 'Open Sans', sans-serif !important;
+        font-family: 'Montserrat', sans-serif !important;
         padding-top: 8px !important;
         padding-bottom: 8px !important;
     }
@@ -53,15 +53,15 @@ hide_style = """
     /* Membesarkan tulisan label 'Ketik Nama yang dicari di TPS ...:' */
     div[data-testid="stTextInput"] label p {
         font-size: 18px !important;
-        font-weight: 200 !important;
-        font-family: 'Open Sans', sans-serif !important;
+        font-weight: 100 !important;
+        font-family: 'Montserrat', sans-serif !important;
     }
 
     /* Membesarkan tulisan teks yang diketikkan di dalam kotak pencarian nama */
     div[data-testid="stTextInput"] input {
         font-size: 18px !important;
         font-weight: 200 !important;
-        font-family: 'Open Sans', sans-serif !important;
+        font-family: 'Montserrat', sans-serif !important;
     }
     </style>
 """

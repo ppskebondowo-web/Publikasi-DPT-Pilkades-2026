@@ -143,7 +143,7 @@ if os.path.exists("Rekap.csv"):
             df_rekap[col] = df_rekap[col].apply(format_ribuan)
     
     html_table = '<div style="overflow-x: auto; margin-bottom: 10px;">'
-    html_table += '<table style="width: 100%; border-collapse: collapse; font-size: 15px;">'
+    html_table += '<table style="width: 100%; border-collapse: collapse; font-size: 18px;">'
     html_table += '<thead><tr style="background-color: rgba(128, 128, 128, 0.2);">'
     for col in df_rekap.columns:
         html_table += f'<th style="text-align: center; font-weight: bold; padding: 8px; border: 1px solid rgba(128, 128, 128, 0.3);">{col}</th>'

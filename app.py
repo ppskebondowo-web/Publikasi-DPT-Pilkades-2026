@@ -9,64 +9,63 @@ st.set_page_config(
     layout="centered"
 )
 
-# Memuat 6 Keluarga Font Terbaik dari Google Fonts sekaligus (Tetap Ringan & Cepat di HP)
+# 1. Memuat Google Fonts (Menambahkan Montserrat varian 300/Light)
 st.markdown("""
     <link rel="preconnect" href="https://googleapis.com">
     <link rel="preconnect" href="https://gstatic.com" crossorigin>
-    <link href="https://googleapis.com/css2?family=Merriweather:wght@100;700&family=Montserrat:wght@100;600;700;800&family=Open+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Poppins:wght@100;600;700;800&family=Roboto:wght@100;400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://googleapis.com/css2?family=Merriweather:wght@700&family=Montserrat:wght@300;400;600;700;800&family=Open+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Poppins:wght@600;700;800&family=Roboto:wght@400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 """, unsafe_allow_html=True)
 
-# Style CSS Kustom
+# 2. Style CSS Kustom
 hide_style = """
     <style>
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
     
-    /* Membesarkan tulisan label 'Pilih nomor TPS terlebih dahulu:' */
-    div[data-testid="stSelectbox"] label p {
-        font-size: 16px !important;
-        font-weight: 100 !important;
-        font-family: 'Montserrat', sans-serif !important;
+    /* Menerapkan Open Sans sebagai font dasar */
+    html, body, [class*="css"], p, div, span, td, th {
+        font-family: 'Open Sans', sans-serif;
     }
     
-    /* Membesarkan tulisan pilihan terpilih di dalam kotak dropdown TPS */
+    /* Label 'Pilih nomor TPS terlebih dahulu:' & 'Ketik Nama...' -> Montserrat Light (300) ukuran 18px */
+    div[data-testid="stSelectbox"] label p,
+    div[data-testid="stTextInput"] label p {
+        font-family: 'Montserrat', sans-serif !important;
+        font-weight: 300 !important;
+        font-size: 18px !important;
+    }
+    
+    /* Kotak Dropdown TPS ('TPS 006') -> Disamakan ukurannya menjadi 18px */
     div[data-baseweb="select"] div,
     div[data-baseweb="select"] span {
-        font-size: 24px !important;
-        font-weight: 100 !important;
-        font-family: 'Montserrat', sans-serif !important;
+        font-family: 'Open Sans', sans-serif !important;
+        font-weight: 400 !important;
+        font-size: 18px !important;
     }
     
-    /* Membesarkan tulisan seluruh daftar TPS saat menu dropdown terbuka (Popover & Listbox) */
+    /* Daftar pilihan saat menu dropdown TPS dibuka -> Ukuran 18px */
     div[data-baseweb="popover"] li,
     div[data-baseweb="popover"] div,
     ul[role="listbox"] li,
     [role="option"] {
+        font-family: 'Open Sans', sans-serif !important;
+        font-weight: 400 !important;
         font-size: 18px !important;
-        font-weight: 200 !important;
-        font-family: 'Montserrat', sans-serif !important;
         padding-top: 8px !important;
         padding-bottom: 8px !important;
     }
 
-    /* Membesarkan tulisan label 'Ketik Nama yang dicari di TPS ...:' */
-    div[data-testid="stTextInput"] label p {
+    /* Kotak Input Nama ('Contoh: JOHN DOE' & teks ketikan) -> Disamakan ukurannya menjadi 18px */
+    div[data-testid="stTextInput"] input,
+    div[data-testid="stTextInput"] input::placeholder {
+        font-family: 'Open Sans', sans-serif !important;
+        font-weight: 400 !important;
         font-size: 18px !important;
-        font-weight: 100 !important;
-        font-family: 'Montserrat', sans-serif !important;
-    }
-
-    /* Membesarkan tulisan teks yang diketikkan di dalam kotak pencarian nama */
-    div[data-testid="stTextInput"] input {
-        font-size: 18px !important;
-        font-weight: 200 !important;
-        font-family: 'Montserrat', sans-serif !important;
     }
     </style>
 """
 st.markdown(hide_style, unsafe_allow_html=True)
-
 
 # 2. Judul Utama Aplikasi Web
 st.title("DAFTAR PEMILIH TETAP")

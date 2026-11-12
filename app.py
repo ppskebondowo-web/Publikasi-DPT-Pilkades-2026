@@ -32,7 +32,7 @@ hide_style = """
     div[data-testid="stTextInput"] label p {
         font-family: 'Montserrat', sans-serif !important;
         font-weight: 300 !important;
-        font-size: 18px !important;
+        font-size: 12px !important;
     }
     
         /* Kotak Dropdown TPS -> Memaksa ukuran 18px sama persis dengan kotak pencarian nama */

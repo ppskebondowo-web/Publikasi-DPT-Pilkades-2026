@@ -34,13 +34,18 @@ hide_style = """
         font-size: 18px !important;
     }
     
-    div[data-testid="stSelectbox"] div[data-baseweb="select"],
-    div[data-testid="stSelectbox"] div[data-baseweb="select"] *,
-    div[data-baseweb="select"] [value] {
+        /* Kotak Dropdown TPS -> Memaksa ukuran 18px sama persis dengan kotak pencarian nama */
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:first-child,
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] div,
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] span,
+    div[data-testid="stSelectbox"] input {
         font-family: 'Open Sans', sans-serif !important;
         font-weight: 400 !important;
         font-size: 18px !important;
-        line-height: 1.4 !important;
+        line-height: 1.5 !important;
+        min-height: 28px !important;
+    }
+
     }
     
     div[data-baseweb="popover"] li,

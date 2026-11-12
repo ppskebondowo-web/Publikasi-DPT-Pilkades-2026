@@ -21,7 +21,13 @@ st.markdown(hide_style, unsafe_allow_html=True)
 
 # 2. Judul Utama Aplikasi Web
 st.title("DAFTAR PEMILIH TETAP")
-st.caption("Aplikasi Resmi Publikasi Daftar Pemilih Tetap<br>Pemilihan Kepala Desa Kebondowo Tahun 2026<br>© Panitia Pilkades Kebondowo")
+st.markdown("""
+<div style="font-size: 14px; color: gray; line-height: 1.4; margin-top: -10px; margin-bottom: 15px;">
+    Aplikasi Resmi Publikasi Daftar Pemilih Tetap<br>
+    Pemilihan Kepala Desa Kebondowo Tahun 2026<br>
+    © Panitia Pilkades Kebondowo
+</div>
+""", unsafe_allow_html=True)
 
 # Fungsi membaca data lokal CSV secara instan dengan proteksi kerusakan baris teks
 @st.cache_data

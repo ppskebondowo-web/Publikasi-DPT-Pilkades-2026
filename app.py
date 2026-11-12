@@ -13,7 +13,7 @@ st.set_page_config(
 st.markdown("""
     <link rel="preconnect" href="https://googleapis.com">
     <link rel="preconnect" href="https://gstatic.com" crossorigin>
-    <link href="https://googleapis.com/css2?family=Merriweather:wght@700&family=Montserrat:wght@600;700;800&family=Open+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Poppins:wght@600;700;800&family=Roboto:wght@400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://googleapis.com/css2?family=Merriweather:wght@100;700&family=Montserrat:wght@100;600;700;800&family=Open+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Poppins:wght@100;600;700;800&family=Roboto:wght@100;400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 """, unsafe_allow_html=True)
 
 # Style CSS Kustom
@@ -26,8 +26,8 @@ hide_style = """
     /* Membesarkan tulisan label 'Pilih nomor TPS terlebih dahulu:' */
     div[data-testid="stSelectbox"] label p {
         font-size: 16px !important;
-        font-weight: 10 !important;
-        font-family: 'Shadows Into Light Two' !important;
+        font-weight: 100 !important;
+        font-family: 'Montserrat' !important;
     }
     
     /* Membesarkan tulisan pilihan terpilih di dalam kotak dropdown TPS */

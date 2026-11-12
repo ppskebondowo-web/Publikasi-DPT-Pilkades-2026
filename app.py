@@ -11,9 +11,9 @@ st.set_page_config(
 
 # Memuat Google Fonts secara resmi menggunakan tag <link> agar anti-blokir
 st.markdown("""
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Montserrat:wght@300;400;600;700;800&family=Open+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Poppins:wght@600;700;800&family=Roboto:wght@300;400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Merriweather:wght@700&family=Montserrat:wght@300;400;600;700;800&family=Open+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Poppins:wght@600;700;800&family=Roboto:wght@300;400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 """, unsafe_allow_html=True)
 
 # Style CSS Kustom
@@ -80,7 +80,7 @@ hide_style = """
 """
 st.markdown(hide_style, unsafe_allow_html=True)
 
-# 2. Judul Utama Aplikasi Web (Perbaikan line-height agar tidak bertumpuk di layar HP)
+# 2. Judul Utama Aplikasi Web
 st.markdown("""
 <h1 style="font-family: 'Open Sans', sans-serif; font-size: 32px; font-weight: 600; margin-bottom: 8px; line-height: 1.2;">
     DAFTAR PEMILIH TETAP
@@ -140,7 +140,7 @@ try:
         # Isi Tabel Center Semua
         html_table += '<tbody>'
         for index, row in df_rekap.iterrows():
-            is_total = str(row.iloc[0]).strip().lower() == 'total'
+            is_total = str(row.iloc).strip().lower() == 'total'
             row_style = 'font-weight: bold; background-color: rgba(128, 128, 128, 0.15);' if is_total else ''
             
             html_table += f'<tr style="{row_style}">'
@@ -181,7 +181,7 @@ if pilihan_tps != "-- Pilih TPS --":
             if not kolom_nama:
                 st.error(f"Eror Struktur: Kolom 'Nama' tidak ditemukan di {pilihan_tps}.")
             else:
-                nama_key = kolom_nama[0]
+                nama_key = kolom_nama
                 df_tps[nama_key] = df_tps[nama_key].fillna('').astype(str).str.strip()
                 
                 # Form Pencarian dengan Tombol

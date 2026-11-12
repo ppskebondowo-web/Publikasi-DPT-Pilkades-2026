@@ -39,6 +39,11 @@ if os.path.exists("ocra.ttf"):
         font_b64 = base64.b64encode(f.read()).decode()
     st.markdown(f"<style>@font-face {{ font-family: 'OCRA_Lokal'; src: url(data:font/ttf;base64,{font_b64}) format('truetype'); }}</style>", unsafe_allow_html=True)
 
+if os.path.exists("montserrat.ttf"):
+    with open("montserrat.ttf", "rb") as f:
+        mont_b64 = base64.b64encode(f.read()).decode()
+    st.markdown(f"<style>@font-face {{ font-family: 'Montserrat_Lokal'; src: url(data:font/ttf;base64,{mont_b64}) format('truetype'); }}</style>", unsafe_allow_html=True)
+
 logo_b64 = base64.b64encode(open("logo.png", "rb").read()).decode() if os.path.exists("logo.png") else None
 img_html = f'<img src="data:image/png;base64,{logo_b64}" style="width: 85px; margin-bottom: 10px;">' if logo_b64 else ''
 

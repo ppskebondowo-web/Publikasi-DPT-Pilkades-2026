@@ -71,7 +71,7 @@ try:
         
         # Membangun Tabel HTML Kustom agar Header Center & Tebal
         html_table = '<div style="overflow-x: auto; margin-bottom: 10px;">'
-        html_table += '<table style="width: 100%; border-collapse: collapse; font-size: 15px;">'
+        html_table += '<table style="width: 100%; border-collapse: collapse; font-size: 18px;">'
         
         # Bagian Header (Center & Tebal)
         html_table += '<thead><tr style="background-color: rgba(128, 128, 128, 0.2);">'

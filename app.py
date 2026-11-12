@@ -80,7 +80,7 @@ hide_style = """
 """
 st.markdown(hide_style, unsafe_allow_html=True)
 
-# 2. Judul Utama Aplikasi Web (Dengan Gambar Logo di Sebelah Kiri)
+# 2. Judul Utama Aplikasi Web (Logo di Atas & Rata Tengah)
 def get_base64_image(image_path):
     if os.path.exists(image_path):
         with open(image_path, "rb") as img_file:
@@ -88,23 +88,22 @@ def get_base64_image(image_path):
     return None
 
 logo_base64 = get_base64_image("logo.png")
-img_html = f'<img src="data:image/png;base64,{logo_base64}" style="width: 65px; height: auto; margin-right: 14px; object-fit: contain;">' if logo_base64 else ''
+img_html = f'<img src="data:image/png;base64,{logo_base64}" style="width: 85px; height: auto; margin-bottom: 10px; object-fit: contain;">' if logo_base64 else ''
 
 st.markdown(f"""
-<div style="display: flex; align-items: center; margin-bottom: 15px;">
+<div style="display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 18px;">
     {img_html}
-    <div>
-        <div style="font-family: 'Open Sans', sans-serif; font-size: 28px; font-weight: 700; margin: 0px 0px 4px 0px; padding: 0px; line-height: 1.15;">
-            DAFTAR PEMILIH TETAP
-        </div>
-        <div style="font-family: 'Open Sans', sans-serif; font-size: 13px; color: gray; line-height: 1.35; margin: 0px; padding: 0px;">
-            Aplikasi Resmi Publikasi Daftar Pemilih Tetap<br>
-            Pemilihan Kepala Desa Kebondowo Tahun 2026<br>
-            © Panitia Pilkades Kebondowo
-        </div>
+    <div style="font-family: 'Open Sans', sans-serif; font-size: 28px; font-weight: 700; margin: 0px 0px 4px 0px; padding: 0px; line-height: 1.15;">
+        DAFTAR PEMILIH TETAP
+    </div>
+    <div style="font-family: 'Open Sans', sans-serif; font-size: 13px; color: gray; line-height: 1.35; margin: 0px; padding: 0px;">
+        Aplikasi Resmi Publikasi Daftar Pemilih Tetap<br>
+        Pemilihan Kepala Desa Kebondowo Tahun 2026<br>
+        © Panitia Pilkades Kebondowo
     </div>
 </div>
 """, unsafe_allow_html=True)
+
 
 
 # Fungsi membaca data lokal CSV

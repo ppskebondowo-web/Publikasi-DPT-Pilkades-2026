@@ -22,7 +22,7 @@ hide_style = """
     div[data-testid="stSelectbox"] label p {
         font-size: 16px !important;
         font-weight: 10 !important;
-        font-family: 'Open Sans', sans-serif !important;
+        font-family: 'Shadows Into Light Two' !important;
     }
     
     /* Membesarkan tulisan pilihan terpilih di dalam kotak dropdown TPS */

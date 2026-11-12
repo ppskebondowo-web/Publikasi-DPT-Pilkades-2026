@@ -180,19 +180,41 @@ if pilihan_tps != "-- Pilih TPS --":
                 nama_key = kolom_nama[0]
                 df_tps[nama_key] = df_tps[nama_key].fillna('').astype(str).str.strip()
                 
-                cari_nama = st.text_input(f"Ketik Nama yang dicari di {pilihan_tps}:", "", placeholder="Contoh: JOHN DOE")
+                            # Membungkus kotak pencarian dengan st.form agar tulisan "Press Enter to apply" hilang & diganti tombol
+                with st.form(key=f"form_cari_{pilihan_tps}", border=False):
+                    cari_nama = st.text_input(
+                        f"Ketik Nama yang dicari di {pilihan_tps}:", 
+                        "", 
+                        placeholder="Contoh: JOHN DOE"
+                    )
+                    # Tombol pencarian yang nyaman diketuk di layar HP
+                    tombol_cari = st.form_submit_button("🔍 Cari Pemilih", use_container_width=True)
                 
-                if cari_nama:
-                    df_filtered = df_tps[df_tps[nama_key].str.contains(cari_nama, case=False, na=False)]
-                    
-                    if not df_filtered.empty:
-                        st.success(f"Ditemukan {len(df_filtered)} data yang cocok:")
+                if tombol_cari or cari_nama:
+                    if cari_nama.strip():
+                        # Filter pencarian nama (case-insensitive)
+                        df_filtered = df_tps[df_tps[nama_key].str.contains(cari_nama.strip(), case=False, na=False)]
                         
-                        for index, row in df_filtered.iterrows():
-                            v_nama = row.get('Nama', '-').upper()
-                            v_jk = row.get('JnsKlmn', '-')
-                            v_alamat = row.get('Alamat', '-')
-                            v_id = row.get('ID', '-')
+                        if not df_filtered.empty:
+                            st.success(f"Ditemukan {len(df_filtered)} data yang cocok:")
+                            
+                            for index, row in df_filtered.iterrows():
+                                v_nama = row.get('Nama', '-').upper()
+                                v_jk = row.get('JnsKlmn', '-')
+                                v_alamat = row.get('Alamat', '-')
+                                v_id = row.get('ID', '-')
+                                
+                                html_card = f'<div style="padding: 2px 0;"><div style="font-family: \'Arial Black\', Gadget, sans-serif; font-size: 20px; font-weight: bold; line-height: 1.2; margin-bottom: 4px;"><span style="font-family: sans-serif;">📋</span> {v_nama}</div><div style="font-size: 15px; line-height: 1.3; margin-bottom: 2px;">👤 <span style="font-style: italic;">{v_jk}</span></div><div style="font-size: 15px; line-height: 1.3; margin-bottom: 3px;">📍 {v_alamat}</div><div style="font-family: \'OCR A Extended\', \'OCR-A\', Courier, monospace; font-size: 16px; font-weight: bold; line-height: 1.2;"><span style="font-family: sans-serif;">🆔</span> {v_id}</div></div><hr style="margin: 8px 0; border: 0; border-top: 1px solid rgba(128, 128, 128, 0.3);">'
+                                
+                                st.markdown(html_card, unsafe_allow_html=True)
+                                    
+                        else:
+                            st.warning(f"Nama '{cari_nama}' tidak ditemukan di {pilihan_tps}. Periksa ejaan kembali.")
+                    else:
+                        st.warning("Silakan ketikkan nama terlebih dahulu sebelum menekan tombol cari.")
+                else:
+                    st.info(f"Ketik nama pemilih pada kolom di atas lalu tekan tombol 🔍 Cari Pemilih.")
+
                             
                             # HTML 1 baris penuh untuk mengunci jarak rapat antara garis, nama, dan elemen bawahnya
                             html_card = f'<div style="padding: 2px 0;"><div style="font-family: \'Roboto\', Gadget, sans-serif; font-size: 28px; font-weight: light; line-height: 1.2; margin-bottom: 6px;"><span style="font-family: sans-serif;">{v_nama}</div><div style="font-size: 16px; line-height: 1.3; margin-bottom: 7px;">👤 <span style="font-style: italic;">{v_jk}</span></div><div style="font-size: 16px; line-height: 1.3; margin-bottom: 7px;">📍 {v_alamat}</div><div style="font-family: \'OCR A Extended\', \'OCR-A\', Courier, monospace; font-size: 18px; font-weight: regular; line-height: 1.3;"><span style="font-family: sans-serif;">🆔</span>{v_id}</div></div><hr style="margin: 8px 0; border: 0; border-top: 1px solid rgba(128, 128, 128, 0.3);">'

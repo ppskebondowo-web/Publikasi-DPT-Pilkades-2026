@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import os
+import base64
 
 # 1. Konfigurasi Tampilan untuk HP Android
 st.set_page_config(
@@ -79,17 +80,32 @@ hide_style = """
 """
 st.markdown(hide_style, unsafe_allow_html=True)
 
-# 2. Judul Utama Aplikasi Web (Jarak Rapat Tanpa Padding Bawaan h1)
-st.markdown("""
-<div style="font-family: 'Open Sans', sans-serif; font-size: 32px; font-weight: 600; margin: 0px 0px 4px 0px; padding: 0px; line-height: 1.15;">
-    DAFTAR PEMILIH TETAP
-</div>
-<div style="font-family: 'Open Sans', sans-serif; font-size: 14px; color: gray; line-height: 1.4; margin: 0px 0px 15px 0px; padding: 0px;">
-    Aplikasi Resmi Publikasi Daftar Pemilih Tetap<br>
-    Pemilihan Kepala Desa Kebondowo Tahun 2026<br>
-    © Panitia Pilkades Kebondowo
+# 2. Judul Utama Aplikasi Web (Dengan Gambar Logo di Sebelah Kiri)
+def get_base64_image(image_path):
+    if os.path.exists(image_path):
+        with open(image_path, "rb") as img_file:
+            return base64.b64encode(img_file.read()).decode()
+    return None
+
+logo_base64 = get_base64_image("logo.png")
+img_html = f'<img src="data:image/png;base64,{logo_base64}" style="width: 65px; height: auto; margin-right: 14px; object-fit: contain;">' if logo_base64 else ''
+
+st.markdown(f"""
+<div style="display: flex; align-items: center; margin-bottom: 15px;">
+    {img_html}
+    <div>
+        <div style="font-family: 'Open Sans', sans-serif; font-size: 28px; font-weight: 700; margin: 0px 0px 4px 0px; padding: 0px; line-height: 1.15;">
+            DAFTAR PEMILIH TETAP
+        </div>
+        <div style="font-family: 'Open Sans', sans-serif; font-size: 13px; color: gray; line-height: 1.35; margin: 0px; padding: 0px;">
+            Aplikasi Resmi Publikasi Daftar Pemilih Tetap<br>
+            Pemilihan Kepala Desa Kebondowo Tahun 2026<br>
+            © Panitia Pilkades Kebondowo
+        </div>
+    </div>
 </div>
 """, unsafe_allow_html=True)
+
 
 # Fungsi membaca data lokal CSV
 @st.cache_data

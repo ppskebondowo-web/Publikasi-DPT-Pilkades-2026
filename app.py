@@ -36,13 +36,16 @@ hide_style = """
         font-size: 18px !important;
     }
     
-    /* Kotak Dropdown TPS ('TPS 006') -> Disamakan ukurannya menjadi 18px */
-    div[data-baseweb="select"] div,
-    div[data-baseweb="select"] span {
+        /* Kotak Dropdown TPS ('TPS 006') -> Memaksa semua teks di dalamnya menjadi 18px */
+    div[data-testid="stSelectbox"] div[data-baseweb="select"],
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] *,
+    div[data-baseweb="select"] [value] {
         font-family: 'Open Sans', sans-serif !important;
         font-weight: 400 !important;
         font-size: 18px !important;
+        line-height: 1.4 !important;
     }
+
     
     /* Daftar pilihan saat menu dropdown TPS dibuka -> Ukuran 18px */
     div[data-baseweb="popover"] li,

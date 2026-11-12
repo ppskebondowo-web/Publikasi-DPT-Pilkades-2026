@@ -9,11 +9,11 @@ st.set_page_config(
     layout="centered"
 )
 
-# Memuat Google Fonts secara resmi menggunakan tag <link> agar anti-blokir
+# Memuat 6 Keluarga Font Terbaik dari Google Fonts sekaligus (Tetap Ringan & Cepat di HP)
 st.markdown("""
     <link rel="preconnect" href="https://googleapis.com">
     <link rel="preconnect" href="https://gstatic.com" crossorigin>
-    <link href="https://googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Poppins:wght@600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://googleapis.com/css2?family=Merriweather:wght@700&family=Montserrat:wght@600;700;800&family=Open+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Poppins:wght@600;700;800&family=Roboto:wght@400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 """, unsafe_allow_html=True)
 
 # Style CSS Kustom

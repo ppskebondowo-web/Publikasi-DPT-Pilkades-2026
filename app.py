@@ -20,7 +20,7 @@ hide_style = """
     
     /* Membesarkan tulisan label 'Pilih nomor TPS terlebih dahulu:' */
     div[data-testid="stSelectbox"] label p {
-        font-size: 18px !important;
+        font-size: 16px !important;
         font-weight: 10 !important;
         font-family: 'Open Sans', sans-serif !important;
     }
@@ -28,8 +28,8 @@ hide_style = """
     /* Membesarkan tulisan pilihan terpilih di dalam kotak dropdown TPS */
     div[data-baseweb="select"] div,
     div[data-baseweb="select"] span {
-        font-size: 18px !important;
-        font-weight: 200 !important;
+        font-size: 24px !important;
+        font-weight: 50 !important;
         font-family: 'Open Sans', sans-serif !important;
     }
     

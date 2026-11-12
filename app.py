@@ -71,24 +71,19 @@ try:
             html_table += f'<th style="text-align: center; font-weight: bold; padding: 8px; border: 1px solid rgba(128, 128, 128, 0.3);">{col}</th>'
         html_table += '</tr></thead>'
         
-        # Bagian Isi Tabel
+        # Bagian Isi Tabel (Semua Sel Rata Tengah / Center)
         html_table += '<tbody>'
         for index, row in df_rekap.iterrows():
-            # Mengecek apakah baris ini adalah baris 'Total'
+            # Mengecek apakah baris ini adalah baris 'Total' untuk dicetak tebal
             is_total = str(row.iloc[0]).strip().lower() == 'total'
             row_style = 'font-weight: bold; background-color: rgba(128, 128, 128, 0.15);' if is_total else ''
             
             html_table += f'<tr style="{row_style}">'
-            for i, val in enumerate(row):
-                # Jika baris Total, semua sel dibuat center. Jika baris TPS biasa, kolom pertama rata kiri.
-                if is_total:
-                    align = 'center'
-                else:
-                    align = 'left' if i == 0 else 'center'
-                    
-                html_table += f'<td style="text-align: {align}; padding: 7px 8px; border: 1px solid rgba(128, 128, 128, 0.3);">{val}</td>'
+            for val in row:
+                html_table += f'<td style="text-align: center; padding: 7px 8px; border: 1px solid rgba(128, 128, 128, 0.3);">{val}</td>'
             html_table += '</tr>'
         html_table += '</tbody></table></div>'
+
 
         
         st.markdown(html_table, unsafe_allow_html=True)

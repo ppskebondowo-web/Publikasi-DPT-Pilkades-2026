@@ -79,12 +79,12 @@ hide_style = """
 """
 st.markdown(hide_style, unsafe_allow_html=True)
 
-# 2. Judul Utama Aplikasi Web
+# 2. Judul Utama Aplikasi Web (Jarak Rapat Tanpa Padding Bawaan h1)
 st.markdown("""
-<h1 style="font-family: 'Open Sans', sans-serif; font-size: 32px; font-weight: 600; margin-bottom: 8px; line-height: 1.2;">
+<div style="font-family: 'Open Sans', sans-serif; font-size: 32px; font-weight: 600; margin: 0px 0px 4px 0px; padding: 0px; line-height: 1.15;">
     DAFTAR PEMILIH TETAP
-</h1>
-<div style="font-family: 'Open Sans', sans-serif; font-size: 14px; color: gray; line-height: 1.4; margin-bottom: 15px;">
+</div>
+<div style="font-family: 'Open Sans', sans-serif; font-size: 14px; color: gray; line-height: 1.4; margin: 0px 0px 15px 0px; padding: 0px;">
     Aplikasi Resmi Publikasi Daftar Pemilih Tetap<br>
     Pemilihan Kepala Desa Kebondowo Tahun 2026<br>
     © Panitia Pilkades Kebondowo

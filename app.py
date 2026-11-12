@@ -195,7 +195,7 @@ if pilihan_tps != "-- Pilih TPS --":
                             v_alamat = row.get('Alamat', '-')
                             v_id = row.get('ID', '-')
                             
-                            html_card = f'<div style="padding: 2px 0;"><div style="font-family: \'Roboto\', sans-serif; font-size: 28px; font-weight: 300; line-height: 1.2; margin-bottom: 6px;">{v_nama}</div><div style="font-size: 16px; line-height: 1.3; margin-bottom: 7px;">👤 <span style="font-style: italic;">{v_jk}</span></div><div style="font-size: 16px; line-height: 1.3; margin-bottom: 7px;">📍 {v_alamat}</div><div style="font-family: \'OCR A Extended\', \'OCR-A\', Courier, monospace; font-size: 18px; font-weight: 400; line-height: 1.3;"><span style="font-family: sans-serif;">🆔</span> {v_id}</div></div><hr style="margin: 8px 0; border: 0; border-top: 1px solid rgba(128, 128, 128, 0.3);">'
+                            html_card = f'<div style="padding: 2px 0;"><div style="font-family: \'Roboto\', sans-serif; font-size: 28px; font-weight: 300; line-height: 1.2; margin-bottom: 6px;">{v_nama}</div><div style="font-size: 16px; line-height: 1.3; margin-bottom: 7px;">👤 <span style="font-style: italic;">{v_jk}</span></div><div style="font-size: 16px; line-height: 1.3; margin-bottom: 7px;">📍 {v_alamat}</div><div style="font-family: \'OCR A Extended\', \'OCR-A\', Courier, monospace; font-size: 18px; font-weight: 400; line-height: 1.3;"><span style="font-family: sans-serif;">🆔 {v_id}</div></div><hr style="margin: 8px 0; border: 0; border-top: 1px solid rgba(128, 128, 128, 0.3);">'
                             st.markdown(html_card, unsafe_allow_html=True)
                     else:
                         st.warning(f"Nama '{cari_nama}' tidak ditemukan di {pilihan_tps}.")

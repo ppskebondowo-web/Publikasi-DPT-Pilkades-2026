@@ -15,8 +15,8 @@ st.markdown("""
     <style>
     #MainMenu, footer, header {visibility: hidden;}
     html, body, [class*="css"], p, div, span, td, th { font-family: 'Open Sans', sans-serif; }
-    div[data-testid="stSelectbox"] label p { font-family: 'Montserrat', sans-serif !important; font-weight: 100 !important; font-size: 14px !important; }
-    div[data-testid="stTextInput"] label p { font-family: 'Montserrat', sans-serif !important; font-weight: 100 !important; font-size: 14px !important; }
+    div[data-testid="stSelectbox"] label p { font-family: 'Montserrat_Lokal', sans-serif !important; font-size: 14px !important; }
+    div[data-testid="stTextInput"] label p { font-family: 'Montserrat_Lokal', sans-serif !important; font-size: 14px !important; }
     div[data-testid="stSelectbox"] div[data-baseweb="select"],
     div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:first-child,
     div[data-testid="stSelectbox"] div[data-baseweb="select"] div,

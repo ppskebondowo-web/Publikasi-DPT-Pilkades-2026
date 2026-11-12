@@ -47,7 +47,7 @@ st.subheader("📊 Rekapitulasi Pemilih")
 try:
     if os.path.exists("Rekap.csv"):
         df_rekap = load_local_csv("Rekap.csv")
-        st.dataframe(df_rekap, use_container_width=True, hide_index=True)
+        st.dataframe(df_rekap, width='stretch', hide_index=True)
     else:
         st.error("File 'Rekap.csv' tidak ditemukan di server aplikasi. Pastikan Anda sudah mengunggahnya ke GitHub.")
 except Exception as e:
@@ -55,7 +55,7 @@ except Exception as e:
 
 # 4. FITUR 2: PENCARIAN DATA PER TPS
 st.markdown("---")
-st.subheader("🔍 Cek Data Pemilih Per TPS")
+st.subheader("🔍 Cek Data Pemilih")
 
 tps_options = {
     "TPS 001": "TPS 001.csv", "TPS 002": "TPS 002.csv", "TPS 003": "TPS 003.csv",

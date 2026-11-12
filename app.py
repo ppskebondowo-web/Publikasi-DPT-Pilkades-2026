@@ -42,7 +42,7 @@ def load_local_csv(filename):
                     lines.append(parts)
         return pd.DataFrame(lines, columns=header)
 
-# 3. FITUR 1: TAMPILKAN REKAPITULASI (Dengan Format Titik Ribuan)
+# 3. FITUR 1: TAMPILKAN REKAPITULASI (Header Center & Tebal + Titik Ribuan)
 st.subheader("📊 Rekapitulasi Pemilih")
 try:
     if os.path.exists("Rekap.csv"):
@@ -51,7 +51,6 @@ try:
         # Fungsi otomatis untuk menambahkan titik pemisah ribuan pada angka
         def format_ribuan(val):
             try:
-                # Bersihkan karakter non-angka jika ada, lalu format dengan titik
                 num = int(float(str(val).replace('.', '').replace(',', '').strip()))
                 return f"{num:,}".replace(",", ".")
             except:
@@ -61,12 +60,38 @@ try:
         for col in ['L', 'P', 'L+P']:
             if col in df_rekap.columns:
                 df_rekap[col] = df_rekap[col].apply(format_ribuan)
-                
-        st.dataframe(df_rekap, width='stretch', hide_index=True)
+        
+        # Membangun Tabel HTML Kustom agar Header Center & Tebal
+        html_table = '<div style="overflow-x: auto; margin-bottom: 10px;">'
+        html_table += '<table style="width: 100%; border-collapse: collapse; font-size: 15px;">'
+        
+        # Bagian Header (Center & Tebal)
+        html_table += '<thead><tr style="background-color: rgba(128, 128, 128, 0.2);">'
+        for col in df_rekap.columns:
+            html_table += f'<th style="text-align: center; font-weight: bold; padding: 8px; border: 1px solid rgba(128, 128, 128, 0.3);">{col}</th>'
+        html_table += '</tr></thead>'
+        
+        # Bagian Isi Tabel
+        html_table += '<tbody>'
+        for index, row in df_rekap.iterrows():
+            # Membuat baris Total di bagian bawah otomatis tebal
+            is_total = str(row.iloc[0]).strip().lower() == 'total'
+            row_style = 'font-weight: bold; background-color: rgba(128, 128, 128, 0.1);' if is_total else ''
+            
+            html_table += f'<tr style="{row_style}">'
+            for i, val in enumerate(row):
+                # Kolom pertama (Nama TPS) rata kiri, kolom angka (L, P, L+P) rata tengah
+                align = 'left' if i == 0 else 'center'
+                html_table += f'<td style="text-align: {align}; padding: 7px 8px; border: 1px solid rgba(128, 128, 128, 0.3);">{val}</td>'
+            html_table += '</tr>'
+        html_table += '</tbody></table></div>'
+        
+        st.markdown(html_table, unsafe_allow_html=True)
     else:
         st.error("File 'Rekap.csv' tidak ditemukan di server aplikasi. Pastikan Anda sudah mengunggahnya ke GitHub.")
 except Exception as e:
     st.error("Gagal memproses data Rekapitulasi lokal.")
+
 
 
 # 4. FITUR 2: PENCARIAN DATA PER TPS

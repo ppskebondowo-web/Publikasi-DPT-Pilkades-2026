@@ -14,7 +14,7 @@ st.set_page_config(
 st.markdown("""
     <link rel="preconnect" href="https://googleapis.com">
     <link rel="preconnect" href="https://gstatic.com" crossorigin>
-    <link href="https://googleapis.com/css2?family=Merriweather:wght@700&family=Montserrat:wght@100;300;400;600;700;800&family=Open+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Poppins:wght@600;700;800&family=Roboto:wght@300;400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://googleapis.com/css2?family=Merriweather:wght@700&family=Montserrat:wght@300;400;600;700;800&family=Open+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Poppins:wght@600;700;800&family=Roboto:wght@300;400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 """, unsafe_allow_html=True)
 
 # Style CSS Kustom
@@ -28,14 +28,21 @@ hide_style = """
         font-family: 'Open Sans', sans-serif;
     }
     
-    div[data-testid="stSelectbox"] label p,
+    /* Label Dropdown TPS diperkecil menjadi 15px */
+    div[data-testid="stSelectbox"] label p {
+        font-family: 'Montserrat', sans-serif !important;
+        font-weight: 300 !important;
+        font-size: 15px !important;
+    }
+
+    /* Label Input Pencarian Nama tetap 18px */
     div[data-testid="stTextInput"] label p {
         font-family: 'Montserrat', sans-serif !important;
-        font-weight: 100 !important;
-        font-size: 12px !important;
+        font-weight: 300 !important;
+        font-size: 18px !important;
     }
     
-        /* Kotak Dropdown TPS -> Memaksa ukuran 18px sama persis dengan kotak pencarian nama */
+    /* Kotak Dropdown TPS -> Ukuran 18px */
     div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:first-child,
     div[data-testid="stSelectbox"] div[data-baseweb="select"] div,
     div[data-testid="stSelectbox"] div[data-baseweb="select"] span,
@@ -46,9 +53,8 @@ hide_style = """
         line-height: 1.5 !important;
         min-height: 28px !important;
     }
-
-    }
     
+    /* Daftar pilihan saat menu dropdown TPS dibuka -> Ukuran 18px */
     div[data-baseweb="popover"] li,
     div[data-baseweb="popover"] div,
     ul[role="listbox"] li,
@@ -60,6 +66,7 @@ hide_style = """
         padding-bottom: 8px !important;
     }
 
+    /* Kotak Input Pencarian Nama -> Ukuran 18px */
     div[data-testid="stTextInput"] input,
     div[data-testid="stTextInput"] input::placeholder {
         font-family: 'Open Sans', sans-serif !important;
@@ -67,6 +74,7 @@ hide_style = """
         font-size: 18px !important;
     }
 
+    /* Menghilangkan tulisan 'Press Enter to submit form' */
     [data-testid="InputInstructions"],
     [data-testid="InputInstructions"] *,
     div[data-testid="stForm"] small,
@@ -104,9 +112,6 @@ st.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
-
-
-
 # Fungsi membaca data lokal CSV
 @st.cache_data
 def load_local_csv(filename):
@@ -126,7 +131,7 @@ def load_local_csv(filename):
                     lines.append(parts)
         return pd.DataFrame(lines, columns=header)
 
-# 3. FITUR 1: TAMPILKAN REKAPITULASI
+# 3. FITUR 1: TAMPILKAN REKAPITULASI (Font 18px & Center Semua)
 st.subheader("📊 Rekapitulasi Pemilih")
 if os.path.exists("Rekap.csv"):
     df_rekap = load_local_csv("Rekap.csv")
@@ -205,14 +210,13 @@ if pilihan_tps != "-- Pilih TPS --":
                     if not df_filtered.empty:
                         st.success(f"Ditemukan {len(df_filtered)} data yang cocok:")
                         
-                                                for index, row in df_filtered.iterrows():
+                        for index, row in df_filtered.iterrows():
                             v_nama = row.get('Nama', '-').upper()
                             v_jk = row.get('JnsKlmn', '-')
                             v_usia = str(row.get('Usia', '')).strip()
                             v_alamat = row.get('Alamat', '-')
                             v_id = row.get('ID', '-')
                             
-                            # Menggabungkan Jenis Kelamin dan Usia jika data usia tersedia
                             if v_usia and v_usia != '-' and v_usia.lower() != 'nan':
                                 jk_usia_text = f"{v_jk}, {v_usia} tahun"
                             else:
@@ -221,8 +225,3 @@ if pilihan_tps != "-- Pilih TPS --":
                             html_card = f'<div style="padding: 2px 0;"><div style="font-family: \'Roboto\', sans-serif; font-size: 28px; font-weight: 300; line-height: 1.2; margin-bottom: 6px;">{v_nama}</div><div style="font-size: 16px; line-height: 1.3; margin-bottom: 7px;">👤 <span style="font-style: italic;">{jk_usia_text}</span></div><div style="font-size: 16px; line-height: 1.3; margin-bottom: 7px;">📍 {v_alamat}</div><div style="font-family: \'OCR A Extended\', \'OCR-A\', Courier, monospace; font-size: 18px; font-weight: 400; line-height: 1.3;"><span style="font-family: sans-serif;">🆔</span> {v_id}</div></div><hr style="margin: 8px 0; border: 0; border-top: 1px solid rgba(128, 128, 128, 0.3);">'
                             st.markdown(html_card, unsafe_allow_html=True)
                     else:
-                        st.warning(f"Nama '{cari_nama}' tidak ditemukan di {pilihan_tps}.")
-                else:
-                    st.warning("Silakan ketikkan nama terlebih dahulu.")
-            else:
-                st.info("Ketik nama pemilih di atas lalu tekan tombol 🔍 Cari Pemilih.")

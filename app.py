@@ -9,7 +9,7 @@ st.set_page_config(
     layout="centered"
 )
 
-# Style CSS Kustom untuk menyembunyikan menu bawaan & memuat Google Font Open Sans
+# Style CSS Kustom untuk menyembunyikan menu bawaan, memuat Open Sans, & membesarkan Dropdown + Pencarian Nama
 hide_style = """
     <style>
     @import url('https://googleapis.com');
@@ -17,9 +17,44 @@ hide_style = """
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
+    
+    /* Membesarkan tulisan label 'Pilih nomor TPS terlebih dahulu:' */
+    div[data-testid="stSelectbox"] label p {
+        font-size: 18px !important;
+        font-weight: 700 !important;
+        font-family: 'Open Sans', sans-serif !important;
+    }
+    
+    /* Membesarkan tulisan daftar pilihan di dalam kotak dropdown TPS */
+    div[data-baseweb="select"] > div {
+        font-size: 18px !important;
+        font-weight: 600 !important;
+        font-family: 'Open Sans', sans-serif !important;
+    }
+    
+    /* Membesarkan tulisan pada menu daftar TPS saat dropdown dibuka */
+    ul[data-baseweb="menu"] li {
+        font-size: 18px !important;
+        font-family: 'Open Sans', sans-serif !important;
+    }
+
+    /* Membesarkan tulisan label 'Ketik Nama yang dicari di TPS ...:' */
+    div[data-testid="stTextInput"] label p {
+        font-size: 18px !important;
+        font-weight: 700 !important;
+        font-family: 'Open Sans', sans-serif !important;
+    }
+
+    /* Membesarkan tulisan teks yang diketikkan di dalam kotak pencarian nama */
+    div[data-testid="stTextInput"] input {
+        font-size: 18px !important;
+        font-weight: 600 !important;
+        font-family: 'Open Sans', sans-serif !important;
+    }
     </style>
 """
 st.markdown(hide_style, unsafe_allow_html=True)
+
 
 # 2. Judul Utama Aplikasi Web
 st.title("DAFTAR PEMILIH TETAP")

@@ -80,7 +80,7 @@ hide_style = """
 """
 st.markdown(hide_style, unsafe_allow_html=True)
 
-# 2. Judul Utama Aplikasi Web (Logo di Atas & Rata Tengah)
+# 2. Judul Utama Aplikasi Web (Logo di Atas & Rata Kiri)
 def get_base64_image(image_path):
     if os.path.exists(image_path):
         with open(image_path, "rb") as img_file:
@@ -91,7 +91,7 @@ logo_base64 = get_base64_image("logo.png")
 img_html = f'<img src="data:image/png;base64,{logo_base64}" style="width: 85px; height: auto; margin-bottom: 10px; object-fit: contain;">' if logo_base64 else ''
 
 st.markdown(f"""
-<div style="display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 18px;">
+<div style="display: flex; flex-direction: column; align-items: flex-start; text-align: left; margin-bottom: 18px;">
     {img_html}
     <div style="font-family: 'Open Sans', sans-serif; font-size: 28px; font-weight: 700; margin: 0px 0px 4px 0px; padding: 0px; line-height: 1.15;">
         DAFTAR PEMILIH TETAP
@@ -103,6 +103,7 @@ st.markdown(f"""
     </div>
 </div>
 """, unsafe_allow_html=True)
+
 
 
 

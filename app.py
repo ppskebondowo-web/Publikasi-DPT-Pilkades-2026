@@ -9,7 +9,7 @@ st.set_page_config(
     layout="centered"
 )
 
-# Style CSS Kustom untuk menyembunyikan menu bawaan, memuat Open Sans, & membesarkan Dropdown + Pencarian Nama
+# Style CSS Kustom untuk menyembunyikan menu bawaan, memuat Open Sans, & membesarkan Dropdown + Input Nama
 hide_style = """
     <style>
     @import url('https://googleapis.com');
@@ -25,17 +25,24 @@ hide_style = """
         font-family: 'Open Sans', sans-serif !important;
     }
     
-    /* Membesarkan tulisan daftar pilihan di dalam kotak dropdown TPS */
-    div[data-baseweb="select"] > div {
+    /* Membesarkan tulisan pilihan terpilih di dalam kotak dropdown TPS */
+    div[data-baseweb="select"] div,
+    div[data-baseweb="select"] span {
         font-size: 18px !important;
         font-weight: 600 !important;
         font-family: 'Open Sans', sans-serif !important;
     }
     
-    /* Membesarkan tulisan pada menu daftar TPS saat dropdown dibuka */
-    ul[data-baseweb="menu"] li {
+    /* Membesarkan tulisan seluruh daftar TPS saat menu dropdown terbuka (Popover & Listbox) */
+    div[data-baseweb="popover"] li,
+    div[data-baseweb="popover"] div,
+    ul[role="listbox"] li,
+    [role="option"] {
         font-size: 18px !important;
+        font-weight: 600 !important;
         font-family: 'Open Sans', sans-serif !important;
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
     }
 
     /* Membesarkan tulisan label 'Ketik Nama yang dicari di TPS ...:' */

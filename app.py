@@ -74,17 +74,22 @@ try:
         # Bagian Isi Tabel
         html_table += '<tbody>'
         for index, row in df_rekap.iterrows():
-            # Membuat baris Total di bagian bawah otomatis tebal
+            # Mengecek apakah baris ini adalah baris 'Total'
             is_total = str(row.iloc[0]).strip().lower() == 'total'
-            row_style = 'font-weight: bold; background-color: rgba(128, 128, 128, 0.1);' if is_total else ''
+            row_style = 'font-weight: bold; background-color: rgba(128, 128, 128, 0.15);' if is_total else ''
             
             html_table += f'<tr style="{row_style}">'
             for i, val in enumerate(row):
-                # Kolom pertama (Nama TPS) rata kiri, kolom angka (L, P, L+P) rata tengah
-                align = 'left' if i == 0 else 'center'
+                # Jika baris Total, semua sel dibuat center. Jika baris TPS biasa, kolom pertama rata kiri.
+                if is_total:
+                    align = 'center'
+                else:
+                    align = 'left' if i == 0 else 'center'
+                    
                 html_table += f'<td style="text-align: {align}; padding: 7px 8px; border: 1px solid rgba(128, 128, 128, 0.3);">{val}</td>'
             html_table += '</tr>'
         html_table += '</tbody></table></div>'
+
         
         st.markdown(html_table, unsafe_allow_html=True)
     else:

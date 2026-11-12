@@ -21,7 +21,7 @@ hide_style = """
     /* Membesarkan tulisan label 'Pilih nomor TPS terlebih dahulu:' */
     div[data-testid="stSelectbox"] label p {
         font-size: 18px !important;
-        font-weight: 50 !important;
+        font-weight: 10 !important;
         font-family: 'Open Sans', sans-serif !important;
     }
     

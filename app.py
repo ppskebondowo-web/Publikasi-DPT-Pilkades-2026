@@ -18,10 +18,17 @@ st.markdown("""
 
 # Style CSS Kustom
 hide_style = """
-    /* Menghilangkan tulisan 'Press Enter to submit form' */
-    div[data-testid="InputInstructions"] {
+        /* Menghilangkan total tulisan 'Press Enter to submit form' di semua versi Streamlit */
+    [data-testid="InputInstructions"],
+    [data-testid="InputInstructions"] *,
+    div[data-testid="stForm"] small,
+    div[data-testid="stTextInput"] small {
         display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        opacity: 0 !important;
     }
+
     <style>
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}

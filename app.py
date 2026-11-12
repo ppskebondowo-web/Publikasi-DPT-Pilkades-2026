@@ -15,8 +15,8 @@ st.markdown("""
     <style>
     #MainMenu, footer, header {visibility: hidden;}
     html, body, [class*="css"], p, div, span, td, th { font-family: 'Open Sans', sans-serif; }
-    div[data-testid="stSelectbox"] label p { font-family: 'Montserrat', sans-serif !important; font-weight: 300 !important; font-size: 15px !important; }
-    div[data-testid="stTextInput"] label p { font-family: 'Montserrat', sans-serif !important; font-weight: 300 !important; font-size: 18px !important; }
+    div[data-testid="stSelectbox"] label p { font-family: 'Montserrat', sans-serif !important; font-weight: 100 !important; font-size: 14px !important; }
+    div[data-testid="stTextInput"] label p { font-family: 'Montserrat', sans-serif !important; font-weight: 100 !important; font-size: 14px !important; }
     div[data-testid="stSelectbox"] div[data-baseweb="select"],
     div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:first-child,
     div[data-testid="stSelectbox"] div[data-baseweb="select"] div,
@@ -103,7 +103,7 @@ if pilihan_tps != "-- Pilih TPS --":
                             v_id = row.get('ID', '-')
                             v_usia = next((str(row[k]).strip() for k in row.index if k.strip().lower() in ['usia', 'umur']), '')
                             jk_usia = f"{v_jk}, {v_usia} tahun" if v_usia and v_usia.lower() not in ['-', 'nan', ''] else v_jk
-                            st.markdown(f'<div style="text-align: center; padding: 8px 0;"><div style="font-family: \'Roboto\', sans-serif; font-size: 28px; line-height: 1.2; margin-bottom: 4px;">{v_nama}</div><div style="font-size: 16px; font-style: italic; margin-bottom: 3px;">{jk_usia}</div><div style="font-size: 16px; margin-bottom: 5px;">{v_alamat}</div><div style="font-family: \'OCRA_Lokal\', \'OCR A Extended\', monospace; font-size: 19px; letter-spacing: 1px;"><span style="font-family: sans-serif; letter-spacing: 0;">🆔</span> {v_id}</div></div><hr style="margin: 10px 0; border: 0; border-top: 1px solid rgba(128, 128, 128, 0.3);">', unsafe_allow_html=True)
+                            st.markdown(f'<div style="text-align: center; padding: 8px 0;"><div style="font-family: \'Roboto\', sans-serif; font-size: 28px; line-height: 1.2; margin-bottom: 4px;">{v_nama}</div><div style="font-size: 16px; font-style: italic; margin-bottom: 3px;">{jk_usia}</div><div style="font-size: 16px; margin-bottom: 5px;">{v_alamat}</div><div style="font-family: \'OCRA_Lokal\', \'OCR A Extended\', monospace; font-size: 19px; letter-spacing: 1px;"><span style="font-family: sans-serif; letter-spacing: 0;">🆔</span>{v_id}</div></div><hr style="margin: 10px 0; border: 0; border-top: 1px solid rgba(128, 128, 128, 0.3);">', unsafe_allow_html=True)
                     else:
                         st.warning(f"Nama '{cari_nama}' tidak ditemukan di {pilihan_tps}.")
                 else:

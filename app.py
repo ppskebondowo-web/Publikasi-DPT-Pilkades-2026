@@ -200,9 +200,15 @@ if pilihan_tps != "-- Pilih TPS --":
                         for index, row in df_filtered.iterrows():
                             v_nama = row.get('Nama', '-').upper()
                             v_jk = row.get('JnsKlmn', '-')
-                            v_usia = str(row.get('Usia', '')).strip()
                             v_alamat = row.get('Alamat', '-')
                             v_id = row.get('ID', '-')
+                            
+                            # Mencari kolom usia secara fleksibel (mendukung Usia, USIA, Umur, UMUR)
+                            v_usia = ''
+                            for k in row.index:
+                                if k.strip().lower() in ['usia', 'umur']:
+                                    v_usia = str(row[k]).strip()
+                                    break
                             
                             if v_usia and v_usia != '-' and v_usia.lower() != 'nan':
                                 jk_usia_text = f"{v_jk}, {v_usia} tahun"

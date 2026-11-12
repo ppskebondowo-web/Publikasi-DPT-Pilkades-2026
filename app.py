@@ -18,6 +18,10 @@ st.markdown("""
 
 # Style CSS Kustom
 hide_style = """
+    /* Menghilangkan tulisan 'Press Enter to submit form' */
+    div[data-testid="InputInstructions"] {
+        display: none !important;
+    }
     <style>
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}

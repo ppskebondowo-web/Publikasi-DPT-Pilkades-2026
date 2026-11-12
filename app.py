@@ -21,7 +21,7 @@ hide_style = """
     /* Membesarkan tulisan label 'Pilih nomor TPS terlebih dahulu:' */
     div[data-testid="stSelectbox"] label p {
         font-size: 18px !important;
-        font-weight: 700 !important;
+        font-weight: 200 !important;
         font-family: 'Open Sans', sans-serif !important;
     }
     
@@ -29,7 +29,7 @@ hide_style = """
     div[data-baseweb="select"] div,
     div[data-baseweb="select"] span {
         font-size: 18px !important;
-        font-weight: 600 !important;
+        font-weight: 200 !important;
         font-family: 'Open Sans', sans-serif !important;
     }
     
@@ -39,7 +39,7 @@ hide_style = """
     ul[role="listbox"] li,
     [role="option"] {
         font-size: 18px !important;
-        font-weight: 600 !important;
+        font-weight: 200 !important;
         font-family: 'Open Sans', sans-serif !important;
         padding-top: 8px !important;
         padding-bottom: 8px !important;
@@ -48,14 +48,14 @@ hide_style = """
     /* Membesarkan tulisan label 'Ketik Nama yang dicari di TPS ...:' */
     div[data-testid="stTextInput"] label p {
         font-size: 18px !important;
-        font-weight: 700 !important;
+        font-weight: 200 !important;
         font-family: 'Open Sans', sans-serif !important;
     }
 
     /* Membesarkan tulisan teks yang diketikkan di dalam kotak pencarian nama */
     div[data-testid="stTextInput"] input {
         font-size: 18px !important;
-        font-weight: 600 !important;
+        font-weight: 200 !important;
         font-family: 'Open Sans', sans-serif !important;
     }
     </style>

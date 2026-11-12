@@ -105,7 +105,8 @@ st.markdown(f"""
 @st.cache_data
 def load_local_csv(filename):
     try:
-        df = pd.read_csv(filename, header=0, dtype=str, encoding='utf-8', on_bad_lines='skip', engine='python')
+        # sep=None mendeteksi pemisah titik koma (;) maupun koma (,) secara otomatis
+        df = pd.read_csv(filename, sep=None, header=0, dtype=str, encoding='utf-8', on_bad_lines='skip', engine='python')
         df = df.dropna(how='all', axis=0)
         df.columns = df.columns.str.strip()
         df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
@@ -113,9 +114,11 @@ def load_local_csv(filename):
     except Exception:
         lines = []
         with open(filename, 'r', encoding='utf-8', errors='ignore') as f:
-            header = f.readline().strip().split(',')
+            first_line = f.readline().strip()
+            sep = ';' if ';' in first_line else ','
+            header = first_line.split(sep)
             for line in f:
-                parts = line.strip().split(',')
+                parts = line.strip().split(sep)
                 if len(parts) == len(header):
                     lines.append(parts)
         return pd.DataFrame(lines, columns=header)

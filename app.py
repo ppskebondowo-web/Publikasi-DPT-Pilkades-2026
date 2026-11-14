@@ -81,7 +81,6 @@ def load_local_csv(filename):
     df.columns = df.columns.str.strip()
     return df.loc[:, ~df.columns.str.contains('^Unnamed')]
 
-
 st.subheader("📊 Rekapitulasi Pemilih")
 if os.path.exists("Rekap.csv"):
     df_rekap = load_local_csv("Rekap.csv")

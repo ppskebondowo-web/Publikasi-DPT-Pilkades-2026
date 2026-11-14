@@ -49,8 +49,8 @@ if os.path.exists("saira.ttf"):
         siera_b64 = base64.b64encode(f.read()).decode()
     st.markdown(f"<style>@font-face {{ font-family: 'Siera_Lokal'; src: url(data:font/ttf;base64,{siera_b64}) format('truetype'); }}</style>", unsafe_allow_html=True)
 
-if os.path.exists("StlfRg.otf"):
-    with open("StlfRg.otf", "rb") as f:
+if os.path.exists("mdsl.otf"):
+    with open("mdsl.otf", "rb") as f:
         siera_b64 = base64.b64encode(f.read()).decode()
     st.markdown(f"<style>@font-face {{ font-family: 'Stillfish_Lokal'; src: url(data:font/ttf;base64,{siera_b64}) format('truetype'); }}</style>", unsafe_allow_html=True)
 

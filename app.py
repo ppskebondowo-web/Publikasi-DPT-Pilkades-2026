@@ -66,8 +66,8 @@ st.markdown(f"""
 <div style="display: flex; flex-direction: column; align-items: flex-start; text-align: left; margin-bottom: 18px;">
     {img_html}
     <div style="font-size: 28px; font-weight: 700; margin-bottom: 4px; line-height: 1.15;">DAFTAR PEMILIH TETAP</div>
-    <div style="font-size: 13px; color: gray; line-height: 1.35;">
-        Aplikasi Resmi Publikasi Daftar Pemilih Tetap<br>
+    <div style="font-size: 14px; color: gray; line-height: 1.35;">
+        Publikasi Resmi Daftar Pemilih Tetap<br>
         Pemilihan Kepala Desa Kebondowo Tahun 2026<br>
         © Panitia Pilkades Kebondowo
     </div>

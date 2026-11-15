@@ -81,12 +81,7 @@ def load_local_csv(filename):
     df.columns = df.columns.str.strip()
     return df.loc[:, ~df.columns.str.contains('^Unnamed')]
 
-st.markdown("""
-<h3 style="margin-bottom: 10px;">
-    <span style="filter: grayscale(100%); opacity: 0.45;">📊</span> Rekapitulasi Pemilih
-</h3>
-""", unsafe_allow_html=True)
-
+st.subheader("📊 Rekapitulasi Pemilih")
 if os.path.exists("Rekap.csv"):
     df_rekap = load_local_csv("Rekap.csv")
     for col in ['L', 'P', 'L+P']:

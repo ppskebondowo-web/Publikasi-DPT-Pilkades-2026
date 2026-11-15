@@ -126,7 +126,7 @@ if pilihan_tps != "-- Pilih TPS --":
         nama_col = next((c for c in df_tps.columns if c.lower() == 'nama'), None)
         if nama_col:
             with st.form(key=f"form_{pilihan_tps}", border=False):
-                cari_nama = st.text_input(f"Ketik Nama yang dicari di {pilihan_tps}:", "", placeholder="Contoh: BARRU LINGGANATUR")
+                cari_nama = st.text_input(f"Ketik Nama yang dicari di {pilihan_tps}:", "", placeholder="Contoh: BUDI LUHUR")
                 tombol_cari = st.form_submit_button("🔍 Cari Pemilih", use_container_width=True)
             if tombol_cari or cari_nama:
                 if cari_nama.strip():

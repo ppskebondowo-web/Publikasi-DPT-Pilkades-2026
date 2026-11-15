@@ -95,13 +95,14 @@ if os.path.exists("Rekap.csv"):
         style = 'font-weight: bold; background-color: rgba(128, 128, 128, 0.15);' if is_total else ''
         html_table += f'<tr style="{style}">' + ''.join([f'<td style="text-align: center; padding: 7px 8px; border: 1px solid rgba(128, 128, 128, 0.3);">{v}</td>' for v in row]) + '</tr>'
     st.markdown(html_table + '</tbody></table></div>', unsafe_allow_html=True)
+
 st.subheader("🗺️ Pemetaan Pemilih")
 if os.path.exists("PetaPemilih.csv"):
     df_peta = load_local_csv("PetaPemilih.csv")
     
     html_peta = '<div style="overflow-x: auto; margin-bottom: 15px;"><table style="width: 100%; border-collapse: collapse; font-size: 16px;">'
-    html_peta += '<thead><tr style="background-color: rgba(128, 128, 128, 0.2);">' + ''.join([f'<th style="text-align: center; font-weight: bold; padding: 8px; border: 1px solid rgba(128, 128, 128, 0.3);">{c}</th>' for c in df_peta.columns]) + '</tr></thead><tbody>'
-    
+    html_peta += '<thead><tr style="background-color: rgba(128, 128, 128, 0.2);">' + ''.join([f'<th style="text-align: center; font-weight: bold; font-style: italic; padding: 8px; border: 1px solid rgba(128, 128, 128, 0.3);">{c}</th>' for c in df_peta.columns]) + '</tr></thead><tbody>'
+
     for _, row in df_peta.iterrows():
         html_peta += '<tr>'
         for i, val in enumerate(row):

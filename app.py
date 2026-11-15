@@ -115,7 +115,6 @@ if os.path.exists("PetaPemilih.csv"):
 else:
     st.info("File 'PetaPemilih.csv' belum diunggah.")
 
-st.markdown("---")
 st.subheader("🔍 Cek Data Pemilih")
 tps_list = ["TPS 001", "TPS 002", "TPS 003", "TPS 004", "TPS 005", "TPS 006", "TPS 007", "TPS 008", "TPS 009", "TPS 010", "TPS 011"]
 pilihan_tps = st.selectbox("Pilih nomor TPS terlebih dahulu:", ["-- Pilih TPS --"] + tps_list)

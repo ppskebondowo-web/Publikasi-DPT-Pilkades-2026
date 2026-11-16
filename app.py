@@ -90,11 +90,24 @@ if os.path.exists("Rekap.csv"):
     
     html_table = '<div style="overflow-x: auto; margin-bottom: 10px;"><table style="width: 100%; border-collapse: collapse; font-size: 18px;">'
     html_table += '<thead><tr style="background-color: rgba(128, 128, 128, 0.2);">' + ''.join([f'<th style="text-align: center; font-weight: bold; padding: 8px; border: 1px solid rgba(128, 128, 128, 0.3);">{c}</th>' for c in df_rekap.columns]) + '</tr></thead><tbody>'
+    
     for _, row in df_rekap.iterrows():
-        is_total = str(row.iloc[0]).strip().lower() == 'total'
+        nama_baris = str(row.iloc[0]).strip()
+        is_total = nama_baris.lower() == 'total'
         style = 'font-weight: bold; background-color: rgba(128, 128, 128, 0.15);' if is_total else ''
-        html_table += f'<tr style="{style}">' + ''.join([f'<td style="text-align: center; padding: 7px 8px; border: 1px solid rgba(128, 128, 128, 0.3);">{v}</td>' for v in row]) + '</tr>'
+        
+        html_table += f'<tr style="{style}">'
+        for i, val in enumerate(row):
+            if i == 0 and not is_total:
+                # Nama TPS dibuat menjadi link aktif yang mengarah ke bagian daftar pemilih
+                val_display = f'<a href="?tps_klik={nama_baris}#daftar-tps" target="_self" style="text-decoration: none; color: #1E88E5; font-weight: 600;">{val}</a>'
+            else:
+                val_display = val
+            html_table += f'<td style="text-align: center; padding: 7px 8px; border: 1px solid rgba(128, 128, 128, 0.3);">{val_display}</td>'
+        html_table += '</tr>'
+        
     st.markdown(html_table + '</tbody></table></div>', unsafe_allow_html=True)
+
 
 st.subheader("🗺️ Pemetaan Pemilih")
 if os.path.exists("PetaPemilih.csv"):
@@ -147,4 +160,39 @@ if pilihan_tps != "-- Pilih TPS --":
                     st.warning("Silakan ketikkan nama terlebih dahulu.")
             else:
                 st.info("Ketik nama pemilih di atas lalu tekan tombol 🔍 Cari Pemilih.")
+ # Menampilkan seluruh kartu daftar pemilih jika nama TPS di tabel rekap diklik
+tps_terklik = st.query_params.get("tps_klik", None)
+
+if tps_terklik:
+    st.markdown('<div id="daftar-tps"></div>', unsafe_allow_html=True)
+    st.markdown("---")
+    
+    col_judul, col_tutup = st.columns([3, 1])
+    with col_judul:
+        st.subheader(f"📋 Seluruh Pemilih {tps_terklik}")
+    with col_tutup:
+        if st.button("❌ Tutup", use_container_width=True):
+            st.query_params.clear()
+            st.rerun()
+            
+    csv_klik = f"{tps_terklik}.csv"
+    if os.path.exists(csv_klik):
+        df_semua = load_local_csv(csv_klik)
+        st.info(f"Menampilkan seluruh daftar pemilih di **{tps_terklik}** (Total: **{len(df_semua)}** pemilih)")
+        
+        semua_kartu_html = ""
+        for _, row in df_semua.iterrows():
+            v_nama = str(row.get('Nama', '-')).upper()
+            v_jk = row.get('JnsKlmn', '-')
+            v_alamat = row.get('Alamat', '-')
+            v_id = row.get('ID', '-')
+            v_usia = next((str(row[k]).strip() for k in row.index if k.strip().lower() in ['usia', 'umur']), '')
+            jk_usia = f"{v_jk}, {v_usia} tahun" if v_usia and v_usia.lower() not in ['-', 'nan', ''] else v_jk
+            
+            semua_kartu_html += f'<div style="text-align: center; padding: 8px 0;"><div style="font-family: \'Siera_Lokal\', \'Roboto\', sans-serif; font-size: 28px; line-height: 1.2; margin-bottom: 4px;">{v_nama}</div><div style="font-size: 16px; font-style: italic; margin-bottom: 3px;">{jk_usia}</div><div style="font-size: 16px; margin-bottom: 5px;">{v_alamat}</div><div style="font-family: \'OCRA_Lokal\', \'OCR A Extended\', monospace; font-size: 19px; letter-spacing: 1px;"><span style="font-family: sans-serif; letter-spacing: 0;">🆔</span> {v_id}</div></div><hr style="margin: 10px 0; border: 0; border-top: 1px solid rgba(128, 128, 128, 0.3);">'
+            
+        st.markdown(semua_kartu_html, unsafe_allow_html=True)
+    else:
+        st.error(f"File '{csv_klik}' tidak ditemukan di GitHub.")
+               
 # --- SELESAI ---

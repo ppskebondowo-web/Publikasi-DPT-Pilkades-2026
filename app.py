@@ -22,8 +22,8 @@ st.markdown("""
     
     /* Memperkecil maksimal jarak atas pada wadah utama aplikasi */
     .block-container, div[data-testid="stAppViewBlockContainer"] {
-        padding-top: 0.5rem !important;
-        padding-bottom: 2rem !important;
+        padding-top: 0rem !important;
+        padding-bottom: 5rem !important;
     }
     html, body, [class*="css"], p, div, span, td, th { font-family: 'Open Sans', sans-serif; }
     div[data-testid="stSelectbox"] label p { font-family: 'Montserrat_Lokal', sans-serif !important; font-size: 12px !important; }

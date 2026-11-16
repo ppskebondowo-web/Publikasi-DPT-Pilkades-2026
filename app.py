@@ -96,9 +96,14 @@ def load_local_csv(filename):
 tps_terklik = st.query_params.get("tps_klik", None)
 
 if tps_terklik:
-    col_judul, col_tutup = st.columns([3, 1.3])
+        col_judul, col_tutup = st.columns([3, 1.3])
     with col_judul:
-        st.subheader(f"Seluruh Pemilih {tps_terklik}")
+        st.markdown(f"""
+        <div style="font-size: 18px; font-weight: 700; padding-top: 8px; line-height: 1.2;">
+            📋 Seluruh Pemilih {tps_terklik}
+        </div>
+        """, unsafe_allow_html=True)
+
     with col_tutup:
         if st.button("⬅️ Kembali", use_container_width=True):
             st.query_params.clear()

@@ -134,15 +134,20 @@ else:
     if os.path.exists("Rekap.csv"):
         df_rekap = load_local_csv("Rekap.csv")
         
-        peta_dict = {}
+                peta_dict = {}
         if os.path.exists("PetaPemilih.csv"):
             df_peta = load_local_csv("PetaPemilih.csv")
-            for _, r_peta in df_peta.iterrows():
-                vals = list(r_peta.values)
-                if len(vals) >= 3:
-                    tps_key = str(vals).strip().upper()
-                    asal_val = str(vals).strip()
-                    peta_dict[tps_key] = f"{peta_dict[tps_key]}, {asal_val}" if tps_key in peta_dict else asal_val
+            # Mencari kolom TPS dan ASAL PEMILIH secara fleksibel (huruf besar/kecil)
+            col_tps = next((c for c in df_peta.columns if c.strip().lower() == 'tps'), None)
+            col_asal = next((c for c in df_peta.columns if 'asal' in c.strip().lower()), None)
+            
+            if col_tps and col_asal:
+                for _, r_peta in df_peta.iterrows():
+                    tps_key = str(r_peta.get(col_tps, '')).strip().upper()
+                    asal_val = str(r_peta.get(col_asal, '')).strip()
+                    if tps_key and asal_val and asal_val.lower() != 'nan':
+                        peta_dict[tps_key] = f"{peta_dict[tps_key]}, {asal_val}" if tps_key in peta_dict else asal_val
+
         
         def fmt_angka(val):
             s = str(val).replace('.', '').strip()

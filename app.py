@@ -187,7 +187,7 @@ else:
                 """, unsafe_allow_html=True)
             else:
                 info_wilayah = peta_dict.get(nama_tps.upper(), "-")
-                html_btn = f'<a href="?tps_klik={nama_tps}" target="_self" class="tombol-tps-kustom"><div style="line-height: 1.25; margin-bottom: 3px;"><span style="font-family: \'Siera_Lokal\', sans-serif; font-size: 22px;">{nama_tps} ({val_total})</span><span style="font-size: 13px; opacity: 0.85;"> | {val_l} lk &nbsp;{val_p} pr</span></div><div style="font-size: 14px; opacity: 0.9;">{info_wilayah}</div></a>'
+                html_btn = f'<a href="?tps_klik={nama_tps}" target="_self" class="tombol-tps-kustom"><span style="display: block; line-height: 1.25; margin-bottom: 3px;"><span style="font-family: \'Siera_Lokal\', sans-serif; font-size: 22px;">{nama_tps} ({val_total})</span><span style="font-size: 13px; opacity: 0.85;"> | {val_l} lk &nbsp;{val_p} pr</span></span><span style="display: block; font-size: 14px; opacity: 0.9;">{info_wilayah}</span></a>'
                 st.markdown(html_btn, unsafe_allow_html=True)
 
     st.markdown("---")

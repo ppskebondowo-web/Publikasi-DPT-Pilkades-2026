@@ -199,7 +199,7 @@ else:
                     <span style="font-size: 13px; opacity: 0.85;">Laki-laki: {val_l} &nbsp;|&nbsp; Perempuan: {val_p}</span>
                 </div>
                 """, unsafe_allow_html=True)
-           else:
+        else:
                 info_wilayah = peta_dict.get(nama_tps.upper(), "-")
                 
                 # Format tombol dengan ukuran font berbeda: TPS besar (22px), lk & pr diperkecil (13px)

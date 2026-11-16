@@ -68,8 +68,8 @@ st.markdown("""
 
     /* Membesarkan lingkaran tombol radio agar mudah disentuh jari */
     div[data-testid="stRadio"] div[role="radiogroup"] label p {
-        font-size: 20px !important;
-        font-weight: 400 !important; /* Ubah angka ini sesuai selera ketebalan */
+        font-size: 18px !important;
+        font-weight: 100 !important; /* Ubah angka ini sesuai selera ketebalan */
     }
 
     /* Memberi jarak antar opsi agar tidak berdempetan saat diketuk */

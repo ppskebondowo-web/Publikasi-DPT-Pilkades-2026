@@ -56,7 +56,8 @@ st.markdown("""
         /* Membesarkan label judul dan tulisan opsi radio button (Semua, Laki-laki, Perempuan) */
     div[data-testid="stRadio"] > label p {
         font-size: 16px !important;
-        font-weight: 600 !important;
+        font-weight: 400 !important;
+        font-style: italic !important;
         margin-bottom: 6px !important;
     }
     

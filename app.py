@@ -160,7 +160,7 @@ if tps_terklik:
             if filter_cepat.strip():
                 st.success(f"Ditemukan **{len(df_tampil)}** pemilih {label_kategori}dengan nama '{filter_cepat.strip()}' di **{tps_terklik}**:")
             else:
-                st.info(f"Menampilkan pemilih {label_kategori}di **{tps_terklik}** (Total: **{len(df_tampil)}** pemilih)")
+                st.info(f"Menampilkan semua pemilih {label_kategori}di **{tps_terklik}** (Total: **{len(df_tampil)}** pemilih)")
                 
             semua_kartu_html = ""
             for _, row in df_tampil.iterrows():

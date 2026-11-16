@@ -138,9 +138,10 @@ else:
         if os.path.exists("PetaPemilih.csv"):
             df_peta = load_local_csv("PetaPemilih.csv")
             for _, r_peta in df_peta.iterrows():
-                if len(r_peta) >= 3:
-                    tps_key = str(r_peta.iloc).strip().upper()
-                    asal_val = str(r_peta.iloc).strip()
+                vals = list(r_peta.values)
+                if len(vals) >= 3:
+                    tps_key = str(vals).strip().upper()
+                    asal_val = str(vals).strip()
                     peta_dict[tps_key] = f"{peta_dict[tps_key]}, {asal_val}" if tps_key in peta_dict else asal_val
         
         def fmt_angka(val):
@@ -150,8 +151,8 @@ else:
         cols = st.columns(2)
         col_idx = 0
         
-        for _, row in df_rekap.iterrows():
-            nama_tps = str(row.iloc).strip()
+        for idx, row in df_rekap.iterrows():
+            nama_tps = str(next(iter(row.values))).strip()
             val_l = fmt_angka(row.get('L', '0'))
             val_p = fmt_angka(row.get('P', '0'))
             val_total = fmt_angka(row.get('L+P', '0'))
@@ -169,10 +170,11 @@ else:
                 
                 with cols[col_idx % 2]:
                     label_tombol = f"🗳️ {nama_tps} ({val_total})\nL: {val_l} | P: {val_p}{teks_wilayah}"
-                    if st.button(label_tombol, key=f"btn_rekap_{nama_tps}", use_container_width=True):
+                    if st.button(label_tombol, key=f"btn_rekap_{idx}_{nama_tps}", use_container_width=True):
                         st.query_params["tps_klik"] = nama_tps
                         st.rerun()
                 col_idx += 1
+
 
     st.markdown("---")
     st.subheader("🔍 Cek Data Pemilih")

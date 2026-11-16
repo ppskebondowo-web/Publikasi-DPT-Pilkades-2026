@@ -121,7 +121,7 @@ tps_terklik = st.query_params.get("tps_klik", None)
 if tps_terklik:
     col_judul, col_tutup = st.columns([3, 1.3])
     with col_judul:
-        st.markdown(f'<div style="font-size: 18px; font-weight: 500; padding-top: 8px; line-height: 1.2;">Pemilih di {tps_terklik}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div style="font-size: 20px; font-weight: 500; padding-top: 8px; line-height: 1.2;">Pemilih di {tps_terklik}</div>', unsafe_allow_html=True)
     with col_tutup:
         if st.button("⬅️ Kembali", use_container_width=True):
             st.query_params.clear()

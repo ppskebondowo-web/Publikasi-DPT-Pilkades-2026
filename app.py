@@ -16,8 +16,8 @@ st.markdown("""
     #MainMenu, footer, header {visibility: hidden;}
     /* Mengurangi jarak kosong di bagian paling atas halaman (di atas logo) */
     .block-container {
-        padding-top: 1.2rem !important;
-        padding-bottom: 2rem !important;
+        padding-top: 0rem !important;
+        padding-bottom: 0rem !important;
     }
     html, body, [class*="css"], p, div, span, td, th { font-family: 'Open Sans', sans-serif; }
     div[data-testid="stSelectbox"] label p { font-family: 'Montserrat_Lokal', sans-serif !important; font-size: 12px !important; }

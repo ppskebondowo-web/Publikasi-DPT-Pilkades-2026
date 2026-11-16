@@ -48,8 +48,8 @@ st.markdown("""
 
     /* Mengatur khusus baris pertama tombol menggunakan font kartu nama (Siera_Lokal) & ukuran besar */
     div.stButton > button p::first-line {
-        font-family: 'Siera_Lokal', sans-serif !important;
-        font-size: 22px !important;
+        font-family: 'Roboto', sans-serif !important;
+        font-size: 20px !important;
         font-weight: normal !important;
     }
 
@@ -141,7 +141,7 @@ if tps_terklik:
         st.error(f"File '{csv_klik}' tidak ditemukan di GitHub.")
 
 else:
-    st.subheader("📊 Rekapitulasi & Pemetaan Pemilih")
+    st.subheader("📊 Rekap Pemilih")
     if os.path.exists("Rekap.csv"):
         df_rekap = load_local_csv("Rekap.csv")
         

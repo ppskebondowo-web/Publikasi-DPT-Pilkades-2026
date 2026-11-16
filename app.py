@@ -160,7 +160,8 @@ if pilihan_tps != "-- Pilih TPS --":
                     st.warning("Silakan ketikkan nama terlebih dahulu.")
             else:
                 st.info("Ketik nama pemilih di atas lalu tekan tombol 🔍 Cari Pemilih.")
- # Menampilkan seluruh kartu daftar pemilih jika nama TPS di tabel rekap diklik
+
+# Menampilkan seluruh kartu daftar pemilih jika nama TPS di tabel rekap diklik
 tps_terklik = st.query_params.get("tps_klik", None)
 
 if tps_terklik:

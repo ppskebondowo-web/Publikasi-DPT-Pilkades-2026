@@ -16,7 +16,7 @@ st.markdown("""
     #MainMenu, footer, header {visibility: hidden;}
     /* Mengurangi jarak kosong di bagian paling atas halaman (di atas logo) */
     .block-container {
-        padding-top: -1rem !important;
+        padding-top: 0rem !important;
         padding-bottom: 2rem !important;
     }
     html, body, [class*="css"], p, div, span, td, th { font-family: 'Open Sans', sans-serif; }

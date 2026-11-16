@@ -177,7 +177,7 @@ else:
                 """, unsafe_allow_html=True)
             else:
                 info_wilayah = peta_dict.get(nama_tps.upper(), "-")
-                label_tombol = f"{nama_tps} ({val_total}) | L {val_l} | P {val_p}\n{info_wilayah}"
+                label_tombol = f"{nama_tps} ({val_total}) | {val_l} l | {val_p} p\n{info_wilayah}"
                 if st.button(label_tombol, key=f"btn_rekap_{idx}_{nama_tps}", use_container_width=True):
                     st.query_params["tps_klik"] = nama_tps
                     st.rerun()

@@ -156,11 +156,11 @@ if tps_terklik:
             df_tampil = df_tampil[df_tampil[nama_col_klik].str.contains(filter_cepat.strip(), case=False, na=False)]
             
         if not df_tampil.empty:
-            label_kategori = f"kategori **{pilihan_jk}** " if pilihan_jk != "Semua" else ""
+            label_kategori = f"**{pilihan_jk}** " if pilihan_jk != "Semua" else ""
             if filter_cepat.strip():
                 st.success(f"Ditemukan **{len(df_tampil)}** pemilih {label_kategori}dengan nama '{filter_cepat.strip()}' di **{tps_terklik}**:")
             else:
-                st.info(f"Menampilkan daftar pemilih {label_kategori}di **{tps_terklik}** (Total: **{len(df_tampil)}** pemilih)")
+                st.info(f"Menampilkan pemilih {label_kategori}di **{tps_terklik}** (Total: **{len(df_tampil)}** pemilih)")
                 
             semua_kartu_html = ""
             for _, row in df_tampil.iterrows():

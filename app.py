@@ -48,7 +48,7 @@ st.markdown("""
 
     /* Mengatur khusus baris pertama tombol menggunakan font kartu nama (Siera_Lokal) & ukuran besar */
     div.stButton > button p::first-line {
-        font-family: 'Roboto', sans-serif !important;
+        font-family: 'Oswald_Lokal', sans-serif !important;
         font-size: 20px !important;
         font-weight: normal !important;
     }
@@ -62,6 +62,7 @@ font_files = [
     ("Siera_Lokal", "saira.ttf", "truetype", "ttf"),
     ("Stillfish_Lokal", "mdsl.otf", "opentype", "otf"),
     ("StillfishIt_Lokal", "StlfRgIt.otf", "opentype", "otf")
+    ("Oswald_Lokal", "oswldr.ttf", "truetype", "ttf")
 ]
 
 for f_name, f_file, f_format, f_mime in font_files:

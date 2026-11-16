@@ -215,7 +215,7 @@ else:
             
             if nama_tps.lower() == 'total':
                 st.markdown(f"""
-                <div style="text-align: center; padding: 10px; margin-top: 6px; margin-bottom: 14px; border-radius: 8px; background-color: rgba(128, 128, 128, 1); border: 1px solid rgba(128, 128, 128, 0.3); font-size: 16px;">
+                <div style="text-align: center; padding: 10px; margin-top: 6px; margin-bottom: 14px; border-radius: 8px; background-color: rgba(128, 128, 128, 0); border: 1px solid rgba(128, 128, 128, 0.3); font-size: 16px;">
                     <strong>TOTAL KESELURUHAN: {val_total} Pemilih</strong><br>
                     <span style="font-size: 13px; opacity: 0.85;">Laki-laki: {val_l} &nbsp;|&nbsp; Perempuan: {val_p}</span>
                 </div>

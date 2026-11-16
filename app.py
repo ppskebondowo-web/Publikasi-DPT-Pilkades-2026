@@ -46,11 +46,29 @@ st.markdown("""
         line-height: 1.4 !important;
     }
 
-    /* Mengatur khusus baris pertama tombol menggunakan font kartu nama (Siera_Lokal) & ukuran besar */
+    /* Mengatur khusus baris pertama tombol menggunakan font kartu nama (Oswald_Lokal) & ukuran besar */
     div.stButton > button p::first-line {
         font-family: 'Oswald_Lokal', sans-serif !important;
-        font-size: 20px !important;
+        font-size: 22px !important;
         font-weight: normal !important;
+    }
+    /* Gaya tombol HTML kustom agar ukuran font per kata bisa diatur bebas */
+    a.tombol-tps-kustom {
+        display: block;
+        width: 100%;
+        padding: 10px 14px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        border: 1px solid rgba(128, 128, 128, 0.35);
+        background-color: rgba(128, 128, 128, 0.08);
+        text-decoration: none !important;
+        color: inherit !important;
+        text-align: center;
+        transition: background-color 0.2s;
+    }
+    a.tombol-tps-kustom:hover, a.tombol-tps-kustom:active {
+        background-color: rgba(128, 128, 128, 0.2);
+        border-color: rgba(128, 128, 128, 0.6);
     }
 
     </style>
@@ -181,12 +199,23 @@ else:
                     <span style="font-size: 13px; opacity: 0.85;">Laki-laki: {val_l} &nbsp;|&nbsp; Perempuan: {val_p}</span>
                 </div>
                 """, unsafe_allow_html=True)
-            else:
+                        else:
                 info_wilayah = peta_dict.get(nama_tps.upper(), "-")
-                label_tombol = f"{nama_tps} ({val_total}): {val_l} lk {val_p} pr\n{info_wilayah}"
-                if st.button(label_tombol, key=f"btn_rekap_{idx}_{nama_tps}", use_container_width=True):
-                    st.query_params["tps_klik"] = nama_tps
-                    st.rerun()
+                
+                # Format tombol dengan ukuran font berbeda: TPS besar (22px), lk & pr diperkecil (13px)
+                html_btn = f"""
+                <a href="?tps_klik={nama_tps}" target="_self" class="tombol-tps-kustom">
+                    <div style="line-height: 1.25; margin-bottom: 3px;">
+                        <span style="font-family: 'Siera_Lokal', sans-serif; font-size: 22px;">{nama_tps} ({val_total})</span>
+                        <span style="font-size: 13px; opacity: 0.85;"> | {val_l} lk &nbsp;{val_p} pr</span>
+                    </div>
+                    <div style="font-size: 14px; opacity: 0.9;">
+                        {info_wilayah}
+                    </div>
+                </a>
+                """
+                st.markdown(html_btn, unsafe_allow_html=True)
+
 
     st.markdown("---")
     st.subheader("🔍 Cek Data Pemilih")

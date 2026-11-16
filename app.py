@@ -13,18 +13,19 @@ st.markdown("""
 
 st.markdown("""
     <style>
-    #MainMenu, footer, header {visibility: hidden;}
-    /* Menghilangkan ruang tinggi bawaan header Streamlit sepenuhnya */
-    header[data-testid="stHeader"] {
+    #MainMenu, footer, header[data-testid="stHeader"] {
         display: none !important;
         height: 0px !important;
     }
     
-    /* Memperkecil maksimal jarak atas pada wadah utama aplikasi */
-    .block-container, div[data-testid="stAppViewBlockContainer"] {
-        padding-top: 0rem !important;
-        padding-bottom: 5rem !important;
+    /* Memangkas habis padding atas wadah utama Streamlit */
+    .block-container,
+    div[data-testid="stAppViewBlockContainer"],
+    section.main > div {
+        padding-top: 0px !important;
+        margin-top: 0px !important;
     }
+
     html, body, [class*="css"], p, div, span, td, th { font-family: 'Open Sans', sans-serif; }
     div[data-testid="stSelectbox"] label p { font-family: 'Montserrat_Lokal', sans-serif !important; font-size: 12px !important; }
     div[data-testid="stTextInput"] label p { font-family: 'Montserrat_Lokal', sans-serif !important; font-size: 12px !important; }
@@ -110,7 +111,7 @@ logo_b64 = base64.b64encode(open("logo.png", "rb").read()).decode() if os.path.e
 img_html = f'<img src="data:image/png;base64,{logo_b64}" style="width: 85px; margin-bottom: 10px;">' if logo_b64 else ''
 
 st.markdown(f"""
-<div style="display: flex; flex-direction: column; align-items: flex-start; text-align: left; margin-bottom: 18px;">
+<div style="display: flex; flex-direction: column; align-items: flex-start; text-align: left; margin-top: -35px; margin-bottom: 18px;">
     {img_html}
     <div style="font-size: 28px; font-weight: 700; margin-bottom: 4px; line-height: 1.15;">DAFTAR PEMILIH TETAP</div>
     <div style="font-size: 14px; color: gray; line-height: 1.35;">

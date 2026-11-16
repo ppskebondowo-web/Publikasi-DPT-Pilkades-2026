@@ -98,7 +98,7 @@ tps_terklik = st.query_params.get("tps_klik", None)
 if tps_terklik:
     col_judul, col_tutup = st.columns([3, 1.3])
     with col_judul:
-        st.subheader(f"📋 Seluruh Pemilih {tps_terklik}")
+        st.subheader(f"Seluruh Pemilih {tps_terklik}")
     with col_tutup:
         if st.button("⬅️ Kembali", use_container_width=True):
             st.query_params.clear()

@@ -155,13 +155,20 @@ if tps_terklik:
         if filter_cepat.strip() and nama_col_klik:
             df_tampil = df_tampil[df_tampil[nama_col_klik].str.contains(filter_cepat.strip(), case=False, na=False)]
             
+        # Keterangan jumlah data yang tampil sesuai pilihan kategori (Semua / Laki-laki / Perempuan)
         if not df_tampil.empty:
-            label_kategori = f"**{pilihan_jk}** " if pilihan_jk != "Semua" else ""
-            if filter_cepat.strip():
-                st.success(f"Ditemukan **{len(df_tampil)}** pemilih {label_kategori}dengan nama '{filter_cepat.strip()}' di **{tps_terklik}**:")
+            if pilihan_jk == "Laki-laki":
+                teks_kategori = "pemilih laki-laki"
+            elif pilihan_jk == "Perempuan":
+                teks_kategori = "pemilih perempuan"
             else:
-                st.info(f"Menampilkan semua pemilih {label_kategori}di **{tps_terklik}** (Total: **{len(df_tampil)}** pemilih)")
-                
+                teks_kategori = "semua pemilih"
+
+            if filter_cepat.strip():
+                st.success(f"Ditemukan **{len(df_tampil)}** {teks_kategori} dengan nama '{filter_cepat.strip()}' di **{tps_terklik}**:")
+            else:
+                st.info(f"Menampilkan {teks_kategori} di **{tps_terklik}** (Total: **{len(df_tampil)}** pemilih)")
+
             semua_kartu_html = ""
             for _, row in df_tampil.iterrows():
                 v_nama = str(row.get('Nama', '-')).upper()

@@ -61,14 +61,14 @@ st.markdown("""
     }
     
     div[data-testid="stRadio"] div[role="radiogroup"] label p {
-        font-size: 18px !important;
-        font-weight: 600 !important;
+        font-size: 16px !important;
+        font-weight: 400 !important;
     }
 
     /* Membesarkan lingkaran tombol radio agar mudah disentuh jari */
-    div[data-testid="stRadio"] div[role="radiogroup"] label > div:first-child {
-        transform: scale(1.25) !important;
-        margin-right: 6px !important;
+    div[data-testid="stRadio"] div[role="radiogroup"] label p {
+        font-size: 18px !important;
+        font-weight: 400 !important; /* Ubah angka ini sesuai selera ketebalan */
     }
 
     /* Memberi jarak antar opsi agar tidak berdempetan saat diketuk */

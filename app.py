@@ -111,7 +111,7 @@ logo_b64 = base64.b64encode(open("logo.png", "rb").read()).decode() if os.path.e
 img_html = f'<img src="data:image/png;base64,{logo_b64}" style="width: 85px; margin-bottom: 10px;">' if logo_b64 else ''
 
 st.markdown(f"""
-<div style="display: flex; flex-direction: column; align-items: flex-start; text-align: left; margin-top: -75px; margin-bottom: 18px;">
+<div style="display: flex; flex-direction: column; align-items: flex-start; text-align: left; margin-top: -100px; margin-bottom: 18px;">
     {img_html}
     <div style="font-size: 28px; font-weight: 700; margin-bottom: 4px; line-height: 1.15;">DAFTAR PEMILIH TETAP</div>
     <div style="font-size: 14px; color: gray; line-height: 1.35;">

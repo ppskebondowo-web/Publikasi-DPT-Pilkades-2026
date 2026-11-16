@@ -61,7 +61,7 @@ font_files = [
     ("Montserrat_Lokal", "montserrat.ttf", "truetype", "ttf"),
     ("Siera_Lokal", "saira.ttf", "truetype", "ttf"),
     ("Stillfish_Lokal", "mdsl.otf", "opentype", "otf"),
-    ("StillfishIt_Lokal", "StlfRgIt.otf", "opentype", "otf")
+    ("StillfishIt_Lokal", "StlfRgIt.otf", "opentype", "otf"),
     ("Oswald_Lokal", "oswldr.ttf", "truetype", "ttf")
 ]
 

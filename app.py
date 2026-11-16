@@ -74,7 +74,7 @@ st.markdown("""
 
     /* Memberi jarak antar opsi agar tidak berdempetan saat diketuk */
     div[data-testid="stRadio"] div[role="radiogroup"] {
-        gap: 16px !important;
+        gap: 18px !important;
     }
 
     </style>

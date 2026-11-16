@@ -32,27 +32,6 @@ st.markdown("""
     div[data-testid="stTextInput"] input { font-size: 18px !important; }
     [data-testid="InputInstructions"], div[data-testid="stForm"] small { display: none !important; }
     
-        div.stButton > button {
-        min-height: 68px !important;
-        white-space: pre-wrap !important;
-        line-height: 1.35 !important;
-        padding: 10px 12px !important;
-    }
-    
-    /* Mengatur teks baris kedua (Nama Wilayah) pada tombol */
-    div.stButton > button p {
-        font-family: 'Open Sans', sans-serif !important;
-        font-size: 14px !important;
-        line-height: 1.4 !important;
-    }
-
-    /* Mengatur khusus baris pertama tombol menggunakan font kartu nama (Oswald_Lokal) & ukuran besar */
-    div.stButton > button p::first-line {
-        font-family: 'Oswald_Lokal', sans-serif !important;
-        font-size: 22px !important;
-        font-weight: normal !important;
-    }
-    /* Gaya tombol HTML kustom agar ukuran font per kata bisa diatur bebas */
     a.tombol-tps-kustom {
         display: block;
         width: 100%;
@@ -70,7 +49,6 @@ st.markdown("""
         background-color: rgba(128, 128, 128, 0.2);
         border-color: rgba(128, 128, 128, 0.6);
     }
-
     </style>
 """, unsafe_allow_html=True)
 
@@ -116,12 +94,7 @@ tps_terklik = st.query_params.get("tps_klik", None)
 if tps_terklik:
     col_judul, col_tutup = st.columns([3, 1.3])
     with col_judul:
-        st.markdown(f"""
-        <div style="font-size: 18px; font-weight: 700; padding-top: 8px; line-height: 1.2;">
-            📋 Seluruh Pemilih {tps_terklik}
-        </div>
-        """, unsafe_allow_html=True)
-
+        st.markdown(f'<div style="font-size: 18px; font-weight: 700; padding-top: 8px; line-height: 1.2;">📋 Pemilih {tps_terklik}</div>', unsafe_allow_html=True)
     with col_tutup:
         if st.button("⬅️ Kembali", use_container_width=True):
             st.query_params.clear()
@@ -131,6 +104,13 @@ if tps_terklik:
     if os.path.exists(csv_klik):
         df_semua = load_local_csv(csv_klik)
         nama_col_klik = next((c for c in df_semua.columns if c.lower() == 'nama'), None)
+        jk_col_klik = next((c for c in df_semua.columns if 'jns' in c.lower() or 'kelamin' in c.lower()), None)
+        
+        pilihan_jk = st.radio(
+            "Tampilkan kategori pemilih:",
+            ["Semua", "Laki-laki", "Perempuan"],
+            horizontal=True
+        )
         
         with st.form(key=f"form_cepat_{tps_terklik}", border=False):
             filter_cepat = st.text_input(
@@ -138,19 +118,23 @@ if tps_terklik:
                 "", 
                 placeholder="Ketik nama lalu tekan Saring (kosongkan untuk semua)"
             )
-            tombol_cepat = st.form_submit_button("🔍 Saring Nama", use_container_width=True)
+            tombol_cepat = st.form_submit_button("🔍 Saring Data", use_container_width=True)
+            
+        df_tampil = df_semua.copy()
+        
+        if pilihan_jk != "Semua" and jk_col_klik:
+            df_tampil = df_tampil[df_tampil[jk_col_klik].str.strip().str.lower() == pilihan_jk.lower()]
             
         if filter_cepat.strip() and nama_col_klik:
-            df_tampil = df_semua[df_semua[nama_col_klik].str.contains(filter_cepat.strip(), case=False, na=False)]
-            if not df_tampil.empty:
-                st.success(f"Ditemukan **{len(df_tampil)}** pemilih dengan nama '{filter_cepat.strip()}' di **{tps_terklik}**:")
-            else:
-                st.warning(f"Nama '{filter_cepat.strip()}' tidak ditemukan di {tps_terklik}.")
-        else:
-            df_tampil = df_semua
-            st.info(f"Menampilkan seluruh daftar pemilih di **{tps_terklik}** (Total: **{len(df_tampil)}** pemilih)")
+            df_tampil = df_tampil[df_tampil[nama_col_klik].str.contains(filter_cepat.strip(), case=False, na=False)]
             
         if not df_tampil.empty:
+            label_kategori = f"kategori **{pilihan_jk}** " if pilihan_jk != "Semua" else ""
+            if filter_cepat.strip():
+                st.success(f"Ditemukan **{len(df_tampil)}** pemilih {label_kategori}dengan nama '{filter_cepat.strip()}' di **{tps_terklik}**:")
+            else:
+                st.info(f"Menampilkan daftar pemilih {label_kategori}di **{tps_terklik}** (Total: **{len(df_tampil)}** pemilih)")
+                
             semua_kartu_html = ""
             for _, row in df_tampil.iterrows():
                 v_nama = str(row.get('Nama', '-')).upper()
@@ -161,6 +145,8 @@ if tps_terklik:
                 jk_usia = f"{v_jk}, {v_usia} tahun" if v_usia and v_usia.lower() not in ['-', 'nan', ''] else v_jk
                 semua_kartu_html += f'<div style="text-align: center; padding: 8px 0;"><div style="font-family: \'Siera_Lokal\', sans-serif; font-size: 30px; line-height: 1.2; margin-bottom: 4px;">{v_nama}</div><div style="font-size: 16px; font-style: italic; margin-bottom: 3px;">{jk_usia}</div><div style="font-family: \'Stillfish_Lokal\', sans-serif; font-size: 17px; margin-bottom: 5px;">{v_alamat}</div><div style="font-family: \'OCRA_Lokal\', \'OCR A Extended\', monospace; font-size: 19px; letter-spacing: 1px;"><span style="font-family: sans-serif; letter-spacing: 0;">🆔</span>{v_id}</div></div><hr style="margin: 10px 0; border: 0; border-top: 1px solid rgba(128, 128, 128, 0.3);">'
             st.markdown(semua_kartu_html, unsafe_allow_html=True)
+        else:
+            st.warning(f"Data pemilih kategori **{pilihan_jk}** tidak ditemukan di {tps_terklik}.")
     else:
         st.error(f"File '{csv_klik}' tidak ditemukan di GitHub.")
 
@@ -201,13 +187,8 @@ else:
                 """, unsafe_allow_html=True)
             else:
                 info_wilayah = peta_dict.get(nama_tps.upper(), "-")
-
-                # HTML ditulis dalam 1 baris tunggal agar tidak dianggap blok kode oleh Markdown Streamlit
                 html_btn = f'<a href="?tps_klik={nama_tps}" target="_self" class="tombol-tps-kustom"><div style="line-height: 1.25; margin-bottom: 3px;"><span style="font-family: \'Siera_Lokal\', sans-serif; font-size: 22px;">{nama_tps} ({val_total})</span><span style="font-size: 13px; opacity: 0.85;"> | {val_l} lk &nbsp;{val_p} pr</span></div><div style="font-size: 14px; opacity: 0.9;">{info_wilayah}</div></a>'
-                
                 st.markdown(html_btn, unsafe_allow_html=True)
-
-
 
     st.markdown("---")
     st.subheader("🔍 Cek Data Pemilih")

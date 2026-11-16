@@ -30,6 +30,10 @@ st.markdown("""
     }
     div[data-baseweb="popover"] li, [role="option"] { font-size: 18px !important; padding: 8px !important; }
     div[data-testid="stTextInput"] input { font-size: 18px !important; }
+    div[data-testid="stTextInput"] input::placeholder {
+    font-size: 10px !important;
+    opacity: 0.75 !important;
+}
     [data-testid="InputInstructions"], div[data-testid="stForm"] small { display: none !important; }
     
     a.tombol-tps-kustom {

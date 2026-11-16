@@ -14,9 +14,15 @@ st.markdown("""
 st.markdown("""
     <style>
     #MainMenu, footer, header {visibility: hidden;}
-    /* Mengurangi jarak kosong di bagian paling atas halaman (di atas logo) */
-    .block-container {
-        padding-top: 0rem !important;
+    /* Menghilangkan ruang tinggi bawaan header Streamlit sepenuhnya */
+    header[data-testid="stHeader"] {
+        display: none !important;
+        height: 0px !important;
+    }
+    
+    /* Memperkecil maksimal jarak atas pada wadah utama aplikasi */
+    .block-container, div[data-testid="stAppViewBlockContainer"] {
+        padding-top: 0.5rem !important;
         padding-bottom: 2rem !important;
     }
     html, body, [class*="css"], p, div, span, td, th { font-family: 'Open Sans', sans-serif; }

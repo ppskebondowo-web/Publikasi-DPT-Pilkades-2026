@@ -134,7 +134,7 @@ else:
     if os.path.exists("Rekap.csv"):
         df_rekap = load_local_csv("Rekap.csv")
         
-                peta_dict = {}
+        peta_dict = {}
         if os.path.exists("PetaPemilih.csv"):
             df_peta = load_local_csv("PetaPemilih.csv")
             # Mencari kolom TPS dan ASAL PEMILIH secara fleksibel (huruf besar/kecil)

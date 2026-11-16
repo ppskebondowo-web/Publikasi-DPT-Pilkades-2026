@@ -34,30 +34,20 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-if os.path.exists("ocra.ttf"):
-    with open("ocra.ttf", "rb") as f:
-        font_b64 = base64.b64encode(f.read()).decode()
-    st.markdown(f"<style>@font-face {{ font-family: 'OCRA_Lokal'; src: url(data:font/ttf;base64,{font_b64}) format('truetype'); }}</style>", unsafe_allow_html=True)
+# Memuat semua file font lokal dari GitHub (mendukung .ttf dan .otf)
+font_files = [
+    ("OCRA_Lokal", "ocra.ttf", "truetype", "ttf"),
+    ("Montserrat_Lokal", "montserrat.ttf", "truetype", "ttf"),
+    ("Siera_Lokal", "saira.ttf", "truetype", "ttf"),
+    ("Stillfish_Lokal", "mdsl.otf", "opentype", "otf"),
+    ("StillfishIt_Lokal", "StlfRgIt.otf", "opentype", "otf")
+]
 
-if os.path.exists("montserrat.ttf"):
-    with open("montserrat.ttf", "rb") as f:
-        mont_b64 = base64.b64encode(f.read()).decode()
-    st.markdown(f"<style>@font-face {{ font-family: 'Montserrat_Lokal'; src: url(data:font/ttf;base64,{mont_b64}) format('truetype'); }}</style>", unsafe_allow_html=True)
-
-if os.path.exists("saira.ttf"):
-    with open("saira.ttf", "rb") as f:
-        siera_b64 = base64.b64encode(f.read()).decode()
-    st.markdown(f"<style>@font-face {{ font-family: 'Siera_Lokal'; src: url(data:font/ttf;base64,{siera_b64}) format('truetype'); }}</style>", unsafe_allow_html=True)
-
-if os.path.exists("mdsl.otf"):
-    with open("mdsl.otf", "rb") as f:
-        siera_b64 = base64.b64encode(f.read()).decode()
-    st.markdown(f"<style>@font-face {{ font-family: 'Stillfish_Lokal'; src: url(data:font/ttf;base64,{siera_b64}) format('truetype'); }}</style>", unsafe_allow_html=True)
-
-if os.path.exists("StlfRgIt.otf"):
-    with open("StlfRgIt.otf", "rb") as f:
-        siera_b64 = base64.b64encode(f.read()).decode()
-    st.markdown(f"<style>@font-face {{ font-family: 'StillfishIt_Lokal'; src: url(data:font/ttf;base64,{siera_b64}) format('truetype'); }}</style>", unsafe_allow_html=True)
+for f_name, f_file, f_format, f_mime in font_files:
+    if os.path.exists(f_file):
+        with open(f_file, "rb") as f:
+            b64_data = base64.b64encode(f.read()).decode()
+        st.markdown(f"<style>@font-face {{ font-family: '{f_name}'; src: url(data:font/{f_mime};base64,{b64_data}) format('{f_format}'); }}</style>", unsafe_allow_html=True)
 
 logo_b64 = base64.b64encode(open("logo.png", "rb").read()).decode() if os.path.exists("logo.png") else None
 img_html = f'<img src="data:image/png;base64,{logo_b64}" style="width: 85px; margin-bottom: 10px;">' if logo_b64 else ''
@@ -81,119 +71,132 @@ def load_local_csv(filename):
     df.columns = df.columns.str.strip()
     return df.loc[:, ~df.columns.str.contains('^Unnamed')]
 
-st.subheader("📊 Rekapitulasi Pemilih")
-if os.path.exists("Rekap.csv"):
-    df_rekap = load_local_csv("Rekap.csv")
-    for col in ['L', 'P', 'L+P']:
-        if col in df_rekap.columns:
-            df_rekap[col] = df_rekap[col].apply(lambda x: f"{int(float(str(x).replace('.', '').strip())):,}".replace(",", ".") if str(x).replace('.', '').strip().isdigit() else x)
-    
-    html_table = '<div style="overflow-x: auto; margin-bottom: 10px;"><table style="width: 100%; border-collapse: collapse; font-size: 18px;">'
-    html_table += '<thead><tr style="background-color: rgba(128, 128, 128, 0.2);">' + ''.join([f'<th style="text-align: center; font-weight: bold; padding: 8px; border: 1px solid rgba(128, 128, 128, 0.3);">{c}</th>' for c in df_rekap.columns]) + '</tr></thead><tbody>'
-    
-    for _, row in df_rekap.iterrows():
-        nama_baris = str(row.iloc[0]).strip()
-        is_total = nama_baris.lower() == 'total'
-        style = 'font-weight: bold; background-color: rgba(128, 128, 128, 0.15);' if is_total else ''
-        
-        html_table += f'<tr style="{style}">'
-        for i, val in enumerate(row):
-            if i == 0 and not is_total:
-                # Nama TPS dibuat menjadi link aktif yang mengarah ke bagian daftar pemilih
-                val_display = f'<a href="?tps_klik={nama_baris}#daftar-tps" target="_self" style="text-decoration: none; color: #1E88E5; font-weight: 600;">{val}</a>'
-            else:
-                val_display = val
-            html_table += f'<td style="text-align: center; padding: 7px 8px; border: 1px solid rgba(128, 128, 128, 0.3);">{val_display}</td>'
-        html_table += '</tr>'
-        
-    st.markdown(html_table + '</tbody></table></div>', unsafe_allow_html=True)
-
-
-st.subheader("🗺️ Pemetaan Pemilih")
-if os.path.exists("PetaPemilih.csv"):
-    df_peta = load_local_csv("PetaPemilih.csv")
-    
-    html_peta = '<div style="overflow-x: auto; margin-bottom: 15px;"><table style="width: 100%; border-collapse: collapse; font-size: 16px;">'
-    html_peta += '<thead><tr style="background-color: rgba(128, 128, 128, 0.2);">' + ''.join([f'<th style="text-align: center; font-weight: bold; font-style: italic; padding: 8px; border: 1px solid rgba(128, 128, 128, 0.3);">{c}</th>' for c in df_peta.columns]) + '</tr></thead><tbody>'
-
-    for _, row in df_peta.iterrows():
-        html_peta += '<tr>'
-        for i, val in enumerate(row):
-            # Kolom NO dan TPS dibuat rata tengah (center), sedangkan ASAL PEMILIH dibuat rata kiri (left) agar rapi
-            align = 'left' if i == 2 else 'center'
-            html_peta += f'<td style="text-align: {align}; padding: 7px 8px; border: 1px solid rgba(128, 128, 128, 0.3);">{val}</td>'
-        html_peta += '</tr>'
-    
-    st.markdown(html_peta + '</tbody></table></div>', unsafe_allow_html=True)
-else:
-    st.info("File 'PetaPemilih.csv' belum diunggah.")
-
-st.subheader("🔍 Cek Data Pemilih")
-tps_list = ["TPS 001", "TPS 002", "TPS 003", "TPS 004", "TPS 005", "TPS 006", "TPS 007", "TPS 008", "TPS 009", "TPS 010", "TPS 011"]
-pilihan_tps = st.selectbox("Pilih nomor TPS terlebih dahulu:", ["-- Pilih TPS --"] + tps_list)
-
-if pilihan_tps != "-- Pilih TPS --":
-    csv_file = f"{pilihan_tps}.csv"
-    if os.path.exists(csv_file):
-        df_tps = load_local_csv(csv_file)
-        nama_col = next((c for c in df_tps.columns if c.lower() == 'nama'), None)
-        if nama_col:
-            with st.form(key=f"form_{pilihan_tps}", border=False):
-                cari_nama = st.text_input(f"Ketik Nama yang dicari di {pilihan_tps}:", "", placeholder="Contoh: BUDI LUHUR")
-                tombol_cari = st.form_submit_button("🔍 Cari Pemilih", use_container_width=True)
-            if tombol_cari or cari_nama:
-                if cari_nama.strip():
-                    hasil = df_tps[df_tps[nama_col].str.contains(cari_nama.strip(), case=False, na=False)]
-                    if not hasil.empty:
-                        st.success(f"Ditemukan {len(hasil)} data yang cocok:")
-                        for _, row in hasil.iterrows():
-                            v_nama = str(row.get('Nama', '-')).upper()
-                            v_jk = row.get('JnsKlmn', '-')
-                            v_alamat = row.get('Alamat', '-')
-                            v_id = row.get('ID', '-')
-                            v_usia = next((str(row[k]).strip() for k in row.index if k.strip().lower() in ['usia', 'umur']), '')
-                            jk_usia = f"{v_jk}, {v_usia} tahun" if v_usia and v_usia.lower() not in ['-', 'nan', ''] else v_jk
-                            st.markdown(f'<div style="text-align: center; padding: 8px 0;"><div style="font-family: \'Siera_Lokal\', sans-serif; font-size: 30px; line-height: 1.2; margin-bottom: 4px;">{v_nama}</div><div style="font-size: 16px; font-style: italic; margin-bottom: 3px;">{jk_usia}</div><div style="font-family: \'Stillfish_Lokal\', sans-serif;font-size: 17px; margin-bottom: 5px;">{v_alamat}</div><div style="font-family: \'OCRA_Lokal\', \'OCR A Extended\', monospace; font-size: 19px; letter-spacing: 1px;"><span style="font-family: sans-serif; letter-spacing: 0;">🆔</span>{v_id}</div></div><hr style="margin: 10px 0; border: 0; border-top: 1px solid rgba(128, 128, 128, 0.3);">', unsafe_allow_html=True)
-                    else:
-                        st.warning(f"Nama '{cari_nama}' tidak ditemukan di {pilihan_tps}.")
-                else:
-                    st.warning("Silakan ketikkan nama terlebih dahulu.")
-            else:
-                st.info("Ketik nama pemilih di atas lalu tekan tombol 🔍 Cari Pemilih.")
-
-# Menampilkan seluruh kartu daftar pemilih jika nama TPS di tabel rekap diklik
 tps_terklik = st.query_params.get("tps_klik", None)
 
 if tps_terklik:
-    st.markdown('<div id="daftar-tps"></div>', unsafe_allow_html=True)
-    st.markdown("---")
-    
-    col_judul, col_tutup = st.columns([3, 1])
+    # MODE 1: HANYA MENAMPILKAN PEMILIH TPS YANG DIKLIK + PENCARIAN CEPAT
+    col_judul, col_tutup = st.columns([3, 1.3])
     with col_judul:
         st.subheader(f"📋 Seluruh Pemilih {tps_terklik}")
     with col_tutup:
-        if st.button("❌ Tutup", use_container_width=True):
+        if st.button("⬅️ Kembali", use_container_width=True):
             st.query_params.clear()
             st.rerun()
             
     csv_klik = f"{tps_terklik}.csv"
     if os.path.exists(csv_klik):
         df_semua = load_local_csv(csv_klik)
-        st.info(f"Menampilkan seluruh daftar pemilih di **{tps_terklik}** (Total: **{len(df_semua)}** pemilih)")
+        nama_col_klik = next((c for c in df_semua.columns if c.lower() == 'nama'), None)
         
-        semua_kartu_html = ""
-        for _, row in df_semua.iterrows():
-            v_nama = str(row.get('Nama', '-')).upper()
-            v_jk = row.get('JnsKlmn', '-')
-            v_alamat = row.get('Alamat', '-')
-            v_id = row.get('ID', '-')
-            v_usia = next((str(row[k]).strip() for k in row.index if k.strip().lower() in ['usia', 'umur']), '')
-            jk_usia = f"{v_jk}, {v_usia} tahun" if v_usia and v_usia.lower() not in ['-', 'nan', ''] else v_jk
+        with st.form(key=f"form_cepat_{tps_terklik}", border=False):
+            filter_cepat = st.text_input(
+                f"Cari nama di {tps_terklik}:", 
+                "", 
+                placeholder="Ketik nama lalu tekan Saring (kosongkan untuk semua)"
+            )
+            tombol_cepat = st.form_submit_button("🔍 Saring Nama", use_container_width=True)
             
-            semua_kartu_html += f'<div style="text-align: center; padding: 8px 0;"><div style="font-family: \'Siera_Lokal\', \'Roboto\', sans-serif; font-size: 28px; line-height: 1.2; margin-bottom: 4px;">{v_nama}</div><div style="font-size: 16px; font-style: italic; margin-bottom: 3px;">{jk_usia}</div><div style="font-size: 16px; margin-bottom: 5px;">{v_alamat}</div><div style="font-family: \'OCRA_Lokal\', \'OCR A Extended\', monospace; font-size: 19px; letter-spacing: 1px;"><span style="font-family: sans-serif; letter-spacing: 0;">🆔</span> {v_id}</div></div><hr style="margin: 10px 0; border: 0; border-top: 1px solid rgba(128, 128, 128, 0.3);">'
+        if filter_cepat.strip() and nama_col_klik:
+            df_tampil = df_semua[df_semua[nama_col_klik].str.contains(filter_cepat.strip(), case=False, na=False)]
+            if not df_tampil.empty:
+                st.success(f"Ditemukan **{len(df_tampil)}** pemilih dengan nama '{filter_cepat.strip()}' di **{tps_terklik}**:")
+            else:
+                st.warning(f"Nama '{filter_cepat.strip()}' tidak ditemukan di {tps_terklik}.")
+        else:
+            df_tampil = df_semua
+            st.info(f"Menampilkan seluruh daftar pemilih di **{tps_terklik}** (Total: **{len(df_tampil)}** pemilih)")
             
-        st.markdown(semua_kartu_html, unsafe_allow_html=True)
+        if not df_tampil.empty:
+            semua_kartu_html = ""
+            for _, row in df_tampil.iterrows():
+                v_nama = str(row.get('Nama', '-')).upper()
+                v_jk = row.get('JnsKlmn', '-')
+                v_alamat = row.get('Alamat', '-')
+                v_id = row.get('ID', '-')
+                v_usia = next((str(row[k]).strip() for k in row.index if k.strip().lower() in ['usia', 'umur']), '')
+                jk_usia = f"{v_jk}, {v_usia} tahun" if v_usia and v_usia.lower() not in ['-', 'nan', ''] else v_jk
+                semua_kartu_html += f'<div style="text-align: center; padding: 8px 0;"><div style="font-family: \'Siera_Lokal\', sans-serif; font-size: 30px; line-height: 1.2; margin-bottom: 4px;">{v_nama}</div><div style="font-size: 16px; font-style: italic; margin-bottom: 3px;">{jk_usia}</div><div style="font-family: \'Stillfish_Lokal\', sans-serif; font-size: 17px; margin-bottom: 5px;">{v_alamat}</div><div style="font-family: \'OCRA_Lokal\', \'OCR A Extended\', monospace; font-size: 19px; letter-spacing: 1px;"><span style="font-family: sans-serif; letter-spacing: 0;">🆔</span>{v_id}</div></div><hr style="margin: 10px 0; border: 0; border-top: 1px solid rgba(128, 128, 128, 0.3);">'
+            st.markdown(semua_kartu_html, unsafe_allow_html=True)
     else:
         st.error(f"File '{csv_klik}' tidak ditemukan di GitHub.")
-               
+
+else:
+    # MODE 2: HALAMAN UTAMA (REKAP, PEMETAAN, & PENCARIAN NAMA)
+    st.subheader("📊 Rekapitulasi Pemilih")
+    if os.path.exists("Rekap.csv"):
+        df_rekap = load_local_csv("Rekap.csv")
+        for col in ['L', 'P', 'L+P']:
+            if col in df_rekap.columns:
+                df_rekap[col] = df_rekap[col].apply(lambda x: f"{int(float(str(x).replace('.', '').strip())):,}".replace(",", ".") if str(x).replace('.', '').strip().isdigit() else x)
+        
+        html_table = '<div style="overflow-x: auto; margin-bottom: 10px;"><table style="width: 100%; border-collapse: collapse; font-size: 18px;">'
+        html_table += '<thead><tr style="background-color: rgba(128, 128, 128, 0.2);">' + ''.join([f'<th style="text-align: center; font-weight: bold; padding: 8px; border: 1px solid rgba(128, 128, 128, 0.3);">{c}</th>' for c in df_rekap.columns]) + '</tr></thead><tbody>'
+        
+        for _, row in df_rekap.iterrows():
+            nama_baris = str(row.iloc[0]).strip()
+            is_total = nama_baris.lower() == 'total'
+            style = 'font-weight: bold; background-color: rgba(128, 128, 128, 0.15);' if is_total else ''
+            
+            html_table += f'<tr style="{style}">'
+            for i, val in enumerate(row):
+                if i == 0 and not is_total:
+                    val_display = f'<a href="?tps_klik={nama_baris}" target="_self" style="text-decoration: none; color: #1E88E5; font-weight: 600;">{val}</a>'
+                else:
+                    val_display = val
+                html_table += f'<td style="text-align: center; padding: 7px 8px; border: 1px solid rgba(128, 128, 128, 0.3);">{val_display}</td>'
+            html_table += '</tr>'
+            
+        st.markdown(html_table + '</tbody></table></div>', unsafe_allow_html=True)
+
+    st.subheader("🗺️ Pemetaan Pemilih")
+    if os.path.exists("PetaPemilih.csv"):
+        df_peta = load_local_csv("PetaPemilih.csv")
+        
+        html_peta = '<div style="overflow-x: auto; margin-bottom: 15px;"><table style="width: 100%; border-collapse: collapse; font-size: 16px;">'
+        html_peta += '<thead><tr style="background-color: rgba(128, 128, 128, 0.2);">' + ''.join([f'<th style="text-align: center; font-weight: bold; font-style: italic; padding: 8px; border: 1px solid rgba(128, 128, 128, 0.3);">{c}</th>' for c in df_peta.columns]) + '</tr></thead><tbody>'
+
+        for _, row in df_peta.iterrows():
+            html_peta += '<tr>'
+            for i, val in enumerate(row):
+                align = 'left' if i == 2 else 'center'
+                html_peta += f'<td style="text-align: {align}; padding: 7px 8px; border: 1px solid rgba(128, 128, 128, 0.3);">{val}</td>'
+            html_peta += '</tr>'
+        
+        st.markdown(html_peta + '</tbody></table></div>', unsafe_allow_html=True)
+    else:
+        st.info("File 'PetaPemilih.csv' belum diunggah.")
+
+    st.subheader("🔍 Cek Data Pemilih")
+    tps_list = ["TPS 001", "TPS 002", "TPS 003", "TPS 004", "TPS 005", "TPS 006", "TPS 007", "TPS 008", "TPS 009", "TPS 010", "TPS 011"]
+    pilihan_tps = st.selectbox("Pilih nomor TPS terlebih dahulu:", ["-- Pilih TPS --"] + tps_list)
+
+    if pilihan_tps != "-- Pilih TPS --":
+        csv_file = f"{pilihan_tps}.csv"
+        if os.path.exists(csv_file):
+            df_tps = load_local_csv(csv_file)
+            nama_col = next((c for c in df_tps.columns if c.lower() == 'nama'), None)
+            if nama_col:
+                with st.form(key=f"form_{pilihan_tps}", border=False):
+                    cari_nama = st.text_input(f"Ketik Nama yang dicari di {pilihan_tps}:", "", placeholder="Contoh: BUDI LUHUR")
+                    tombol_cari = st.form_submit_button("🔍 Cari Pemilih", use_container_width=True)
+                if tombol_cari or cari_nama:
+                    if cari_nama.strip():
+                        hasil = df_tps[df_tps[nama_col].str.contains(cari_nama.strip(), case=False, na=False)]
+                        if not hasil.empty:
+                            st.success(f"Ditemukan {len(hasil)} data yang cocok:")
+                            for _, row in hasil.iterrows():
+                                v_nama = str(row.get('Nama', '-')).upper()
+                                v_jk = row.get('JnsKlmn', '-')
+                                v_alamat = row.get('Alamat', '-')
+                                v_id = row.get('ID', '-')
+                                v_usia = next((str(row[k]).strip() for k in row.index if k.strip().lower() in ['usia', 'umur']), '')
+                                jk_usia = f"{v_jk}, {v_usia} tahun" if v_usia and v_usia.lower() not in ['-', 'nan', ''] else v_jk
+                                st.markdown(f'<div style="text-align: center; padding: 8px 0;"><div style="font-family: \'Siera_Lokal\', sans-serif; font-size: 30px; line-height: 1.2; margin-bottom: 4px;">{v_nama}</div><div style="font-size: 16px; font-style: italic; margin-bottom: 3px;">{jk_usia}</div><div style="font-family: \'Stillfish_Lokal\', sans-serif; font-size: 17px; margin-bottom: 5px;">{v_alamat}</div><div style="font-family: \'OCRA_Lokal\', \'OCR A Extended\', monospace; font-size: 19px; letter-spacing: 1px;"><span style="font-family: sans-serif; letter-spacing: 0;">🆔</span>{v_id}</div></div><hr style="margin: 10px 0; border: 0; border-top: 1px solid rgba(128, 128, 128, 0.3);">', unsafe_allow_html=True)
+                        else:
+                            st.warning(f"Nama '{cari_nama}' tidak ditemukan di {pilihan_tps}.")
+                    else:
+                        st.warning("Silakan ketikkan nama terlebih dahulu.")
+                else:
+                    st.info("Ketik nama pemilih di atas lalu tekan tombol 🔍 Cari Pemilih.")
+
 # --- SELESAI ---

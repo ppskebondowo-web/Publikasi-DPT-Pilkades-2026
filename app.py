@@ -53,6 +53,29 @@ st.markdown("""
         background-color: rgba(128, 128, 128, 0.2);
         border-color: rgba(128, 128, 128, 0.6);
     }
+        /* Membesarkan label judul dan tulisan opsi radio button (Semua, Laki-laki, Perempuan) */
+    div[data-testid="stRadio"] > label p {
+        font-size: 16px !important;
+        font-weight: 600 !important;
+        margin-bottom: 6px !important;
+    }
+    
+    div[data-testid="stRadio"] div[role="radiogroup"] label p {
+        font-size: 18px !important;
+        font-weight: 600 !important;
+    }
+
+    /* Membesarkan lingkaran tombol radio agar mudah disentuh jari */
+    div[data-testid="stRadio"] div[role="radiogroup"] label > div:first-child {
+        transform: scale(1.25) !important;
+        margin-right: 6px !important;
+    }
+
+    /* Memberi jarak antar opsi agar tidak berdempetan saat diketuk */
+    div[data-testid="stRadio"] div[role="radiogroup"] {
+        gap: 16px !important;
+    }
+
     </style>
 """, unsafe_allow_html=True)
 

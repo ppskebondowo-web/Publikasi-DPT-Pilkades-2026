@@ -63,12 +63,12 @@ st.markdown("""
     
     div[data-testid="stRadio"] div[role="radiogroup"] label p {
         font-size: 16px !important;
-        font-weight: 400 !important;
+        font-weight: 100 !important;
     }
 
     /* Membesarkan lingkaran tombol radio agar mudah disentuh jari */
     div[data-testid="stRadio"] div[role="radiogroup"] label p {
-        font-size: 18px !important;
+        font-size: 20px !important;
         font-weight: 400 !important; /* Ubah angka ini sesuai selera ketebalan */
     }
 

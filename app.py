@@ -32,12 +32,27 @@ st.markdown("""
     div[data-testid="stTextInput"] input { font-size: 18px !important; }
     [data-testid="InputInstructions"], div[data-testid="stForm"] small { display: none !important; }
     
-    div.stButton > button {
-        min-height: 62px !important;
+        div.stButton > button {
+        min-height: 68px !important;
         white-space: pre-wrap !important;
         line-height: 1.35 !important;
-        padding: 8px 12px !important;
+        padding: 10px 12px !important;
     }
+    
+    /* Mengatur teks baris kedua (Nama Wilayah) pada tombol */
+    div.stButton > button p {
+        font-family: 'Open Sans', sans-serif !important;
+        font-size: 14px !important;
+        line-height: 1.4 !important;
+    }
+
+    /* Mengatur khusus baris pertama tombol menggunakan font kartu nama (Siera_Lokal) & ukuran besar */
+    div.stButton > button p::first-line {
+        font-family: 'Siera_Lokal', sans-serif !important;
+        font-size: 22px !important;
+        font-weight: normal !important;
+    }
+
     </style>
 """, unsafe_allow_html=True)
 

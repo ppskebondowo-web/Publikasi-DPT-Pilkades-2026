@@ -31,10 +31,18 @@ st.markdown("""
     div[data-baseweb="popover"] li, [role="option"] { font-size: 18px !important; padding: 8px !important; }
     div[data-testid="stTextInput"] input { font-size: 18px !important; }
     [data-testid="InputInstructions"], div[data-testid="stForm"] small { display: none !important; }
+    
+    /* Membuat tinggi dan perataan tombol TPS seragam rapi */
+    div.stButton > button {
+        min-height: 85px !important;
+        white-space: pre-wrap !important;
+        line-height: 1.35 !important;
+        padding: 10px 8px !important;
+    }
     </style>
 """, unsafe_allow_html=True)
 
-# Memuat semua file font lokal dari GitHub (mendukung .ttf dan .otf)
+# Memuat semua file font lokal dari GitHub
 font_files = [
     ("OCRA_Lokal", "ocra.ttf", "truetype", "ttf"),
     ("Montserrat_Lokal", "montserrat.ttf", "truetype", "ttf"),
@@ -121,81 +129,52 @@ if tps_terklik:
         st.error(f"File '{csv_klik}' tidak ditemukan di GitHub.")
 
 else:
-    # MODE 2: HALAMAN UTAMA (REKAP, PEMETAAN, & PENCARIAN NAMA)
-    st.subheader("📊 Rekapitulasi Pemilih")
+    # MODE 2: HALAMAN UTAMA (TOMBOL REKAP+PEMETAAN & PENCARIAN NAMA)
+    st.subheader("📊 Rekapitulasi & Pemetaan Pemilih")
     if os.path.exists("Rekap.csv"):
         df_rekap = load_local_csv("Rekap.csv")
-        for col in ['L', 'P', 'L+P']:
-            if col in df_rekap.columns:
-                df_rekap[col] = df_rekap[col].apply(lambda x: f"{int(float(str(x).replace('.', '').strip())):,}".replace(",", ".") if str(x).replace('.', '').strip().isdigit() else x)
         
-        html_table = '<div style="overflow-x: auto; margin-bottom: 10px;"><table style="width: 100%; border-collapse: collapse; font-size: 18px;">'
-        html_table += '<thead><tr style="background-color: rgba(128, 128, 128, 0.2);">' + ''.join([f'<th style="text-align: center; font-weight: bold; padding: 8px; border: 1px solid rgba(128, 128, 128, 0.3);">{c}</th>' for c in df_rekap.columns]) + '</tr></thead><tbody>'
-        
-        for _, row in df_rekap.iterrows():
-            nama_baris = str(row.iloc[0]).strip()
-            is_total = nama_baris.lower() == 'total'
-            style = 'font-weight: bold; background-color: rgba(128, 128, 128, 0.15);' if is_total else ''
-            
-            html_table += f'<tr style="{style}">'
-            for i, val in enumerate(row):
-                if i == 0 and not is_total:
-                    val_display = f'<a href="?tps_klik={nama_baris}" target="_self" style="text-decoration: none; color: #1E88E5; font-weight: 600;">{val}</a>'
-                else:
-                        st.subheader("📊 Rekapitulasi Pemilih")
-    if os.path.exists("Rekap.csv"):
-        df_rekap = load_local_csv("Rekap.csv")
+        peta_dict = {}
+        if os.path.exists("PetaPemilih.csv"):
+            df_peta = load_local_csv("PetaPemilih.csv")
+            for _, r_peta in df_peta.iterrows():
+                if len(r_peta) >= 3:
+                    tps_key = str(r_peta.iloc).strip().upper()
+                    asal_val = str(r_peta.iloc).strip()
+                    peta_dict[tps_key] = f"{peta_dict[tps_key]}, {asal_val}" if tps_key in peta_dict else asal_val
         
         def fmt_angka(val):
             s = str(val).replace('.', '').strip()
             return f"{int(float(s)):,}".replace(",", ".") if s.isdigit() else val
 
-        # Membuat grid 2 kolom agar tombol tampil rapi berpasangan di layar HP
         cols = st.columns(2)
         col_idx = 0
         
         for _, row in df_rekap.iterrows():
-            nama_tps = str(row.iloc[0]).strip()
+            nama_tps = str(row.iloc).strip()
             val_l = fmt_angka(row.get('L', '0'))
             val_p = fmt_angka(row.get('P', '0'))
             val_total = fmt_angka(row.get('L+P', '0'))
             
             if nama_tps.lower() == 'total':
-                # Baris Total ditampilkan sebagai kotak ringkasan tegas di bagian bawah
                 st.markdown(f"""
-                <div style="text-align: center; padding: 10px; margin-top: 4px; margin-bottom: 14px; border-radius: 8px; background-color: rgba(128, 128, 128, 0.15); border: 1px solid rgba(128, 128, 128, 0.3); font-size: 15px;">
+                <div style="text-align: center; padding: 10px; margin-top: 6px; margin-bottom: 14px; border-radius: 8px; background-color: rgba(128, 128, 128, 0.15); border: 1px solid rgba(128, 128, 128, 0.3); font-size: 15px;">
                     <strong>TOTAL KESELURUHAN: {val_total} Pemilih</strong><br>
                     <span style="font-size: 13px; opacity: 0.85;">Laki-laki: {val_l} &nbsp;|&nbsp; Perempuan: {val_p}</span>
                 </div>
                 """, unsafe_allow_html=True)
             else:
-                # Setiap TPS menjadi tombol interaktif
+                info_wilayah = peta_dict.get(nama_tps.upper(), "")
+                teks_wilayah = f"\n📍 {info_wilayah}" if info_wilayah else ""
+                
                 with cols[col_idx % 2]:
-                    label_tombol = f"🗳️ {nama_tps} ({val_total})\nL: {val_l} | P: {val_p}"
+                    label_tombol = f"🗳️ {nama_tps} ({val_total})\nL: {val_l} | P: {val_p}{teks_wilayah}"
                     if st.button(label_tombol, key=f"btn_rekap_{nama_tps}", use_container_width=True):
                         st.query_params["tps_klik"] = nama_tps
                         st.rerun()
                 col_idx += 1
 
-
-    st.subheader("🗺️ Pemetaan Pemilih")
-    if os.path.exists("PetaPemilih.csv"):
-        df_peta = load_local_csv("PetaPemilih.csv")
-        
-        html_peta = '<div style="overflow-x: auto; margin-bottom: 15px;"><table style="width: 100%; border-collapse: collapse; font-size: 16px;">'
-        html_peta += '<thead><tr style="background-color: rgba(128, 128, 128, 0.2);">' + ''.join([f'<th style="text-align: center; font-weight: bold; font-style: italic; padding: 8px; border: 1px solid rgba(128, 128, 128, 0.3);">{c}</th>' for c in df_peta.columns]) + '</tr></thead><tbody>'
-
-        for _, row in df_peta.iterrows():
-            html_peta += '<tr>'
-            for i, val in enumerate(row):
-                align = 'left' if i == 2 else 'center'
-                html_peta += f'<td style="text-align: {align}; padding: 7px 8px; border: 1px solid rgba(128, 128, 128, 0.3);">{val}</td>'
-            html_peta += '</tr>'
-        
-        st.markdown(html_peta + '</tbody></table></div>', unsafe_allow_html=True)
-    else:
-        st.info("File 'PetaPemilih.csv' belum diunggah.")
-
+    st.markdown("---")
     st.subheader("🔍 Cek Data Pemilih")
     tps_list = ["TPS 001", "TPS 002", "TPS 003", "TPS 004", "TPS 005", "TPS 006", "TPS 007", "TPS 008", "TPS 009", "TPS 010", "TPS 011"]
     pilihan_tps = st.selectbox("Pilih nomor TPS terlebih dahulu:", ["-- Pilih TPS --"] + tps_list)

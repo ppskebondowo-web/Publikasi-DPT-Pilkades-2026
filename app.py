@@ -142,11 +142,41 @@ else:
                 if i == 0 and not is_total:
                     val_display = f'<a href="?tps_klik={nama_baris}" target="_self" style="text-decoration: none; color: #1E88E5; font-weight: 600;">{val}</a>'
                 else:
-                    val_display = val
-                html_table += f'<td style="text-align: center; padding: 7px 8px; border: 1px solid rgba(128, 128, 128, 0.3);">{val_display}</td>'
-            html_table += '</tr>'
+                        st.subheader("📊 Rekapitulasi Pemilih")
+    if os.path.exists("Rekap.csv"):
+        df_rekap = load_local_csv("Rekap.csv")
+        
+        def fmt_angka(val):
+            s = str(val).replace('.', '').strip()
+            return f"{int(float(s)):,}".replace(",", ".") if s.isdigit() else val
+
+        # Membuat grid 2 kolom agar tombol tampil rapi berpasangan di layar HP
+        cols = st.columns(2)
+        col_idx = 0
+        
+        for _, row in df_rekap.iterrows():
+            nama_tps = str(row.iloc[0]).strip()
+            val_l = fmt_angka(row.get('L', '0'))
+            val_p = fmt_angka(row.get('P', '0'))
+            val_total = fmt_angka(row.get('L+P', '0'))
             
-        st.markdown(html_table + '</tbody></table></div>', unsafe_allow_html=True)
+            if nama_tps.lower() == 'total':
+                # Baris Total ditampilkan sebagai kotak ringkasan tegas di bagian bawah
+                st.markdown(f"""
+                <div style="text-align: center; padding: 10px; margin-top: 4px; margin-bottom: 14px; border-radius: 8px; background-color: rgba(128, 128, 128, 0.15); border: 1px solid rgba(128, 128, 128, 0.3); font-size: 15px;">
+                    <strong>TOTAL KESELURUHAN: {val_total} Pemilih</strong><br>
+                    <span style="font-size: 13px; opacity: 0.85;">Laki-laki: {val_l} &nbsp;|&nbsp; Perempuan: {val_p}</span>
+                </div>
+                """, unsafe_allow_html=True)
+            else:
+                # Setiap TPS menjadi tombol interaktif
+                with cols[col_idx % 2]:
+                    label_tombol = f"🗳️ {nama_tps} ({val_total})\nL: {val_l} | P: {val_p}"
+                    if st.button(label_tombol, key=f"btn_rekap_{nama_tps}", use_container_width=True):
+                        st.query_params["tps_klik"] = nama_tps
+                        st.rerun()
+                col_idx += 1
+
 
     st.subheader("🗺️ Pemetaan Pemilih")
     if os.path.exists("PetaPemilih.csv"):

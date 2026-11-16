@@ -32,17 +32,15 @@ st.markdown("""
     div[data-testid="stTextInput"] input { font-size: 18px !important; }
     [data-testid="InputInstructions"], div[data-testid="stForm"] small { display: none !important; }
     
-    /* Membuat tinggi dan perataan tombol TPS seragam rapi */
     div.stButton > button {
-        min-height: 85px !important;
+        min-height: 62px !important;
         white-space: pre-wrap !important;
         line-height: 1.35 !important;
-        padding: 10px 8px !important;
+        padding: 8px 12px !important;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# Memuat semua file font lokal dari GitHub
 font_files = [
     ("OCRA_Lokal", "ocra.ttf", "truetype", "ttf"),
     ("Montserrat_Lokal", "montserrat.ttf", "truetype", "ttf"),
@@ -82,7 +80,6 @@ def load_local_csv(filename):
 tps_terklik = st.query_params.get("tps_klik", None)
 
 if tps_terklik:
-    # MODE 1: HANYA MENAMPILKAN PEMILIH TPS YANG DIKLIK + PENCARIAN CEPAT
     col_judul, col_tutup = st.columns([3, 1.3])
     with col_judul:
         st.subheader(f"📋 Seluruh Pemilih {tps_terklik}")
@@ -129,7 +126,6 @@ if tps_terklik:
         st.error(f"File '{csv_klik}' tidak ditemukan di GitHub.")
 
 else:
-    # MODE 2: HALAMAN UTAMA (TOMBOL REKAP+PEMETAAN & PENCARIAN NAMA)
     st.subheader("📊 Rekapitulasi & Pemetaan Pemilih")
     if os.path.exists("Rekap.csv"):
         df_rekap = load_local_csv("Rekap.csv")
@@ -137,7 +133,6 @@ else:
         peta_dict = {}
         if os.path.exists("PetaPemilih.csv"):
             df_peta = load_local_csv("PetaPemilih.csv")
-            # Mencari kolom TPS dan ASAL PEMILIH secara fleksibel (huruf besar/kecil)
             col_tps = next((c for c in df_peta.columns if c.strip().lower() == 'tps'), None)
             col_asal = next((c for c in df_peta.columns if 'asal' in c.strip().lower()), None)
             
@@ -147,15 +142,11 @@ else:
                     asal_val = str(r_peta.get(col_asal, '')).strip()
                     if tps_key and asal_val and asal_val.lower() != 'nan':
                         peta_dict[tps_key] = f"{peta_dict[tps_key]}, {asal_val}" if tps_key in peta_dict else asal_val
-
         
         def fmt_angka(val):
             s = str(val).replace('.', '').strip()
             return f"{int(float(s)):,}".replace(",", ".") if s.isdigit() else val
 
-        cols = st.columns(2)
-        col_idx = 0
-        
         for idx, row in df_rekap.iterrows():
             nama_tps = str(next(iter(row.values))).strip()
             val_l = fmt_angka(row.get('L', '0'))
@@ -170,16 +161,11 @@ else:
                 </div>
                 """, unsafe_allow_html=True)
             else:
-                info_wilayah = peta_dict.get(nama_tps.upper(), "")
-                teks_wilayah = f"\n📍 {info_wilayah}" if info_wilayah else ""
-                
-                with cols[col_idx % 2]:
-                    label_tombol = f"🗳️ {nama_tps} ({val_total})\nL: {val_l} | P: {val_p}{teks_wilayah}"
-                    if st.button(label_tombol, key=f"btn_rekap_{idx}_{nama_tps}", use_container_width=True):
-                        st.query_params["tps_klik"] = nama_tps
-                        st.rerun()
-                col_idx += 1
-
+                info_wilayah = peta_dict.get(nama_tps.upper(), "-")
+                label_tombol = f"{nama_tps} ({val_total}) | L {val_l} | P {val_p}\n{info_wilayah}"
+                if st.button(label_tombol, key=f"btn_rekap_{idx}_{nama_tps}", use_container_width=True):
+                    st.query_params["tps_klik"] = nama_tps
+                    st.rerun()
 
     st.markdown("---")
     st.subheader("🔍 Cek Data Pemilih")
